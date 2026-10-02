@@ -41,11 +41,10 @@ START, END = "2020-01", "2026-08"   # monthly files; extend END as months comple
 
 SYMBOLS = [
     "BTCUSDT", "ETHUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "SOLUSDT",
-    "DOTUSDT", "LTCUSDT", "BCHUSDT", "LINKUSDT", "TRXUSDT", "ETCUSDT", "XLMUSDT",
-    "EOSUSDT", "ATOMUSDT", "AVAXUSDT", "UNIUSDT", "FILUSDT", "AAVEUSDT",
-    "NEARUSDT", "ALGOUSDT", "VETUSDT", "XTZUSDT", "NEOUSDT", "SUSHIUSDT",
+    "LTCUSDT", "LINKUSDT", "AVAXUSDT",
     # delisted / renamed - kept to reduce survivorship bias
-    "LUNAUSDT", "FTTUSDT", "MATICUSDT", "POLUSDT",
+    "LUNAUSDT", "FTTUSDT",
+    "USDCUSDT",  # stablecoin: sanity check only, excluded from the carry ranking
 ]
 
 KLINE_COLS = ["open_time", "open", "high", "low", "close", "volume", "close_time",

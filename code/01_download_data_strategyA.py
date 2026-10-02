@@ -19,6 +19,9 @@ Requirements: pip install pandas requests
 Run from the project root:  python code/01_download_data_strategyA.py
 """
 
+import io
+import os
+import time
 import zipfile
 from pathlib import Path
 
@@ -63,15 +66,71 @@ RATE_SERIES = {
 }
 
 
+def get_with_retry(url: str, timeout: int, tries: int = 3):
+    """GET with a short pause and backoff; returns a Response or None if every try failed."""
+    for attempt in range(tries):
+        try:
+            r = requests.get(url, headers=HEADERS, timeout=timeout)
+            time.sleep(1)  # be polite to FRED/CFTC; rapid-fire requests get cut off
+            return r
+        except requests.RequestException as e:
+            wait = 5 * (attempt + 1)
+            print(f"  retry {attempt + 1}/{tries} for {url} in {wait}s ({type(e).__name__})")
+            time.sleep(wait)
+    return None
+
+
+FRED_URLS = [
+    "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}",
+    "https://fred.stlouisfed.org/series/{sid}/downloaddata/{sid}.csv",
+]
+
+
 def fred_series(series_id: str) -> pd.Series:
-    """Download one FRED series as a float Series indexed by date; cache raw copy."""
-    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
-    df = pd.read_csv(url, na_values=".")
-    df.columns = ["date", series_id]
-    df["date"] = pd.to_datetime(df["date"])
-    s = df.set_index("date")[series_id].astype(float)
-    s.to_csv(RAW / f"fred_{series_id}.csv")
-    return s
+    """Download one FRED series as a float Series indexed by date; cache raw copy.
+
+    Uses requests with a browser User-Agent (FRED can reject Python's default one),
+    tries a second URL format, and returns an empty Series instead of crashing so
+    the summary can flag discontinued series.
+    """
+    cache = RAW / f"fred_{series_id}.csv"
+    if cache.exists():
+        # also accepts a CSV saved by hand from the FRED website ("." = missing)
+        s = pd.read_csv(cache, index_col=0, parse_dates=True, na_values=".").iloc[:, 0]
+        s.index.name = "date"
+        return s.astype(float).rename(series_id)
+    api_key = os.environ.get("FRED_API_KEY")
+    if api_key:  # official API (api.stlouisfed.org); free key from fredaccount.stlouisfed.org
+        r = get_with_retry(
+            "https://api.stlouisfed.org/fred/series/observations"
+            f"?series_id={series_id}&api_key={api_key}&file_type=json",
+            timeout=60,
+        )
+        if r is not None and r.status_code == 200:
+            obs = pd.DataFrame(r.json()["observations"])
+            s = pd.to_numeric(obs["value"], errors="coerce")
+            s.index = pd.DatetimeIndex(pd.to_datetime(obs["date"]), name="date")
+            s = s.rename(series_id)
+            s.to_csv(cache)
+            return s
+        code = "no connection" if r is None else f"HTTP {r.status_code}"
+        print(f"  {series_id}: FRED API failed ({code}), trying the website")
+    for template in FRED_URLS:
+        url = template.format(sid=series_id)
+        r = get_with_retry(url, timeout=60)
+        if r is None:
+            continue
+        if r.status_code != 200 or not r.text.strip():
+            print(f"  {series_id}: HTTP {r.status_code} from {url}")
+            continue
+        df = pd.read_csv(io.StringIO(r.text), na_values=".")
+        df.columns = ["date", series_id]
+        df["date"] = pd.to_datetime(df["date"])
+        s = df.set_index("date")[series_id].astype(float)
+        s.to_csv(cache)
+        return s
+    print(f"  WARNING: could not download {series_id}; it will show as NO DATA")
+    return pd.Series(dtype=float, name=series_id, index=pd.DatetimeIndex([], name="date"))
 
 
 def build_fx() -> pd.DataFrame:
@@ -110,12 +169,12 @@ CFTC_URLS = ["https://www.cftc.gov/files/dea/history/deacot1986_2016.zip"] + [
 CFTC_NAMES = {
     "JPY": ["JAPANESE YEN"],
     "EUR": ["EURO FX"],
-    "GBP": ["BRITISH POUND"],
+    "GBP": ["BRITISH POUND", "POUND STERLING"],
     "CHF": ["SWISS FRANC"],
     "CAD": ["CANADIAN DOLLAR"],
     "AUD": ["AUSTRALIAN DOLLAR"],
     "NZD": ["NEW ZEALAND DOLLAR", "NZ DOLLAR"],
-    "DEM": ["DEUTSCHE MARK"],  # pre-euro splice
+    "DEM": ["DEUTSCHE MARK", "GERMAN DEUTSCHE MARK"],  # pre-euro splice
 }
 
 CFTC_COLS = {
@@ -133,9 +192,10 @@ def download_cftc() -> pd.DataFrame:
     for url in CFTC_URLS:
         fname = RAW / Path(url).name
         if not fname.exists():
-            r = requests.get(url, headers=HEADERS, timeout=180)
-            if r.status_code != 200:
-                print(f"  skipped {url} (HTTP {r.status_code})")
+            r = get_with_retry(url, timeout=180)
+            if r is None or r.status_code != 200:
+                code = "no connection" if r is None else f"HTTP {r.status_code}"
+                print(f"  skipped {url} ({code})")
                 continue
             fname.write_bytes(r.content)
         with zipfile.ZipFile(fname) as z:
@@ -143,6 +203,8 @@ def download_cftc() -> pd.DataFrame:
         df.columns = df.columns.str.strip()
         frames.append(df[list(CFTC_COLS)].rename(columns=CFTC_COLS))
         print(f"  loaded {fname.name}: {len(df):,} rows")
+    if not frames:
+        raise SystemExit("No CFTC files could be downloaded. Check your internet and re-run.")
     return pd.concat(frames, ignore_index=True)
 
 
@@ -151,9 +213,10 @@ def match_currency(market: str):
     parts = str(market).upper().split(" - ")
     name = parts[0].strip()
     exchange = parts[1] if len(parts) > 1 else ""
-    if "CHICAGO MERCANTILE" not in exchange:
+    # CME currency futures were reported as "INTERNATIONAL MONETARY MARKET" before Aug 2000
+    if not any(x in exchange for x in ("CHICAGO MERCANTILE", "INTERNATIONAL MONETARY MARKET")):
         return None
-    if any(bad in name for bad in ("/", "XRATE", "MINI")):
+    if any(bad in name for bad in ("/", "XRATE", "MINI", "FORWARD", "ROLLING SPOT")):
         return None
     for ccy, prefixes in CFTC_NAMES.items():
         if any(name.startswith(p) for p in prefixes):

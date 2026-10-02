@@ -8,7 +8,7 @@ import sys
 DOWNLOADS = ["code/01_download_data_strategyA.py",
              "code/03_download_data_strategyC.py"]
 ANALYSIS = ["code/02_backtest_strategyA.py",
-            # "code/04_backtest_strategyC.py",   # add as scripts are written
+            "code/04_backtest_strategyC.py",
             # "code/05_risk_analysis.py",
             ]
 
