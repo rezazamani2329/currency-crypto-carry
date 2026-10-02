@@ -251,7 +251,7 @@ def notes(slide, t):
     slide.notes_slide.notes_text_frame.text = t
 
 
-def table(slide, x, y, w, rows, col_w=None, size=12, header_fill=NAVY, row_h=0.36):
+def table(slide, x, y, w, rows, col_w=None, size=12, header_fill=NAVY, row_h=0.36, left=False):
     shape = slide.shapes.add_table(len(rows), len(rows[0]), Inches(x), Inches(y),
                                    Inches(w), Inches(row_h * len(rows)))
     tbl = shape.table
@@ -265,7 +265,7 @@ def table(slide, x, y, w, rows, col_w=None, size=12, header_fill=NAVY, row_h=0.3
             cell.fill.fore_color.rgb = rgb(header_fill if r == 0 else (WHITE if r % 2 else TINT))
             cell.margin_left = cell.margin_right = Inches(0.08)
             p = cell.text_frame.paragraphs[0]
-            p.alignment = PP_ALIGN.LEFT if ci == 0 else PP_ALIGN.RIGHT
+            p.alignment = PP_ALIGN.LEFT if (ci == 0 or left) else PP_ALIGN.RIGHT
             run = p.add_run()
             run.text = str(val)
             run.font.size, run.font.name = Pt(size), BODY
@@ -420,7 +420,7 @@ def build():
         ["Speculative positioning", "CFTC Commitments of Traders", "1986–2026 (NZD from 1999)", "A: crowding (alt. data)"],
         ["Prices, volume, funding (12 coins + USDC)", "Binance public archive", "2020-01 to 2026-08", "C: signal and returns"],
         ["Carry factor portfolios", "Lustig–Roussanov–Verdelhan (course file)", "1983–2021", "Validation, risk factors"],
-    ], col_w=[3.4, 3.4, 3.1, 2.2], size=13, row_h=0.45)
+    ], col_w=[3.4, 3.4, 3.1, 2.2], size=13, row_h=0.45, left=True)
     stat(s, 0.6, 5.0, 3.85, "1986", "CFTC history after matching the pre-2000 'International Monetary Market' contracts")
     stat(s, 4.75, 5.0, 3.85, "≈ 12–15%", "Average annual funding on the large coins (BTC 11.8%, ETH 13.9%, XRP 14.7%)")
     stat(s, 8.9, 5.0, 3.8, "0.985–1.002", "USDC price range: sanity check that the crypto data are read correctly")
@@ -519,7 +519,7 @@ def build():
     # 8 C results ---------------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
-    title(s, "Crypto carry: weak in-sample, strong since 2024")
+    title(s, "Crypto carry: weak, then strong since 2024")
     speaker(s, "Paraj")
     picture(s, ch["c_cum"], 0.5, 1.45, w=7.9)
     stat(s, 8.75, 1.55, 4.0, f"{S(pc, ('Crypto carry (net)', 'Full')):.2f}",
@@ -607,7 +607,7 @@ def build():
         ["", "Sharpe", "Vol (%)", "MaxDD (%)"],
         *[[k.split(" (")[0], f"{comb.loc[k, 'Sharpe']:.2f}", f"{comb.loc[k, 'Ann. vol (%)']:.1f}",
            f"{comb.loc[k, 'Max drawdown (%)']:.0f}"] for k in comb.index],
-    ], col_w=[1.45, 0.8, 0.85, 0.9], size=12)
+    ], col_w=[1.3, 0.8, 0.8, 1.1], size=12)
     notes(s, "The two carry trades crash at different times, so the combination is much smoother; "
              "Strategy C was weak in this window, so the combination does not beat A on Sharpe.")
 
