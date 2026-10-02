@@ -280,3 +280,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ===== Questions this script answers and results =====
+# Results from the 2026-10-02 run (output/strategyC/), net of 5 bp costs:
+# - Does crypto funding carry make money? 2020-02 to 2026-08: 4.1% a year, 29.9% vol,
+#     Sharpe 0.14, max drawdown -67%. In-sample (2020-2023) Sharpe -0.07; out-of-sample
+#     (2024-2026) 13.9% a year, Sharpe 0.81. Turnover about 45x a year (costs ~2.2% a year).
+# - Where does the return come from? Funding +8.6% a year (+12.3% in-sample, +3.1% OOS);
+#     price moves -12.5% a year in-sample and +13.0% OOS. The strong OOS result is mostly price.
+# - Worst weeks: 2022-05-15 -27.3% (LUNA, held LONG because its funding had turned negative),
+#     2021-09-12 -12.3%, 2022-11-13 -11.6% (FTX), 2020-11-29 -11.0%, 2021-08-15 -10.0%.
+# - Correlation with Strategy A monthly net carry: 0.12 (78 months).
+# - Robustness (net Sharpe): 3d daily 0.68, 3d weekly 0.49, 7d daily 0.56, 7d weekly 0.14 (base),
+#     30d daily 0.28, 30d weekly 0.07. Shorter signals work better; the base case is reported.
+# Limitations: short sample, 3-4 coins per leg, flat cost assumption, no funding caps or
+# exchange risk.

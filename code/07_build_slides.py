@@ -531,3 +531,12 @@ def build():
 
 if __name__ == "__main__":
     build()
+
+
+# ===== Questions this script answers and results =====
+# What this builds: slides/presentation.pptx (12 slides) and the chart images in
+# slides/img/: title, idea, Strategy A rule / results / LRV check / risk, Strategy C
+# rule / results / decomposition and robustness / risk control, combined portfolio,
+# conclusions and limitations. Speaker labels Person 1 (FX) / Person 2 (crypto) and
+# short speaker notes on every slide. All numbers are read from output/, so rerun this
+# after any change to the backtests.

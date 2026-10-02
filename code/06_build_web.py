@@ -457,3 +457,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ===== Questions this script answers and results =====
+# What this builds: web/index.html, a single self-contained page (about 0.34 MB) with
+# the idea, Strategy A (rule, cumulative returns, crowding signal, LRV check, risk
+# regressions), Strategy C (coins, cumulative returns with Covid/LUNA/FTX marked,
+# funding vs price, lookback x rebalance selector, risk control), the combined
+# portfolio, and data/replication notes. Gross/net toggles and light/dark mode.
+# It only reads output/ and recomputes the Strategy C robustness variants; it does not
+# change any results. Charts need an internet connection to load Plotly.js.

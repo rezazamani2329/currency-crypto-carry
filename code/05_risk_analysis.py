@@ -311,3 +311,20 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ===== Questions this script answers and results =====
+# Results from the 2026-10-02 run (output/risk/):
+# - Is Strategy A a proper carry trade? Correlation 0.82 with the LRV developed HML factor
+#     (1999-05 to 2021-05): ours Sharpe 0.34, LRV 0.23.
+# - When does Strategy A lose? When volatility spikes: beta to equity-vol changes -1.55
+#     (NW t = -3.7), dollar-factor beta 0.35 (t = 4.1), R2 0.18, alpha not significant (t = 1.7).
+#     Jul 2008 - Mar 2009: -20.5%. Worst months 2008-10, 2007-08, 2000-05, 2009-01, 2015-01.
+# - Is Strategy C exposed to crypto beta? No: BTC beta -0.018 (t = -0.75). Losses are
+#     coin-specific: LUNA -87, XRP -58, DOGE -44 % pts; winners SOL +102, BNB +51.
+# - Does the pre-specified risk control help? No: Sharpe 0.14 -> -0.16 (OOS 0.81 -> 0.74).
+#     The 1/6 cap halves exposure; LUNA crossed the -50% funding filter only mid-week
+#     (2022-05-10); the filter blocked BNB and SOL, the biggest winners.
+# - Combined (2021-02 to 2026-08, each at 10% vol, 50/50): Sharpe 0.51, vol 7.0%,
+#     max drawdown -10.6%; A vs C correlation 0.11.
+# Limitations: LRV factors end 2021-05; one risk control tested by design; short overlap.

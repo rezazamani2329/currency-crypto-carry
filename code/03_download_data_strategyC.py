@@ -1,5 +1,5 @@
 """
-01_download_data_strategyC.py
+03_download_data_strategyC.py
 MFE 230GB Final Project - Strategy C: Crypto Carry (perpetual futures funding rates)
 
 Downloads from Binance's public data archive (data.binance.vision), no API key:
@@ -9,10 +9,17 @@ Downloads from Binance's public data archive (data.binance.vision), no API key:
 Why the archive and not the live API: the Binance trading API blocks US IP
 addresses, but the public bulk-data archive is static files.
 
-Universe: large coins with perpetuals listed by ~2020-2021, INCLUDING coins that
+Universe: 12 large coins with perpetuals listed by ~2020-2021, INCLUDING coins that
 were later delisted or renamed (LUNA, FTT, MATIC) to limit survivorship bias.
 Months before a coin was listed (or after delisting) return HTTP 404 - that is
 expected and cached so re-runs are fast.
+
+Steps:
+  1. Download one zip per coin, month and data type (cached in data/raw/binance/)
+  2. Read each file (older files have no header; newer ones use microsecond timestamps)
+  3. Build daily close, daily quote volume, and the daily sum of funding payments
+  4. Print sanity checks (average funding by coin)
+USDC is downloaded only as a sanity check and is excluded from the backtest.
 
 Outputs (data/clean/):
   crypto_close_daily.csv          perpetual close price (USDT)
@@ -21,7 +28,7 @@ Outputs (data/clean/):
                                   positive = longs pay shorts
 
 Requirements: pip install pandas requests
-Run from the project root:  python code/01_download_data_strategyC.py
+Run from the project root:  python code/03_download_data_strategyC.py
 """
 
 import zipfile
@@ -144,3 +151,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ===== Questions this script answers and results =====
+# Results from the 2026-10-02 run (data/clean/):
+# - Coverage: BTC/ETH 2020-01 to 2026-08; SOL, AVAX from 2020-09; LUNA 2021-01-28 to 2022-05-13;
+#     FTT archive only from 2022-04; USDC from 2023-03-12 (earlier months return 404).
+# - Average funding (annualised): about 12-15% on BTC (11.8), ETH (13.9), XRP (14.7), ADA (13.6),
+#     DOGE (12.4), LINK (13.8), LTC (14.9); positive on 81-88% of days. BNB -0.1, SOL 0.2,
+#     AVAX 6.9, LUNA 22.1 (before its collapse).
+# - Sanity check: USDC price 0.9845-1.0017, funding about 0% -> parsing is correct.
+# - Delisting: FTT's last day with volume is 2022-11-14, but the archive continues to 2026-08
+#     with a frozen price, zero volume and default funding; over its traded days FTT funding
+#     averaged -84% a year. The backtest therefore requires price AND volume > 0.
+# Limitations: about 6.5 years of data, 12 tradable coins, one exchange (Binance); a few
+# archive days in Feb/Apr 2022 are missing for some coins.

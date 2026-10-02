@@ -245,3 +245,20 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ===== Questions this script answers and results =====
+# Results from the 2026-10-02 run (output/strategyA/), net of 3 bp costs:
+# - Does G10 carry make money? Yes, modestly. 1999-05 to 2026-08: 3.27% a year, 8.9% vol,
+#     Sharpe 0.37, max drawdown -37%, worst month -12.0% (Oct 2008), skew -0.49.
+#     In-sample (to 2010) Sharpe 0.47; out-of-sample (2011+) Sharpe 0.27.
+# - Does the crowding filter help? Full sample: Sharpe 0.38 vs 0.37 (no real change).
+#     Out-of-sample: Sharpe 0.32 vs 0.27, skew -0.02 vs -0.10, max drawdown -14.4% vs -15.5%,
+#     at the cost of higher turnover (about 2.0x vs 1.2x a year).
+# - Is carry worse after crowded months? Next-month carry averages 0.02% after the 33 crowded
+#     months (of 247 with a signal) vs 0.30% after non-crowded months; skew -0.71 vs -0.46.
+# - Robust? Full-sample Sharpe 0.35-0.38 and out-of-sample 0.30-0.39 across thresholds
+#     0.5/1.0/1.5 and crowded exposure 0/0.5.
+# - Holdings: NZD long in 80% of months, AUD 63%; CHF short 48%, CAD 42%, JPY 25%, EUR 20%.
+# Limitations: sample starts 1999; few crowded months; the 2008 crash began from a
+# non-crowded reading, so the filter did not avoid the largest drawdown.

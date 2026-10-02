@@ -13,7 +13,15 @@ Outputs (data/clean/):
   cftc_net_spec_weekly.csv          (noncommercial long - short) / open interest
   cftc_net_spec_monthly.csv         same, last observation of each month
 
-Pre-1999 EUR is spliced with the Deutsche mark (fixed rate 1.95583 DEM/EUR).
+Steps:
+  1. Read FRED series from data/raw/fred_<ID>.csv if saved by hand (FRED often blocks
+     scripts); otherwise try the FRED API (FRED_API_KEY) or the website, with retries
+  2. FX: convert to USD per foreign currency unit, take month-end values
+  3. Pre-1999 EUR is spliced with the Deutsche mark (fixed rate 1.95583 DEM/EUR)
+  4. CFTC: match CME currency contracts by name, accepting the pre-Aug-2000 exchange
+     name "INTERNATIONAL MONETARY MARKET"; drop crosses, minis and DM forwards
+  5. Net speculative positioning = (noncommercial long - short) / open interest;
+     the 3-day publication lag is applied later, in 02_backtest_strategyA.py
 
 Requirements: pip install pandas requests
 Run from the project root:  python code/01_download_data_strategyA.py
@@ -271,3 +279,23 @@ if __name__ == "__main__":
     summarize("3-month rates (% p.a.)", rates)
     summarize("CFTC net speculative positioning (share of OI)", net)
     print("\nDone. Clean files are in data/clean/")
+
+
+# ===== Questions this script answers and results =====
+# Results from the 2026-10-02 run (data/clean/):
+# - How far back does each series go?
+#     FX spot: JPY, GBP, CHF, CAD, AUD, NZD 1971-01 to 2026-09; EUR only from 1999-01
+#       (DEXGEUS, the pre-euro mark rate, has not been saved yet).
+#     3-month rates: USD 1964, EUR/DEM 1960, GBP 1957 (ends 2026-01), CAD 1956, AUD 1968,
+#       NZD 1973, JPY only from 2002-04, CHF only from 1999-07.
+#     CFTC positioning: 1986-01 for CAD, CHF, EUR (mark before 1999), GBP, JPY;
+#       AUD 1987-01; NZD 1999-01 (no NZD contract 2000-04 to 2003-11).
+# - Which CFTC contracts are used? CME currency futures under both exchange names:
+#     "INTERNATIONAL MONETARY MARKET" (before Aug 2000) and "CHICAGO MERCANTILE EXCHANGE";
+#     the pound also as "POUND STERLING"; crosses, minis and DM forwards are excluded.
+# - High- vs low-rate currencies (avg rate minus US rate, 1999-2026): NZD +1.76, AUD +1.46,
+#     GBP +0.45, CAD -0.16, EUR -0.65, JPY -1.74, CHF -1.86 percentage points.
+# - Positioning tracks carry: correlation with the rate differential 0.42 (AUD 0.60, NZD 0.57).
+#     In June 2007 speculators were ~+0.6 long AUD/NZD/GBP and short JPY (-0.53) and CHF (-0.58).
+# Limitations: FRED blocks scripted downloads, so FRED CSVs must be saved by hand as
+# data/raw/fred_<ID>.csv; EUR spot only from 1999 until DEXGEUS is added.
