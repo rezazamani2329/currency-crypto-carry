@@ -55,9 +55,21 @@ Notes on data access:
   that need it are skipped if it is absent. A hand-saved `data/raw/fred_VIXCLS.csv`
   is used if present.
 
+## Jupyter notebooks
+Step-by-step versions of the scripts, with explanations and inline charts, in `notebooks/`
+(01-02 Strategy A, 03-04 Strategy C, 05 risk and combined portfolio). They import the
+functions from `code/`, so results match the scripts. By default they use `data/clean/`;
+set `DOWNLOAD = True` in notebooks 01 and 03 to re-download.
+```bash
+conda activate carry          # or your own environment with requirements.txt installed
+python -m ipykernel install --user --name carry --display-name "Python (carry)"
+jupyter lab notebooks/        # then pick the "Python (carry)" kernel
+```
+
 ## Repository structure
 ```
 code/          numbered scripts, run in order (see run_all.py)
+notebooks/     step-by-step Jupyter versions of the scripts
 data/raw/      downloaded files (not committed; re-created by scripts)
 data/clean/    processed data snapshot used for all results (committed)
 output/        tables and figures

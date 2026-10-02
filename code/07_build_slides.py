@@ -353,7 +353,7 @@ def build():
                    "out-of-sample from 2011."),
     ], gap=1.2)
     stat(s, 8.6, 2.05, 4.1, "1986", "CFTC positioning history (after fixing the pre-2000 CME exchange name)")
-    stat(s, 8.6, 3.85, 4.1, "33", "crowded months out of 328")
+    stat(s, 8.6, 3.85, 4.1, "33", "crowded months out of 247 with a crowding signal")
     notes(s, "Mention the data issue we fixed: before Aug 2000 CME currency futures are reported as 'International Monetary Market'.")
 
     # 4 A results ---------------------------------------------------------
