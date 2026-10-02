@@ -1,7 +1,7 @@
 # Crowded Carry: Crash Risk in FX and Crypto Carry Trades
 
 MFE 230GB Currency Markets, Final Project
-Authors: Reza Zamani and [partner]
+Authors: Reza Zamani and Paraj
 
 ## Economic idea
 Carry trades earn a risk premium but are exposed to crashes when crowded

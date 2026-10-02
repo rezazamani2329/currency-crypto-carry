@@ -305,7 +305,7 @@ def build():
     bg(s, NAVY)
     text(s, 0.8, 2.0, 11.5, 1.2, "Crowded Carry", size=60, font=HEAD, bold=True, color=WHITE)
     text(s, 0.8, 3.25, 11.5, 0.8, "Crash risk in FX and crypto carry trades", size=26, color="C9D1E0")
-    text(s, 0.8, 5.3, 11.5, 0.5, "Reza Zamani  ·  [partner]", size=18, color=AMBER, bold=True)
+    text(s, 0.8, 5.3, 11.5, 0.5, "Reza Zamani  ·  Paraj", size=18, color=AMBER, bold=True)
     text(s, 0.8, 5.85, 11.5, 0.5, "MFE 230GB Currency Markets  ·  Final project  ·  October 8, 2026",
          size=14, color="C9D1E0")
     notes(s, "Person 1 opens. One sentence: we test whether carry trades crash when they are crowded, in G10 FX and in crypto.")
