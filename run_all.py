@@ -11,6 +11,7 @@ ANALYSIS = ["code/02_backtest_strategyA.py",
             "code/04_backtest_strategyC.py",
             "code/05_risk_analysis.py",
             "code/06_build_web.py",
+            "code/07_build_slides.py",
             ]
 
 steps = ANALYSIS if os.environ.get("SKIP_DOWNLOAD") == "1" else DOWNLOADS + ANALYSIS
