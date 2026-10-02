@@ -197,7 +197,7 @@ def box(slide, x, y, w, h, fill=TINT, shape=MSO_SHAPE.ROUNDED_RECTANGLE):
 
 
 def title(slide, t, sub=None, dark=False):
-    text(slide, 0.6, 0.45, 10.6, 0.8, t, size=34, font=HEAD, bold=True,
+    text(slide, 0.6, 0.45, 12.1, 0.8, t, size=34, font=HEAD, bold=True,
          color=WHITE if dark else NAVY)
     if sub:
         text(slide, 0.6, 1.2, 11.5, 0.5, sub, size=16, color="C9D1E0" if dark else SLATE)
@@ -311,7 +311,7 @@ def build():
     text(s, 7.0, 4.7, 5.5, 0.5, "Amir Kermani", size=20, color=WHITE, bold=True)
     text(s, 0.8, 6.0, 11.5, 0.5, "Currency Markets (MFE 230GB)  ·  Final project  ·  October 2026",
          size=15, color="C9D1E0")
-    notes(s, "Reza opens. One sentence: we test whether carry trades crash when they are crowded, in G10 FX and in crypto.")
+    notes(s, "Opening, one sentence: we test whether carry trades crash when they are crowded, in G10 FX and in crypto.")
 
     # 2 structure -----------------------------------------------------------
     s = prs.slides.add_slide(blank)
@@ -320,7 +320,7 @@ def build():
     steps = [("Motivation\nand questions", "Slides 3–4"), ("Hypotheses", "Slide 4"), ("Data", "Slide 5"),
              ("Methodology", "Slide 6"), ("Strategy A\nresults", "Slides 7–9"), ("Strategy C\nresults", "Slides 10–12"),
              ("Risk\nanalysis", "Slides 13–14"), ("Combined\nportfolio", "Slide 15"), ("Conclusions", "Slide 16")]
-    step, x0, yc = 1.38, 0.62, 2.75
+    step, x0, yc = 1.38, 0.62, 3.2
     ln = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(x0 + 0.35), Inches(yc + 0.33),
                             Inches(step * 8), Inches(0.05))
     ln.fill.solid()
@@ -342,20 +342,12 @@ def build():
         text(s, x - 0.3, yc + 0.95, 1.32, 0.75, lab.split("\n"), size=14, bold=True, color=NAVY,
              align=PP_ALIGN.CENTER, space_after=0)
         text(s, x - 0.3, yc + 1.75, 1.32, 0.35, where, size=11, color=SLATE, align=PP_ALIGN.CENTER)
-    box(s, 0.6, 5.35, 5.95, 1.2)
-    text(s, 0.85, 5.5, 5.5, 0.4, "Reza Zamani", size=16, bold=True, color=NAVY)
-    text(s, 0.85, 5.92, 5.5, 0.5, "Motivation, questions and hypotheses; Strategy A (G10 FX) and its risk", size=13)
-    box(s, 6.75, 5.35, 5.95, 1.2)
-    text(s, 7.0, 5.5, 5.5, 0.4, "Paraj Goyal", size=16, bold=True, color=NAVY)
-    text(s, 7.0, 5.92, 5.5, 0.5, "Data and methodology; Strategy C (crypto) and its risk; combined portfolio", size=13)
-    text(s, 0.6, 6.72, 8, 0.35, "Proposed split · conclusions presented together", size=11, color=SLATE)
-    notes(s, "Walk through the nine steps in one breath and say who presents which part.")
+    notes(s, "Walk through the nine steps in one breath.")
 
     # 2 idea --------------------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Carry pays because it crashes", "Same economic mechanism, two very different markets")
-    speaker(s, "Reza")
     text(s, 0.6, 2.0, 5.4, 3.8, [
         ("High-yield assets earn a premium over low-yield ones.", {"bullet": True}),
         ("The premium is compensation for crash risk: when many investors hold the same trade, "
@@ -383,7 +375,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Research questions and hypotheses", "Stated before running any backtest")
-    speaker(s, "Reza")
     cols = [("Strategy A · G10 FX carry", NAVY, [
                 ("RQ1", "Does G10 carry earn a premium after costs, and match the academic carry factor?"),
                 ("RQ2", "Does CFTC crowding predict weaker carry, and does cutting exposure help out of sample?"),
@@ -412,7 +403,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Data", "All downloaded 2026-10-02; cleaned snapshot committed in data/clean/")
-    speaker(s, "Paraj")
     table(s, 0.6, 1.95, 12.1, [
         ["Data", "Source", "Coverage", "Used for"],
         ["FX spot (7 currencies)", "FRED, Fed H.10", "1971–2026 (EUR from 1999)", "A: returns"],
@@ -430,7 +420,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Methodology", "Research design chosen to keep the tests honest")
-    speaker(s, "Paraj")
     cards = [("Pre-specified", "All legs, windows, thresholds, lookbacks and costs fixed before the first backtest"),
              ("In- vs out-of-sample", "A: 1999–2010 / 2011–2026.  C: 2020–2023 / 2024–2026"),
              ("Transaction costs", "3 bp per unit traded in FX, 5 bp in crypto; gross and net reported"),
@@ -450,7 +439,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Strategy A: crowding-filtered G10 carry", "JPY, EUR, GBP, CHF, CAD, AUD, NZD vs USD, monthly, 1999–2026")
-    speaker(s, "Reza")
     numbered(s, 0.6, 2.05, 7.2, [
         ("Carry portfolio", "Each month-end: long the 2 highest-rate currencies, short the 2 lowest. "
                             "Equal weights, dollar-neutral, 3 bp costs."),
@@ -468,7 +456,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Crowding filter helps out of sample, not in 2008")
-    speaker(s, "Reza")
     picture(s, ch["a_cum"], 0.5, 1.45, w=7.9)
     stat(s, 8.75, 1.55, 4.0, f"{S(pa, ('Carry (net)', 'Out-of-sample')):.2f} → "
                              f"{S(pa, ('Crowd-filtered (net)', 'Out-of-sample')):.2f}",
@@ -486,7 +473,6 @@ def build():
     bg(s, WHITE)
     title(s, "Our carry matches the academic carry factor",
           "Strategy A vs Lustig–Roussanov–Verdelhan developed HML, net, 1999–2021")
-    speaker(s, "Reza")
     if "a_lrv" in ch:
         picture(s, ch["a_lrv"], 0.5, 1.9, w=7.4)
     stat(s, 8.5, 1.95, 4.2, f"{lrv['Correlation'].iloc[0]:.2f}", "Monthly correlation with LRV developed HML")
@@ -503,7 +489,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Strategy C: crypto funding carry", "12 Binance USDT perpetuals, 2020–2026; USDC as a sanity check only")
-    speaker(s, "Paraj")
     numbered(s, 0.6, 2.05, 7.2, [
         ("Signal", "Trailing 7-day average funding rate, data up to the day before."),
         ("Portfolio", "Each Sunday: short the top third, long the bottom third by funding. "
@@ -519,8 +504,7 @@ def build():
     # 8 C results ---------------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
-    title(s, "Crypto carry: weak, then strong since 2024")
-    speaker(s, "Paraj")
+    title(s, "Crypto carry: weak in-sample, strong since 2024")
     picture(s, ch["c_cum"], 0.5, 1.45, w=7.9)
     stat(s, 8.75, 1.55, 4.0, f"{S(pc, ('Crypto carry (net)', 'Full')):.2f}",
          f"Full-sample net Sharpe ({pc.loc[('Crypto carry (net)', 'Full'), 'Ann. mean (%)']:.1f}% a year, "
@@ -536,7 +520,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Funding is earned, but price moves dominate", "Return decomposition and robustness")
-    speaker(s, "Paraj")
     picture(s, ch["c_decomp"], 0.5, 1.85, w=6.1)
     rows = [["% per year", "Funding", "Price", "Net"]]
     for p in ("Full", "In-sample", "Out-of-sample"):
@@ -556,7 +539,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Strategy A loses when volatility spikes", "Monthly net carry regressed on risk factors, Newey-West t-stats")
-    speaker(s, "Reza")
     m = "RX (dollar) + dVol (LRV)"
     stat(s, 0.6, 1.95, 3.0, f"{reg.loc[(m, 'dVol (LRV)'), 'coef']:.2f}",
          f"Beta to equity-volatility changes (t = {reg.loc[(m, 'dVol (LRV)'), 'NW t-stat']:.1f})", color=RED)
@@ -576,7 +558,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "A pre-specified risk control did not help", "Cap each coin at 1/6 of a leg; no longs with funding below −50% a year")
-    speaker(s, "Paraj")
     picture(s, ch["c_contrib"], 0.5, 1.85, w=5.6)
     table(s, 6.5, 1.95, 6.3, [
         ["Net", "Base", "Controlled"],
@@ -599,7 +580,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Combining FX and crypto carry", "Each scaled to 10% vol with lagged volatility, 50/50, 2021–2026")
-    speaker(s, "Paraj")
     picture(s, ch["comb"], 0.5, 1.85, w=7.8)
     corr = cm.iloc[:, 0].corr(cm.iloc[:, 1])
     stat(s, 8.75, 1.95, 4.0, f"{corr:.2f}", "Correlation between A and C")
@@ -615,7 +595,6 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, NAVY)
     title(s, "Conclusions and limitations", dark=True)
-    speaker(s, "Both")
     text(s, 0.6, 1.7, 5.9, 0.5, "What we found", size=20, bold=True, color=AMBER)
     text(s, 0.6, 2.3, 5.9, 4.5, [
         ("FX carry reproduces the academic factor (corr 0.82) and is exposed to volatility shocks.", {"bullet": True}),
