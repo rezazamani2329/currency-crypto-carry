@@ -1,7 +1,7 @@
 # Crowded Carry: Crash Risk in FX and Crypto Carry Trades
 
 **MFE 230GB Currency Markets, final project**
-Authors: Reza Zamani and Paraj
+Authors: Reza Zamani and Paraj Goyal
 
 Interactive results page: [`web/index.html`](web/index.html) · Slides: [`slides/presentation.pptx`](slides/presentation.pptx) · Step-by-step notebooks: [`notebooks/`](notebooks/)
 

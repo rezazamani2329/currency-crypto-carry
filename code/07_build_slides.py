@@ -303,18 +303,59 @@ def build():
     # 1 title -------------------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, NAVY)
-    text(s, 0.8, 2.0, 11.5, 1.2, "Crowded Carry", size=60, font=HEAD, bold=True, color=WHITE)
-    text(s, 0.8, 3.25, 11.5, 0.8, "Crash risk in FX and crypto carry trades", size=26, color="C9D1E0")
-    text(s, 0.8, 5.3, 11.5, 0.5, "Reza Zamani  ·  Paraj", size=18, color=AMBER, bold=True)
-    text(s, 0.8, 5.85, 11.5, 0.5, "MFE 230GB Currency Markets  ·  Final project  ·  October 8, 2026",
-         size=14, color="C9D1E0")
-    notes(s, "Person 1 opens. One sentence: we test whether carry trades crash when they are crowded, in G10 FX and in crypto.")
+    text(s, 0.8, 1.45, 11.8, 1.0, "Crowded Carry in G10 FX and Crypto", size=46, font=HEAD, bold=True, color=WHITE)
+    text(s, 0.8, 2.6, 11.5, 0.7, "Crash risk in FX and crypto carry trades", size=24, color="C9D1E0")
+    text(s, 0.8, 4.3, 5.5, 0.4, "STUDENTS", size=12, bold=True, color="8E9AB5")
+    text(s, 0.8, 4.7, 5.8, 0.5, "Reza Zamani  ·  Paraj Goyal", size=20, color=AMBER, bold=True)
+    text(s, 7.0, 4.3, 5.5, 0.4, "PROFESSOR", size=12, bold=True, color="8E9AB5")
+    text(s, 7.0, 4.7, 5.5, 0.5, "Amir Kermani", size=20, color=WHITE, bold=True)
+    text(s, 0.8, 6.0, 11.5, 0.5, "Currency Markets (MFE 230GB)  ·  Final project  ·  October 2026",
+         size=15, color="C9D1E0")
+    notes(s, "Reza opens. One sentence: we test whether carry trades crash when they are crowded, in G10 FX and in crypto.")
+
+    # 2 structure -----------------------------------------------------------
+    s = prs.slides.add_slide(blank)
+    bg(s, WHITE)
+    title(s, "Presentation structure", "From the economic idea to two strategies, their risks and a combined portfolio")
+    steps = [("Motivation\nand questions", "Slides 3–4"), ("Hypotheses", "Slide 4"), ("Data", "Slide 5"),
+             ("Methodology", "Slide 6"), ("Strategy A\nresults", "Slides 7–9"), ("Strategy C\nresults", "Slides 10–12"),
+             ("Risk\nanalysis", "Slides 13–14"), ("Combined\nportfolio", "Slide 15"), ("Conclusions", "Slide 16")]
+    step, x0, yc = 1.38, 0.62, 2.75
+    ln = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(x0 + 0.35), Inches(yc + 0.33),
+                            Inches(step * 8), Inches(0.05))
+    ln.fill.solid()
+    ln.fill.fore_color.rgb = rgb("C9D1E0")
+    ln.line.fill.background()
+    for i, (lab, where) in enumerate(steps):
+        x = x0 + i * step
+        hi = i in (4, 5)
+        c = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(x), Inches(yc), Inches(0.72), Inches(0.72))
+        c.fill.solid()
+        c.fill.fore_color.rgb = rgb(AMBER if hi else NAVY)
+        c.line.fill.background()
+        p = c.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        r = p.add_run()
+        r.text = str(i + 1)
+        r.font.size, r.font.bold, r.font.name = Pt(18), True, BODY
+        r.font.color.rgb = rgb(NAVY if hi else WHITE)
+        text(s, x - 0.3, yc + 0.95, 1.32, 0.75, lab.split("\n"), size=14, bold=True, color=NAVY,
+             align=PP_ALIGN.CENTER, space_after=0)
+        text(s, x - 0.3, yc + 1.75, 1.32, 0.35, where, size=11, color=SLATE, align=PP_ALIGN.CENTER)
+    box(s, 0.6, 5.35, 5.95, 1.2)
+    text(s, 0.85, 5.5, 5.5, 0.4, "Reza Zamani", size=16, bold=True, color=NAVY)
+    text(s, 0.85, 5.92, 5.5, 0.5, "Motivation, questions and hypotheses; Strategy A (G10 FX) and its risk", size=13)
+    box(s, 6.75, 5.35, 5.95, 1.2)
+    text(s, 7.0, 5.5, 5.5, 0.4, "Paraj Goyal", size=16, bold=True, color=NAVY)
+    text(s, 7.0, 5.92, 5.5, 0.5, "Data and methodology; Strategy C (crypto) and its risk; combined portfolio", size=13)
+    text(s, 0.6, 6.72, 8, 0.35, "Proposed split · conclusions presented together", size=11, color=SLATE)
+    notes(s, "Walk through the nine steps in one breath and say who presents which part.")
 
     # 2 idea --------------------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Carry pays because it crashes", "Same economic mechanism, two very different markets")
-    speaker(s, "Person 1")
+    speaker(s, "Reza")
     text(s, 0.6, 2.0, 5.4, 3.8, [
         ("High-yield assets earn a premium over low-yield ones.", {"bullet": True}),
         ("The premium is compensation for crash risk: when many investors hold the same trade, "
@@ -338,11 +379,78 @@ def build():
         text(s, 10.65, yy, 2.0, 0.5, v2, size=13)
     notes(s, "Explain why both are carry: an FX forward earns the rate differential; a short perpetual earns the funding rate.")
 
+    # 4 questions and hypotheses --------------------------------------------
+    s = prs.slides.add_slide(blank)
+    bg(s, WHITE)
+    title(s, "Research questions and hypotheses", "Stated before running any backtest")
+    speaker(s, "Reza")
+    cols = [("Strategy A · G10 FX carry", NAVY, [
+                ("RQ1", "Does G10 carry earn a premium after costs, and match the academic carry factor?"),
+                ("RQ2", "Does CFTC crowding predict weaker carry, and does cutting exposure help out of sample?"),
+                ("RQ3", "Is carry exposed to volatility shocks and the dollar factor?")],
+             ["H1: positive carry premium (H0: zero)", "H1: weaker, more negatively skewed carry after crowded months",
+              "H1: negative beta to volatility innovations"]),
+            ("Strategy C · crypto funding carry", AMBER, [
+                ("RQ4", "Does short-high / long-low funding earn a premium after costs, from funding or price?"),
+                ("RQ5", "What drives its losses, and does a pre-specified risk control help?"),
+                ("RQ6", "Are FX and crypto carry correlated; does combining them diversify?")],
+             ["H1: positive premium, mainly from funding (H0: zero)", "H1: little BTC beta; crashes when crowded positions unwind"])]
+    for j, (head, col, rqs, hyps) in enumerate(cols):
+        x = 0.6 + j * 6.25
+        box(s, x, 1.95, 5.9, 4.95, fill=TINT)
+        text(s, x + 0.3, 2.1, 5.4, 0.45, head, size=18, bold=True, color=col if j == 0 else "B7700C")
+        y = 2.65
+        for rq, q in rqs:
+            text(s, x + 0.3, y, 0.7, 0.35, rq, size=13, bold=True, color=SLATE)
+            text(s, x + 1.0, y, 4.65, 0.7, q, size=13)
+            y += 0.72
+        text(s, x + 0.3, y + 0.05, 5.4, 0.35, "Hypotheses", size=13, bold=True, color=SLATE)
+        text(s, x + 0.3, y + 0.42, 5.4, 1.4, [(h, {"bullet": True}) for h in hyps], size=13, space_after=4)
+    notes(s, "Read the six questions quickly; stress that hypotheses and parameters were fixed before testing.")
+
+    # 5 data ----------------------------------------------------------------
+    s = prs.slides.add_slide(blank)
+    bg(s, WHITE)
+    title(s, "Data", "All downloaded 2026-10-02; cleaned snapshot committed in data/clean/")
+    speaker(s, "Paraj")
+    table(s, 0.6, 1.95, 12.1, [
+        ["Data", "Source", "Coverage", "Used for"],
+        ["FX spot (7 currencies)", "FRED, Fed H.10", "1971–2026 (EUR from 1999)", "A: returns"],
+        ["3-month interbank rates", "OECD via FRED", "JPY from 2002, CHF from 1999", "A: carry signal"],
+        ["Speculative positioning", "CFTC Commitments of Traders", "1986–2026 (NZD from 1999)", "A: crowding (alt. data)"],
+        ["Prices, volume, funding (12 coins + USDC)", "Binance public archive", "2020-01 to 2026-08", "C: signal and returns"],
+        ["Carry factor portfolios", "Lustig–Roussanov–Verdelhan (course file)", "1983–2021", "Validation, risk factors"],
+    ], col_w=[3.4, 3.4, 3.1, 2.2], size=13, row_h=0.45)
+    stat(s, 0.6, 5.0, 3.85, "1986", "CFTC history after matching the pre-2000 'International Monetary Market' contracts")
+    stat(s, 4.75, 5.0, 3.85, "≈ 12–15%", "Average annual funding on the large coins (BTC 11.8%, ETH 13.9%, XRP 14.7%)")
+    stat(s, 8.9, 5.0, 3.8, "0.985–1.002", "USDC price range: sanity check that the crypto data are read correctly")
+    notes(s, "FRED blocks scripted downloads, so FRED files were saved by hand. LUNA and FTT are kept to avoid survivorship bias.")
+
+    # 6 methodology ----------------------------------------------------------
+    s = prs.slides.add_slide(blank)
+    bg(s, WHITE)
+    title(s, "Methodology", "Research design chosen to keep the tests honest")
+    speaker(s, "Paraj")
+    cards = [("Pre-specified", "All legs, windows, thresholds, lookbacks and costs fixed before the first backtest"),
+             ("In- vs out-of-sample", "A: 1999–2010 / 2011–2026.  C: 2020–2023 / 2024–2026"),
+             ("Transaction costs", "3 bp per unit traded in FX, 5 bp in crypto; gross and net reported"),
+             ("No look-ahead", "Weights at t earn t+1; CFTC used after its Friday release; funding up to t−1"),
+             ("Survivorship", "LUNA and FTT kept; a coin trades only with a price and positive volume"),
+             ("Robustness and validation", "Grids reported, not used for tuning; A checked against the LRV carry factor")]
+    for i, (h, b) in enumerate(cards):
+        x = 0.6 + (i % 3) * 4.1
+        y = 1.95 + (i // 3) * 2.3
+        box(s, x, y, 3.85, 2.05)
+        text(s, x + 0.25, y + 0.2, 3.4, 0.45, h, size=17, bold=True, color=NAVY)
+        text(s, x + 0.25, y + 0.75, 3.4, 1.2, b, size=13)
+    notes(s, "Methods: rate-differential sort, CFTC z-scores, funding sort, Newey-West regressions, risk targeting. "
+             "Methodology: the design choices on this slide.")
+
     # 3 strategy A rule ---------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Strategy A: crowding-filtered G10 carry", "JPY, EUR, GBP, CHF, CAD, AUD, NZD vs USD, monthly, 1999–2026")
-    speaker(s, "Person 1")
+    speaker(s, "Reza")
     numbered(s, 0.6, 2.05, 7.2, [
         ("Carry portfolio", "Each month-end: long the 2 highest-rate currencies, short the 2 lowest. "
                             "Equal weights, dollar-neutral, 3 bp costs."),
@@ -360,7 +468,7 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Crowding filter helps out of sample, not in 2008")
-    speaker(s, "Person 1")
+    speaker(s, "Reza")
     picture(s, ch["a_cum"], 0.5, 1.45, w=7.9)
     stat(s, 8.75, 1.55, 4.0, f"{S(pa, ('Carry (net)', 'Out-of-sample')):.2f} → "
                              f"{S(pa, ('Crowd-filtered (net)', 'Out-of-sample')):.2f}",
@@ -378,7 +486,7 @@ def build():
     bg(s, WHITE)
     title(s, "Our carry matches the academic carry factor",
           "Strategy A vs Lustig–Roussanov–Verdelhan developed HML, net, 1999–2021")
-    speaker(s, "Person 1")
+    speaker(s, "Reza")
     if "a_lrv" in ch:
         picture(s, ch["a_lrv"], 0.5, 1.9, w=7.4)
     stat(s, 8.5, 1.95, 4.2, f"{lrv['Correlation'].iloc[0]:.2f}", "Monthly correlation with LRV developed HML")
@@ -391,31 +499,11 @@ def build():
     ], col_w=[2.0, 1.1, 1.1], size=13)
     notes(s, "Course file CurrencyPortfolios.xls. This validates our data pipeline and code.")
 
-    # 6 A risk ------------------------------------------------------------
-    s = prs.slides.add_slide(blank)
-    bg(s, WHITE)
-    title(s, "Strategy A loses when volatility spikes", "Monthly net carry regressed on risk factors, Newey-West t-stats")
-    speaker(s, "Person 1")
-    m = "RX (dollar) + dVol (LRV)"
-    stat(s, 0.6, 1.95, 3.0, f"{reg.loc[(m, 'dVol (LRV)'), 'coef']:.2f}",
-         f"Beta to equity-volatility changes (t = {reg.loc[(m, 'dVol (LRV)'), 'NW t-stat']:.1f})", color=RED)
-    stat(s, 3.85, 1.95, 3.0, f"{reg.loc[(m, 'RX (dollar)'), 'coef']:.2f}",
-         f"Beta to the dollar factor (t = {reg.loc[(m, 'RX (dollar)'), 'NW t-stat']:.1f})")
-    stat(s, 0.6, 3.75, 3.0, f"{100 * reg.loc[(m, 'const'), 'coef']:.2f}%",
-         f"Monthly alpha (t = {reg.loc[(m, 'const'), 'NW t-stat']:.1f}): not significant")
-    stat(s, 3.85, 3.75, 3.0, f"{reg.loc[(m, 'R2'), 'coef']:.2f}", "R² of the two-factor model")
-    text(s, 0.6, 5.65, 6.3, 1.2, "Worst months: Oct 2008, Aug 2007, May 2000, Jan 2009, and the Jan 2015 Swiss franc de-peg.",
-         size=14, color=SLATE)
-    text(s, 7.4, 1.95, 5.3, 0.4, f"The 2008 carry crash: {crash08:.1f}% (Jul 2008 – Mar 2009)",
-         size=16, bold=True, color=NAVY)
-    picture(s, ch["a_2008"], 7.3, 2.45, w=5.5)
-    notes(s, "The textbook carry-crash exposure: funding currencies (JPY, CHF) rally when volatility jumps.")
-
     # 7 Strategy C rule ---------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Strategy C: crypto funding carry", "12 Binance USDT perpetuals, 2020–2026; USDC as a sanity check only")
-    speaker(s, "Person 2")
+    speaker(s, "Paraj")
     numbered(s, 0.6, 2.05, 7.2, [
         ("Signal", "Trailing 7-day average funding rate, data up to the day before."),
         ("Portfolio", "Each Sunday: short the top third, long the bottom third by funding. "
@@ -432,7 +520,7 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Crypto carry: weak in-sample, strong since 2024")
-    speaker(s, "Person 2")
+    speaker(s, "Paraj")
     picture(s, ch["c_cum"], 0.5, 1.45, w=7.9)
     stat(s, 8.75, 1.55, 4.0, f"{S(pc, ('Crypto carry (net)', 'Full')):.2f}",
          f"Full-sample net Sharpe ({pc.loc[('Crypto carry (net)', 'Full'), 'Ann. mean (%)']:.1f}% a year, "
@@ -448,7 +536,7 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Funding is earned, but price moves dominate", "Return decomposition and robustness")
-    speaker(s, "Person 2")
+    speaker(s, "Paraj")
     picture(s, ch["c_decomp"], 0.5, 1.85, w=6.1)
     rows = [["% per year", "Funding", "Price", "Net"]]
     for p in ("Full", "In-sample", "Out-of-sample"):
@@ -464,11 +552,31 @@ def build():
     notes(s, "Shorter signals do better even after costs: funding information decays within days. "
              "We report the pre-specified 7-day weekly case as the main result and do not switch after seeing results.")
 
+    # 6 A risk ------------------------------------------------------------
+    s = prs.slides.add_slide(blank)
+    bg(s, WHITE)
+    title(s, "Strategy A loses when volatility spikes", "Monthly net carry regressed on risk factors, Newey-West t-stats")
+    speaker(s, "Reza")
+    m = "RX (dollar) + dVol (LRV)"
+    stat(s, 0.6, 1.95, 3.0, f"{reg.loc[(m, 'dVol (LRV)'), 'coef']:.2f}",
+         f"Beta to equity-volatility changes (t = {reg.loc[(m, 'dVol (LRV)'), 'NW t-stat']:.1f})", color=RED)
+    stat(s, 3.85, 1.95, 3.0, f"{reg.loc[(m, 'RX (dollar)'), 'coef']:.2f}",
+         f"Beta to the dollar factor (t = {reg.loc[(m, 'RX (dollar)'), 'NW t-stat']:.1f})")
+    stat(s, 0.6, 3.75, 3.0, f"{100 * reg.loc[(m, 'const'), 'coef']:.2f}%",
+         f"Monthly alpha (t = {reg.loc[(m, 'const'), 'NW t-stat']:.1f}): not significant")
+    stat(s, 3.85, 3.75, 3.0, f"{reg.loc[(m, 'R2'), 'coef']:.2f}", "R² of the two-factor model")
+    text(s, 0.6, 5.65, 6.3, 1.2, "Worst months: Oct 2008, Aug 2007, May 2000, Jan 2009, and the Jan 2015 Swiss franc de-peg.",
+         size=14, color=SLATE)
+    text(s, 7.4, 1.95, 5.3, 0.4, f"The 2008 carry crash: {crash08:.1f}% (Jul 2008 – Mar 2009)",
+         size=16, bold=True, color=NAVY)
+    picture(s, ch["a_2008"], 7.3, 2.45, w=5.5)
+    notes(s, "The textbook carry-crash exposure: funding currencies (JPY, CHF) rally when volatility jumps.")
+
     # 10 C risk control ---------------------------------------------------
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "A pre-specified risk control did not help", "Cap each coin at 1/6 of a leg; no longs with funding below −50% a year")
-    speaker(s, "Person 2")
+    speaker(s, "Paraj")
     picture(s, ch["c_contrib"], 0.5, 1.85, w=5.6)
     table(s, 6.5, 1.95, 6.3, [
         ["Net", "Base", "Controlled"],
@@ -491,7 +599,7 @@ def build():
     s = prs.slides.add_slide(blank)
     bg(s, WHITE)
     title(s, "Combining FX and crypto carry", "Each scaled to 10% vol with lagged volatility, 50/50, 2021–2026")
-    speaker(s, "Person 2")
+    speaker(s, "Paraj")
     picture(s, ch["comb"], 0.5, 1.85, w=7.8)
     corr = cm.iloc[:, 0].corr(cm.iloc[:, 1])
     stat(s, 8.75, 1.95, 4.0, f"{corr:.2f}", "Correlation between A and C")
