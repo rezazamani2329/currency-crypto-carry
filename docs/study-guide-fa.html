@@ -1,0 +1,691 @@
+<title>Crowded Carry Study Guide (Persian)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,650&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Vazirmatn:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a trading-desk study binder. Sticky contents rail on wide screens, one reading column, FX in blue and crypto in amber throughout. */
+:root {
+  --bg: #f5f6f8; --surface: #ffffff; --ink: #18202b; --muted: #5b6573; --line: #dfe3e9; --soft: #eef1f5;
+  --fx: #1d5fa8; --cx: #b4610f; --good: #2b7a4b; --bad: #b42d23; --hl: #fff4d6;
+  --f-display: "Vazirmatn", "Source Serif 4", Tahoma, serif;
+  --f-body: "Vazirmatn", "IBM Plex Sans", Tahoma, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11151b; --surface: #181d25; --ink: #e5e8ec; --muted: #9aa3ae; --line: #2a313c; --soft: #1e242e;
+    --fx: #7fb2ec; --cx: #eba65f; --good: #6cc391; --bad: #f08a80; --hl: #3a3220; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11151b; --surface: #181d25; --ink: #e5e8ec; --muted: #9aa3ae; --line: #2a313c; --soft: #1e242e;
+  --fx: #7fb2ec; --cx: #eba65f; --good: #6cc391; --bad: #f08a80; --hl: #3a3220; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 var(--f-body); }
+a { color: var(--fx); }
+.shell { max-width: 1180px; margin: 0 auto; padding-inline: 16px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 900px) { .shell { grid-template-columns: minmax(0, 1fr); gap: 0; } .toc { display: none; } }
+.toc { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; max-height: 100vh; overflow-y: auto; padding-block: 32px; font-size: 0.86rem; }
+.toc b { display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: s; }
+.toc li a { display: block; padding: 3px 8px; border-radius: 6px; color: var(--muted); text-decoration: none; }
+.toc li a:hover, .toc li a:focus-visible { background: var(--soft); color: var(--ink); outline: none; }
+main { min-width: 0; padding-block: 32px 80px; }
+.prose { max-width: 70ch; }
+header.top { padding-bottom: 24px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--f-display); font-weight: 650; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.1; margin: 6px 0 10px; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 650; font-size: 1.65rem; line-height: 1.2; margin: 56px 0 10px; text-wrap: balance; scroll-margin-top: 16px; }
+h2 .n { font-family: var(--f-mono); font-size: 0.9rem; color: var(--muted); font-weight: 400; margin-right: 8px; }
+h3 { font-size: 1.07rem; font-weight: 600; margin: 30px 0 6px; text-wrap: balance; }
+p { margin: 0 0 14px; }
+ul, ol { margin: 0 0 14px; padding-left: 22px; }
+li { margin-bottom: 4px; }
+.lede { font-size: 1.1rem; color: var(--muted); max-width: 64ch; }
+.tag { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; padding: 1px 8px; border-radius: 999px; vertical-align: 2px; }
+.tag.fx { background: color-mix(in srgb, var(--fx) 15%, transparent); color: var(--fx); }
+.tag.cx { background: color-mix(in srgb, var(--cx) 18%, transparent); color: var(--cx); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 20px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.kpi .k { font-size: 0.74rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi .v { font-family: var(--f-mono); font-size: 1.45rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.kpi .d { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+.kpi.fx { border-top: 3px solid var(--fx); } .kpi.cx { border-top: 3px solid var(--cx); }
+.formula { font-family: var(--f-mono); font-size: 0.92rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; white-space: pre; margin: 10px 0 16px; }
+code { font-family: var(--f-mono); font-size: 0.88em; background: var(--soft); padding: 1px 5px; border-radius: 4px; }
+.work { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 14px 0 18px; }
+.work > .eyebrow { margin-bottom: 6px; }
+.work .step { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; margin-bottom: 8px; }
+.work .step b.i { font-family: var(--f-mono); color: var(--muted); font-weight: 500; }
+.key { background: var(--hl); border-radius: 8px; padding: 10px 14px; margin: 14px 0; }
+.tbl { overflow-x: auto; margin: 10px 0 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+th, td { padding: 7px 11px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; font-variant-numeric: tabular-nums; }
+th { font-weight: 600; color: var(--muted); background: var(--soft); }
+th:first-child, td:first-child, td.t { text-align: left; }
+.tbl table.p2 td:nth-child(2), .tbl table.p2 th:nth-child(2) { text-align: left; }
+td.t { white-space: normal; min-width: 180px; }
+tr:last-child td { border-bottom: 0; }
+td.neg { color: var(--bad); } td.pos { color: var(--good); }
+tr.em td { font-weight: 600; }
+.pipe { display: grid; gap: 10px; margin: 16px 0; counter-reset: p; }
+.pipe .s { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.pipe .s .no { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); padding-top: 2px; }
+.pipe .s.fx { border-left: 3px solid var(--fx); } .pipe .s.cx { border-left: 3px solid var(--cx); }
+.pipe .s .io { font-size: 0.83rem; color: var(--muted); font-family: var(--f-mono); overflow-wrap: anywhere; }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 10px 4px; margin: 12px 0 6px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; color: var(--muted); padding: 2px 6px 6px; }
+.legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: 3px; margin-right: 6px; }
+.cap { font-size: 0.82rem; color: var(--muted); margin: 0 0 18px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 12px 0 18px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; min-width: 0; }
+.card h4 { margin: 0 0 4px; font-size: 0.98rem; }
+.card p { margin: 0; font-size: 0.92rem; color: var(--ink); }
+.card .ex { font-size: 0.84rem; color: var(--muted); margin-top: 6px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin: 8px 0; }
+details summary { cursor: pointer; padding: 11px 16px; font-weight: 500; list-style: none; display: grid; grid-template-columns: 22px minmax(0,1fr); gap: 6px; }
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: "+"; font-family: var(--f-mono); color: var(--muted); }
+details[open] summary::before { content: "−"; }
+details summary:focus-visible { outline: 2px solid var(--fx); outline-offset: 2px; border-radius: 10px; }
+details .a { padding: 0 16px 12px 44px; color: var(--ink); }
+.verdict { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.verdict.y { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--good); }
+.verdict.m { background: color-mix(in srgb, var(--cx) 18%, transparent); color: var(--cx); }
+.verdict.n { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+.cardsbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0 12px; }
+button { font: inherit; font-size: 0.86rem; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+button:hover { background: var(--soft); } button:focus-visible { outline: 2px solid var(--fx); outline-offset: 2px; }
+.flash { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; min-height: 170px; display: grid; gap: 12px; align-content: start; }
+.flash .q { font-family: var(--f-display); font-size: 1.25rem; line-height: 1.35; }
+.flash .ans { border-top: 1px dashed var(--line); padding-top: 12px; }
+.flash .meta { font-size: 0.78rem; color: var(--muted); font-family: var(--f-mono); }
+footer { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 0.84rem; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* RTL adjustments */
+.shell[dir="rtl"] td:not(:first-child):not(.t) { direction: ltr; }
+.shell[dir="rtl"] .tbl table.p2 td:nth-child(2) { direction: rtl; }
+.shell[dir="rtl"] { overflow-x: clip; }
+.shell[dir="rtl"] ul, .shell[dir="rtl"] ol { padding-left: 0; padding-right: 22px; }
+.shell[dir="rtl"] .toc ol { padding-right: 0; }
+.shell[dir="rtl"] th, .shell[dir="rtl"] td { text-align: left; }
+.shell[dir="rtl"] th:first-child, .shell[dir="rtl"] td:first-child, .shell[dir="rtl"] td.t, .shell[dir="rtl"] .tbl table.p2 td:nth-child(2), .shell[dir="rtl"] .tbl table.p2 th:nth-child(2) { text-align: right; }
+.shell[dir="rtl"] details .a { padding: 0 44px 12px 16px; }
+.shell[dir="rtl"] .pipe .s.fx { border-left: 1px solid var(--line); border-right: 3px solid var(--fx); }
+.shell[dir="rtl"] .pipe .s.cx { border-left: 1px solid var(--line); border-right: 3px solid var(--cx); }
+.shell[dir="rtl"] .formula, .shell[dir="rtl"] .io { text-align: left; }
+.shell[dir="rtl"] h2 .n { margin-right: 0; margin-left: 8px; }
+.shell[dir="rtl"] .legend i { margin-right: 0; margin-left: 6px; }
+body { line-height: 1.85; }
+summary .en { display: block; font-size: 0.82rem; color: var(--muted); font-weight: 400; direction: ltr; text-align: right; }
+.eyebrow { letter-spacing: 0; }
+</style>
+
+<div class="shell" dir="rtl" lang="fa">
+<nav class="toc" aria-label="فهرست">
+  <b>فهرست</b>
+  <ol>
+    <li><a href="#summary">خلاصه در یک دقیقه</a></li>
+    <li><a href="#idea">۱. ایده اصلی</a></li>
+    <li><a href="#concepts">۲. مفاهیمی که لازم دارید</a></li>
+    <li><a href="#questions">۳. پرسش‌ها و فرضیه‌ها</a></li>
+    <li><a href="#pipeline">۴. فرایند از ابتدا تا انتها</a></li>
+    <li><a href="#stratA">۵. استراتژی A گام به گام</a></li>
+    <li><a href="#stratC">۶. استراتژی C گام به گام</a></li>
+    <li><a href="#method">۷. صادق نگه داشتن آزمون</a></li>
+    <li><a href="#resA">۸. نتایج استراتژی A</a></li>
+    <li><a href="#resC">۹. نتایج استراتژی C</a></li>
+    <li><a href="#combo">۱۰. پرتفوی ترکیبی</a></li>
+    <li><a href="#verdicts">۱۱. نتیجه‌گیری</a></li>
+    <li><a href="#limits">۱۲. محدودیت‌ها</a></li>
+    <li><a href="#qa">۱۳. پرسش‌های احتمالی استاد</a></li>
+    <li><a href="#flash">۱۴. کارت‌های خودآزمایی</a></li>
+    <li><a href="#code">۱۵. نقشه کد</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="top">
+  <div class="eyebrow">MFE 230GB Currency Markets · پروژه پایانی · رضا زمانی و Paraj Goyal</div>
+  <h1>کری‌ترید شلوغ: ریسک سقوط در کری‌ترید ارز و کریپتو</h1>
+  <p class="lede">راهنمای کامل مطالعه پروژه: منطق اقتصادی، همه مراحل از داده خام تا نتایج، مثال‌های عددی حل‌شده، نتایج کامل، و پاسخ به پرسش‌هایی که استاد ممکن است بپرسد. اصطلاحات تخصصی انگلیسی در پرانتز آمده‌اند تا با اسلایدها و کد هماهنگ باشند.</p>
+</header>
+
+<section id="summary">
+<h2><span class="n">00</span>خلاصه در یک دقیقه</h2>
+<div class="prose">
+<p><b>کری‌ترید (carry trade)</b> یعنی قرض گرفتن در دارایی با بازده پایین و سرمایه‌گذاری در دارایی با بازده بالا. بیشتر وقت‌ها سود کمی می‌دهد و گاهی ناگهان سقوط می‌کند. توضیح رایج این است که این صرف (premium) پاداشِ پذیرفتن <b>ریسک سقوط (crash risk)</b> است، و سقوط‌ها وقتی شدیدترند که معامله <b>شلوغ (crowded)</b> باشد: یعنی وقتی سفته‌بازان زیادی آن را نگه داشته‌اند و همه باید هم‌زمان از آن خارج شوند.</p>
+<p>ما دو استراتژی کری با منطق یکسان در دو بازار کاملاً متفاوت ساختیم و پرسیدیم آیا شلوغی به پیش‌بینی سقوط‌ها کمک می‌کند:</p>
+<ul>
+  <li><span class="tag fx">A · ارز</span> <b>کری G10 شلوغ.</b> خرید (long) دو ارز توسعه‌یافته با بالاترین نرخ بهره و فروش (short) دو ارز با پایین‌ترین نرخ، ماهانه. شلوغی از داده موقعیت‌های معاملاتی CFTC اندازه‌گیری می‌شود. وقتی معامله شلوغ است، اندازه موقعیت نصف می‌شود.</li>
+  <li><span class="tag cx">C · کریپتو</span> <b>کری نرخ تأمین مالی کریپتو.</b> در قراردادهای دائمی (perpetual) بایننس، فروش یک‌سوم کوین‌ها با بالاترین نرخ تأمین مالی (funding rate) و خرید یک‌سوم با پایین‌ترین نرخ، با تعدیل هفتگی.</li>
+</ul>
+</div>
+<div class="kpis">
+  <div class="kpi fx"><div class="k">نسبت شارپ خالص کری A</div><div class="v">0.37</div><div class="d">۱۹۹۹ تا ۲۰۲۶. بیشترین افت ‎−37%‎ (۲۰۰۸).</div></div>
+  <div class="kpi fx"><div class="k">A با فیلتر شلوغی، خارج از نمونه</div><div class="v">0.32</div><div class="d">در برابر 0.27 بدون فیلتر (۲۰۱۱ تا ۲۰۲۶).</div></div>
+  <div class="kpi cx"><div class="k">نسبت شارپ خالص کری کریپتو C</div><div class="v">0.14</div><div class="d">‎−0.07‎ در ۲۰۲۰–۲۳، و 0.81 از ۲۰۲۴. بیشترین افت ‎−67%‎.</div></div>
+  <div class="kpi"><div class="k">همبستگی A و C</div><div class="v">0.11</div><div class="d">ترکیب ۵۰/۵۰ با نوسان ۱۰٪ شارپ 0.51 دارد.</div></div>
+</div>
+<div class="prose key"><b>داستان در یک جمله.</b> کری در هر دو بازار مثل پاداشِ ریسک سقوط رفتار می‌کند؛ در بازار ارز، شلوغی یک علامت هشدار متوسط اما مفید است؛ در کریپتو، سقوط‌های استراتژی از تک‌کوین‌ها (LUNA و FTT) می‌آیند؛ و چون کری ارز و کری کریپتو در زمان‌های متفاوتی سقوط می‌کنند، ریسک یکدیگر را متنوع می‌کنند.</div>
+</section>
+
+<section id="idea">
+<h2><span class="n">01</span>ایده اصلی</h2>
+<div class="prose">
+<h3>اصلاً چرا کری باید سود بدهد؟</h3>
+<p>طبق نظریه نباید سود بدهد. <b>برابری نرخ بهره پوشش‌نشده (UIP)</b> می‌گوید ارزی که نرخ بهره بالاتری دارد باید دقیقاً به اندازه اختلاف نرخ بهره ارزش خود را از دست بدهد؛ پس قرض گرفتن ین با نرخ 0.1% و نگه داشتن دلار استرالیا با نرخ 4% به‌طور متوسط سودی ندارد. اما در داده‌ها UIP برقرار نیست: ارزهای پربهره به اندازه کافی تضعیف نمی‌شوند و حتی گاهی تقویت می‌شوند. این همان <b>معمای صرف آتی (forward premium puzzle)</b> است و دلیل سودآوری کری.</p>
+<h3>پس چرا همه این کار را نمی‌کنند؟</h3>
+<p>چون این سود با <b>چولگی منفی (negative skewness)</b> همراه است: سودهای کوچک زیاد و چند زیان بزرگ و ناگهانی. می‌گویند کری «از پله‌ها بالا می‌رود و با آسانسور پایین می‌آید». زیان‌ها در دوره‌هایی متمرکزند که برای همه بد است (۲۰۰۸ و جهش‌های ناگهانی نوسان)، پس این صرف را می‌توان جبران ریسک دانست، نه ناهار مجانی.</p>
+<h3>شلوغی کجای ماجراست؟</h3>
+<p>Brunnermeier، Nagel و Pedersen (2008) نشان دادند سقوط کری وقتی رخ می‌دهد که سفته‌بازان موقعیت سنگینی در این معامله دارند و شرایط تأمین مالی سخت می‌شود. اگر همه AUD خریده و JPY فروخته باشند، یک شوک همه را مجبور می‌کند هم‌زمان AUD بفروشند و JPY بخرند و همین فروش، سقوط را عمیق‌تر می‌کند. پس: <b>کری‌ترید شلوغ ریسک سقوط بیشتری دارد</b>. این فرضیه‌ای است که در بازار ارز با داده موقعیت‌های CFTC آزمون می‌کنیم.</p>
+<h3>چرا کریپتو؟</h3>
+<p>قراردادهای دائمی کریپتو نرخ بهره خودشان را دارند: <b>نرخ تأمین مالی (funding rate)</b>. وقتی معامله‌گران زیادی با اهرم long هستند، نرخ تأمین مالی بالایی به shortها می‌پردازند. پس نرخ تأمین مالی بالا هم سیگنال کری است (shortها پول می‌گیرند) و هم سیگنال شلوغی (longهای اهرمی زیاد). اقتصاد یکسان، سرمایه‌گذاران و ساختار بازار کاملاً متفاوت. این به ما اجازه می‌دهد بپرسیم آیا منطق کری و سقوط به کریپتو هم منتقل می‌شود.</p>
+</div>
+<div class="grid2">
+  <div class="card"><h4>یک تشبیه</h4><p>کری مثل فروختن بیمه است. هر ماه حق بیمه می‌گیرید و به‌ندرت خسارت می‌دهید، اما وقتی می‌دهید بزرگ است و در بدترین زمان. شلوغی یعنی بیمه‌گرهای زیادی همان بیمه‌نامه را فروخته‌اند: وقتی فاجعه می‌آید، همه هم‌زمان می‌خواهند ریسک را از خود دور کنند.</p></div>
+  <div class="card"><h4>دو بازار کنار هم</h4><p><span class="tag fx">ارز</span> بازده = اختلاف نرخ بهره، شلوغی = موقعیت‌های CFTC.<br><span class="tag cx">کریپتو</span> بازده = نرخ تأمین مالی، و خود نرخ تأمین مالی تقاضای اهرمی را اندازه می‌گیرد.</p></div>
+</div>
+</section>
+
+<section id="concepts">
+<h2><span class="n">02</span>مفاهیمی که لازم دارید</h2>
+<p class="prose">از پایه به بالا دسته‌بندی شده‌اند. هر کارت تعریف را می‌دهد و می‌گوید پروژه چطور از آن استفاده می‌کند.</p>
+<h3>مبانی ارز</h3>
+<div class="grid2">
+  <div class="card"><h4>نرخ لحظه‌ای S (spot)</h4><p>قیمت یک واحد ارز خارجی به دلار. همه نرخ‌ها را به صورت «دلار به ازای هر واحد ارز خارجی» ذخیره می‌کنیم، پس افزایش S یعنی ارز خارجی تقویت شده است.</p><div class="ex">سری‌هایی مثل DEXUSAL در FRED از قبل دلار به ازای AUD هستند؛ DEXJPUS (ین به ازای دلار) معکوس می‌شود.</div></div>
+  <div class="card"><h4>اختلاف نرخ بهره</h4><p>نرخ سه‌ماهه خارجی منهای نرخ سه‌ماهه آمریکا، i<sub>k</sub> − i<sub>US</sub>. این سیگنال کری در استراتژی A است.</p><div class="ex">داده: نرخ بین‌بانکی سه‌ماهه OECD از طریق FRED.</div></div>
+  <div class="card"><h4>برابری نرخ بهره پوشش‌داده (CIP)</h4><p>نرخ آتی = نرخ لحظه‌ای × (1 + i<sub>US</sub>) / (1 + i<sub>k</sub>). یعنی خرید آتی یک ارز معادل قرض گرفتن دلار و سپرده‌گذاری در ارز خارجی است. به همین دلیل می‌توانیم بازده کری را بدون داده آتی و فقط از نرخ لحظه‌ای و نرخ بهره حساب کنیم.</p></div>
+  <div class="card"><h4>برابری نرخ بهره پوشش‌نشده (UIP)</h4><p>کاهش ارزش مورد انتظار برابر اختلاف نرخ بهره است. اگر برقرار بود، کری سودی نداشت. شکست تجربی آن همان معمای صرف آتی است.</p></div>
+  <div class="card"><h4>بازده مازاد ارز rx</h4><p>بازده قرض گرفتن دلار و نگه داشتن ارز خارجی برای یک ماه: بهره خارجی به‌علاوه تغییر نرخ ارز، منهای بهره آمریکا.</p><div class="ex">فرمول و مثال حل‌شده در بخش ۵.</div></div>
+  <div class="card"><h4>پرتفوی خنثی نسبت به دلار</h4><p>طرف خرید و فروش اندازه برابر دارند، پس پرتفوی شرط خالصی روی دلار ندارد و فقط شرط می‌بندد که ارزهای پربهره از ارزهای کم‌بهره بهتر عمل کنند.</p></div>
+</div>
+<h3>شلوغی و موقعیت‌ها</h3>
+<div class="grid2">
+  <div class="card"><h4>گزارش تعهدات معامله‌گران CFTC</h4><p>گزارش هفتگی نهاد ناظر آمریکا از موقعیت‌ها در بازار آتی. برای هر قرارداد آتی ارز در CME، معامله‌گران را به تجاری (پوشش‌دهنده ریسک) و غیرتجاری (سفته‌باز) تقسیم می‌کند.</p><div class="ex">موقعیت‌ها مربوط به سه‌شنبه‌اند و جمعه منتشر می‌شوند. ما فقط بعد از جمعه از آن‌ها استفاده می‌کنیم.</div></div>
+  <div class="card"><h4>موقعیت خالص سفته‌بازی</h4><p>(long غیرتجاری − short غیرتجاری) / کل قراردادهای باز. مثبت یعنی سفته‌بازان در مجموع ارز خارجی را خریده‌اند.</p></div>
+  <div class="card"><h4>امتیاز z</h4><p>(مقدار امروز − میانگین متحرک) / انحراف معیار متحرک در ۳۶ ماه. نشان می‌دهد موقعیت امروز در مقایسه با تاریخچه اخیر چقدر غیرعادی است.</p></div>
+  <div class="card"><h4>شلوغی پرتفوی</h4><p>میانگین z طرف خرید منهای میانگین z طرف فروش. عدد بالا یعنی سفته‌بازان به شکل غیرعادی همان چیزی را خریده‌اند که ما خریده‌ایم و همان را فروخته‌اند که ما فروخته‌ایم. بالای ۱ را شلوغ می‌نامیم.</p></div>
+</div>
+<h3>سازوکار کریپتو</h3>
+<div class="grid2">
+  <div class="card"><h4>قرارداد دائمی (perp)</h4><p>قرارداد آتی بدون تاریخ سررسید. برای این‌که قیمتش نزدیک قیمت لحظه‌ای بماند، longها و shortها مبلغی دوره‌ای به نام funding رد و بدل می‌کنند.</p></div>
+  <div class="card"><h4>نرخ تأمین مالی (funding rate)</h4><p>در بایننس هر ۸ ساعت پرداخت می‌شود. اگر مثبت باشد longها به shortها می‌پردازند؛ اگر منفی باشد shortها به longها. مقدار معمول 0.01% در هر ۸ ساعت، حدود ۱۱٪ در سال.</p><div class="ex">در داده ما: میانگین حدود ۱۲ تا ۱۵٪ سالانه برای کوین‌های اصلی، و در ۸۱ تا ۸۸٪ روزها مثبت.</div></div>
+  <div class="card"><h4>funding به عنوان کری</h4><p>short بودن در کوینی با funding بالا پول می‌آورد، مثل long بودن در ارز پربهره که بهره می‌آورد. long بودن در کوینی با funding منفی هم پول می‌آورد.</p></div>
+  <div class="card"><h4>سوگیری بقا (survivorship bias)</h4><p>آزمون فقط روی کوین‌هایی که امروز وجود دارند، نتایج را بهتر از واقع نشان می‌دهد. ما LUNA و FTT را که در ۲۰۲۲ فروپاشیدند نگه داشتیم.</p></div>
+</div>
+<h3>آمار و بک‌تست</h3>
+<div class="grid2">
+  <div class="card"><h4>نسبت شارپ</h4><p>میانگین سالانه بازده مازاد تقسیم بر نوسان سالانه. ماهانه: میانگین × 12 / (انحراف معیار × √12). روزانه کریپتو: × 365.</p></div>
+  <div class="card"><h4>بیشترین افت (max drawdown)</h4><p>بزرگ‌ترین کاهش از یک قله قبلی در ارزش تجمعی. ریسک سقوطی را نشان می‌دهد که نوسان نشان نمی‌دهد.</p></div>
+  <div class="card"><h4>چولگی</h4><p>عدم تقارن بازده‌ها. چولگی منفی یعنی زیان‌های بزرگ گاه‌به‌گاه. کری ارز چولگی منفی دارد (‎−0.49‎).</p></div>
+  <div class="card"><h4>گردش و هزینه</h4><p>گردش (turnover) = مجموع قدر مطلق تغییر وزن‌ها. هزینه = گردش × هزینه هر واحد: ۳ واحد پایه (bp) برای ارز و ۵ bp برای کریپتو.</p></div>
+  <div class="card"><h4>درون نمونه / خارج از نمونه</h4><p>نتایج روی داده قبل از نقطه جدایی (A: تا ۲۰۱۰، C: تا ۲۰۲۳) در برابر داده بعد از آن. خارج از نمونه آزمون منصفانه‌تری است.</p></div>
+  <div class="card"><h4>سوگیری نگاه به آینده (look-ahead)</h4><p>استفاده از اطلاعاتی که در زمان تصمیم هنوز معلوم نبوده. ما وزن‌ها را در پایان دوره t می‌سازیم و بازده دوره t+1 را می‌گیریم، و داده CFTC را تا تاریخ انتشارش عقب می‌اندازیم.</p></div>
+  <div class="card"><h4>آماره t نیوی-وست (Newey-West)</h4><p>آماره t که خطای استاندارد را برای خودهمبستگی و ناهمسانی واریانس در رگرسیون‌های سری زمانی اصلاح می‌کند. ۳ وقفه برای داده ماهانه و ۷ وقفه برای روزانه.</p></div>
+  <div class="card"><h4>هدف‌گذاری نوسان</h4><p>مقیاس‌بندی استراتژی تا نوسان پیش‌بینی‌شده‌اش برابر هدف (۱۰٪ سالانه) شود، فقط با نوسان گذشته. باعث می‌شود دو استراتژی قبل از ترکیب قابل مقایسه باشند.</p></div>
+</div>
+</section>
+
+<section id="questions">
+<h2><span class="n">03</span>پرسش‌ها و فرضیه‌های پژوهش</h2>
+<p class="prose">این‌ها قبل از اجرای هر بک‌تستی نوشته شدند. همین نوشتن از قبل است که آزمون را صادق می‌کند.</p>
+<div class="tbl"><table>
+<tr><th>#</th><th>پرسش</th><th>فرضیه (H1)</th></tr>
+<tr><td>RQ1 <span class="tag fx">A</span></td><td class="t">آیا کری G10 بعد از هزینه‌ها بازده مثبت دارد و با فاکتور کری دانشگاهی هم‌خوان است؟</td><td class="t">صرف مثبت؛ همبستگی بالا با فاکتور HML لوستیگ-روسانوف-وردلان (LRV).</td></tr>
+<tr><td>RQ2 <span class="tag fx">A</span></td><td class="t">آیا شلوغی CFTC کری ضعیف‌تر یا مستعد سقوط را پیش‌بینی می‌کند، و آیا کاهش موقعیت هنگام شلوغی خارج از نمونه کمک می‌کند؟</td><td class="t">بعد از ماه‌های شلوغ، بازده کمتر و چولگی منفی‌تر است؛ فیلتر شارپ خارج از نمونه را بالا می‌برد.</td></tr>
+<tr><td>RQ3 <span class="tag fx">A</span></td><td class="t">کری ارز چه وقت زیان می‌دهد؟</td><td class="t">بتای منفی نسبت به شوک‌های نوسان؛ حساسیت مثبت به فاکتور دلار.</td></tr>
+<tr><td>RQ4 <span class="tag cx">C</span></td><td class="t">آیا پرتفوی فروش funding بالا و خرید funding پایین بعد از هزینه صرف دارد، و این صرف از کجا می‌آید؟</td><td class="t">صرف مثبت، عمدتاً از funding دریافتی.</td></tr>
+<tr><td>RQ5 <span class="tag cx">C</span></td><td class="t">چه چیزی زیان‌های کری کریپتو را ایجاد می‌کند و آیا یک کنترل ریسک ساده کمک می‌کند؟</td><td class="t">حساسیت کم به BTC؛ زیان‌ها از تک‌کوین‌ها وقتی موقعیت‌های شلوغ بسته می‌شوند.</td></tr>
+<tr><td>RQ6</td><td class="t">آیا کری ارز و کریپتو همبسته‌اند؟ آیا ترکیبشان تنوع‌بخشی می‌کند؟</td><td class="t">همبستگی کم؛ ترکیب نوسان و افت کمتری دارد.</td></tr>
+</table></div>
+</section>
+
+<section id="pipeline">
+<h2><span class="n">04</span>فرایند از ابتدا تا انتها</h2>
+<p class="prose">هفت اسکریپت شماره‌دار در پوشه <code>code/</code> که <code>run_all.py</code> به ترتیب اجرا می‌کند. نوت‌بوک‌های <code>notebooks/01–05</code> همین مراحل را با وارد کردن همان توابع قدم به قدم نشان می‌دهند، پس اعدادشان یکی است.</p>
+<div class="pipe">
+  <div class="s fx"><div class="no">01</div><div><b>دانلود داده برای A.</b> نرخ لحظه‌ای ارز (FRED H.10)، نرخ سه‌ماهه (OECD از طریق FRED)، فایل‌های فشرده CFTC از ۱۹۸۶ تا ۲۰۲۶. همه چیز به پایان ماه تبدیل، به دلار به ازای واحد ارز خارجی برگردانده، و نام قراردادهای CFTC تطبیق داده می‌شود (از جمله نام قبل از ۲۰۰۰ یعنی «INTERNATIONAL MONETARY MARKET»).<div class="io" dir="ltr">→ data/clean/fx_spot_monthly_usd_per_fcu.csv, rates_3m_monthly.csv, cftc_net_spec_weekly.csv</div></div></div>
+  <div class="s fx"><div class="no">02</div><div><b>بک‌تست A.</b> بازده‌های مازاد، رتبه‌بندی بر اساس اختلاف نرخ، خرید ۲ / فروش ۲، امتیاز z شلوغی، فیلتر، هزینه‌ها، جدول عملکرد، آزمون شلوغ در برابر غیرشلوغ، شبکه استحکام (robustness grid)، نمودارها.<div class="io" dir="ltr">→ output/strategyA/</div></div></div>
+  <div class="s cx"><div class="no">03</div><div><b>دانلود داده برای C.</b> آرشیو عمومی بایننس: کندل روزانه و funding هشت‌ساعته برای ۱۲ قرارداد دائمی USDT، ۲۰۲۰ تا ۲۰۲۶. funding به روزانه جمع زده می‌شود؛ هر کوین فقط در روزهایی قابل معامله است که قیمت و حجم مثبت داشته باشد.<div class="io" dir="ltr">→ data/clean/ crypto prices, volume, funding</div></div></div>
+  <div class="s cx"><div class="no">04</div><div><b>بک‌تست C.</b> سیگنال funding هفت‌روزه، دسته‌بندی هفتگی به یک‌سوم‌ها، سود و زیان روزانه به تفکیک قیمت و funding، هزینه‌ها، عملکرد، تجزیه بازده، شبکه استحکام (۳/۷/۳۰ روز × روزانه/هفتگی)، بدترین هفته‌ها.<div class="io" dir="ltr">→ output/strategyC/</div></div></div>
+  <div class="s"><div class="no">05</div><div><b>تحلیل ریسک.</b> مقایسه A با فاکتور LRV (فایل درس CurrencyPortfolios.xls)، رگرسیون A روی فاکتورهای دلار و نوسان، بتای C نسبت به BTC، سود و زیان به تفکیک کوین، کنترل ریسک از پیش تعیین‌شده برای C، پرتفوی ترکیبی ۵۰/۵۰ با نوسان ۱۰٪.<div class="io" dir="ltr">→ output/risk/</div></div></div>
+  <div class="s"><div class="no">06</div><div><b>صفحه تعاملی.</b> وب‌سایت نتایج را از جدول‌های خروجی می‌سازد.<div class="io" dir="ltr">→ web/index.html</div></div></div>
+  <div class="s"><div class="no">07</div><div><b>اسلایدها.</b> ارائه ۱۶ اسلایدی را با نمودارهای output/ می‌سازد.<div class="io" dir="ltr">→ slides/presentation.pptx (+ PDF)</div></div></div>
+</div>
+<div class="prose">
+<h3>پروژه در عمل چطور پیش رفت</h3>
+<ol>
+  <li><b>۱ اکتبر.</b> انتخاب استراتژی‌های A و C از فهرست درس. ساخت مخزن GitHub و محیط پایتون ۳.۱۲.</li>
+  <li><b>مشکل داده.</b> FRED دانلود خودکار را از شبکه مسدود کرد، پس فایل‌های CSV آن دستی ذخیره شدند. فایل‌های CFTC بدون مشکل دانلود شدند.</li>
+  <li><b>پیدا و رفع کردن یک باگ.</b> موقعیت‌های CFTC اول فقط از ۲۰۰۰ شروع می‌شدند، چون کد فقط «CHICAGO MERCANTILE» را تطبیق می‌داد. قبل از اوت ۲۰۰۰ همان قراردادها با نام «INTERNATIONAL MONETARY MARKET» ثبت شده‌اند. تطبیق هر دو نام، داده موقعیت را تا ۱۹۸۶ عقب برد.</li>
+  <li><b>فهرست کوین‌ها.</b> به ۱۲ کوین محدود شد و LUNA و FTT عمداً نگه داشته شدند تا سوگیری بقا نباشد؛ USDC فقط برای کنترل صحت.</li>
+  <li><b>تحلیل ریسک، وب‌سایت، اسلایدها، نوت‌بوک‌ها، README و گزارش استفاده از هوش مصنوعی.</b> همه تا ۲ اکتبر روی <code>main</code> رفتند.</li>
+</ol>
+</div>
+</section>
+
+<section id="stratA">
+<h2><span class="n">05</span>استراتژی A گام به گام <span class="tag fx">ارز</span></h2>
+<div class="prose">
+<p><b>دامنه:</b> JPY، EUR، GBP، CHF، CAD، AUD، NZD، همه در برابر USD. <b>تناوب:</b> ماهانه. <b>نمونه:</b> <span dir="ltr">۱۹۹۹-۰۵</span> تا <span dir="ltr">۲۰۲۶-۰۸</span> (محدود به شروع داده نرخ بهره JPY و CHF و آغاز یورو).</p>
+<h3>گام ۱. محاسبه بازده مازاد ماهانه هر ارز</h3>
+</div>
+<div class="formula" dir="ltr">rx(k, t) = (1 + i_k,t−1 / 1200) × S_t / S_t−1  −  (1 + i_US,t−1 / 1200)
+
+i in % per year, so /1200 turns it into a monthly decimal. S in USD per foreign unit.</div>
+<p class="prose">i درصد سالانه است، پس تقسیم بر 1200 آن را به عدد اعشاری ماهانه تبدیل می‌کند. S دلار به ازای واحد ارز خارجی است.</p>
+<div class="work">
+  <div class="eyebrow">مثال حل‌شده (اعداد فرضی)</div>
+  <div class="step"><b class="i">الف</b><div>نرخ AUD برابر 4.0% و نرخ آمریکا 1.0%. نرخ AUD/USD از 0.7000 به 0.7035 می‌رسد (‎+0.5%‎).</div></div>
+  <div class="step"><b class="i">ب</b><div dir="ltr" style="text-align:right">rx = (1 + 0.04/12) × 1.005 − (1 + 0.01/12) = 1.003333 × 1.005 − 1.000833 = 1.008350 − 1.000833 = <b>+0.75%</b></div></div>
+  <div class="step"><b class="i">ج</b><div>اگر به جای آن AUD یک درصد سقوط کند: <span dir="ltr">1.003333 × 0.99 − 1.000833 = <b>−0.75%</b></span>.</div></div>
+  <div class="step"><b class="i">د</b><div>نقطه سربه‌سر: AUD می‌تواند حدود 0.25% در ماه (۳٪ در سال) تضعیف شود تا کری زیان‌ده شود. UIP می‌گوید باید به‌طور متوسط دقیقاً همین‌قدر تضعیف شود؛ در داده‌ها این‌طور نیست و همین صرف کری است.</div></div>
+</div>
+<div class="prose"><h3>گام ۲. رتبه‌بندی و ساخت پرتفوی</h3>
+<p>در پایان هر ماه، ۷ ارز را بر اساس i<sub>k</sub> − i<sub>US</sub> رتبه‌بندی کنید. دو ارز بالایی را بخرید و دو ارز پایینی را بفروشید. وزن هر خرید ‎+0.5‎ و هر فروش ‎−0.5‎ (خنثی نسبت به دلار).</p></div>
+<div class="work">
+  <div class="eyebrow">مثال حل‌شده (نرخ‌های فرضی)</div>
+  <div class="tbl" style="margin:6px 0 10px"><table>
+    <tr><th>ارز</th><th>نرخ سه‌ماهه</th><th>اختلاف با USD (3.5%)</th><th>رتبه</th><th>وزن</th></tr>
+    <tr><td>NZD</td><td>5.5%</td><td class="pos">+2.0</td><td>1</td><td>+0.5</td></tr>
+    <tr><td>AUD</td><td>4.3%</td><td class="pos">+0.8</td><td>2</td><td>+0.5</td></tr>
+    <tr><td>GBP</td><td>4.0%</td><td>+0.5</td><td>3</td><td>0</td></tr>
+    <tr><td>CAD</td><td>3.0%</td><td>−0.5</td><td>4</td><td>0</td></tr>
+    <tr><td>EUR</td><td>2.0%</td><td>−1.5</td><td>5</td><td>0</td></tr>
+    <tr><td>CHF</td><td>0.5%</td><td class="neg">−3.0</td><td>6</td><td>−0.5</td></tr>
+    <tr><td>JPY</td><td>0.1%</td><td class="neg">−3.4</td><td>7</td><td>−0.5</td></tr>
+  </table></div>
+  <div>بازده پرتفوی در ماه بعد = <span dir="ltr">0.5 × (rx<sub>NZD</sub> + rx<sub>AUD</sub>) − 0.5 × (rx<sub>CHF</sub> + rx<sub>JPY</sub>)</span></div>
+</div>
+<div class="prose"><h3>گام ۳. اندازه‌گیری شلوغی با داده CFTC</h3>
+<ol>
+  <li>برای هر قرارداد آتی ارز: موقعیت خالص سفته‌بازی = (long غیرتجاری − short غیرتجاری) / قراردادهای باز.</li>
+  <li>هر گزارش سه‌شنبه را ۳ روز جلو ببرید تا فقط بعد از انتشار جمعه استفاده شود؛ آخرین مقدار هر ماه را بردارید.</li>
+  <li>برای هر ارز امتیاز z را در پنجره متحرک ۳۶ ماهه حساب کنید (حداقل ۲۴ ماه لازم است).</li>
+  <li>شلوغی پرتفوی = <span dir="ltr">Σ w<sub>k</sub> × z<sub>k</sub></span> = میانگین z خریدها − میانگین z فروش‌ها.</li>
+</ol></div>
+<div class="work">
+  <div class="eyebrow">مثال حل‌شده (اعداد فرضی)</div>
+  <div class="step"><b class="i">الف</b><div>امتیازهای z: NZD ‎+1.8‎ و AUD ‎+1.4‎ (سفته‌بازان به شکل غیرعادی long هستند)، CHF ‎−0.6‎ و JPY ‎−1.2‎ (به شکل غیرعادی short).</div></div>
+  <div class="step"><b class="i">ب</b><div>شلوغی = <span dir="ltr">0.5(1.8) + 0.5(1.4) − 0.5(−0.6) − 0.5(−1.2) = 0.9 + 0.7 + 0.3 + 0.6 = <b>2.5</b></span></div></div>
+  <div class="step"><b class="i">ج</b><div>2.5 بزرگ‌تر از 1 است، پس معامله شلوغ است: همه وزن‌ها برای ماه بعد در 0.5 ضرب می‌شوند.</div></div>
+</div>
+<div class="prose"><h3>گام ۴. زمان‌بندی و هزینه‌ها</h3>
+<p>وزن‌هایی که در پایان ماه t تعیین می‌شوند بازده ماه t+1 را می‌گیرند. گردش = <span dir="ltr">Σ |w<sub>t</sub> − w<sub>t−1</sub>|</span> و هزینه = گردش × ۳ bp.</p>
+<p><b>مثال:</b> GBP در طرف خرید جای AUD را می‌گیرد. AUD از 0.5 به 0 و GBP از 0 به 0.5 می‌رود، پس گردش = 1.0 و هزینه آن ماه 0.03% است. نصف کردن موقعیت در زمان شلوغی هم گردش ایجاد می‌کند؛ برای همین گردش استراتژی فیلترشده بیشتر است (‎2.0×‎ در برابر ‎1.2×‎ در سال).</p>
+<h3>پارامترهای از پیش تعیین‌شده</h3></div>
+<div class="tbl"><table>
+<tr><th>پارامتر</th><th>مقدار</th><th>دلیل</th></tr>
+<tr><td class="t">تعداد ارز در هر طرف</td><td>2</td><td class="t">استاندارد برای دامنه ۷ ارزی؛ هر طرف متنوع می‌ماند.</td></tr>
+<tr><td class="t">پنجره امتیاز z</td><td class="t">۳۶ ماه (حداقل ۲۴)</td><td class="t">آن‌قدر بلند که «عادی» را تعریف کند و آن‌قدر کوتاه که تطبیق یابد.</td></tr>
+<tr><td class="t">آستانه شلوغی</td><td>1.0</td><td class="t">یک انحراف معیار؛ شبکه استحکام 0.5 و 1.5 را هم آزمون می‌کند.</td></tr>
+<tr><td class="t">اندازه موقعیت هنگام شلوغی</td><td>50%</td><td class="t">کاهش، نه خروج کامل؛ شبکه 0% را هم آزمون می‌کند.</td></tr>
+<tr><td class="t">تأخیر انتشار CFTC</td><td class="t">۳ روز</td><td class="t">داده سه‌شنبه، جمعه منتشر می‌شود.</td></tr>
+<tr><td class="t">هزینه</td><td class="t">۳ bp به ازای هر واحد</td><td class="t">اختلاف خرید و فروش معمول قراردادهای آتی G10.</td></tr>
+<tr><td class="t">شروع خارج از نمونه</td><td>2011-01</td><td class="t">۲۰۰۸ درون نمونه می‌ماند و بیش از ۱۵ سال برای آزمون باقی است.</td></tr>
+</table></div>
+</section>
+
+<section id="stratC">
+<h2><span class="n">06</span>استراتژی C گام به گام <span class="tag cx">کریپتو</span></h2>
+<div class="prose">
+<p><b>دامنه:</b> ۱۲ قرارداد دائمی USDT در بایننس: BTC، ETH، BNB، XRP، ADA، DOGE، SOL، LTC، LINK، AVAX، به‌علاوه LUNA و FTT که در ۲۰۲۲ فروپاشیدند. <b>تناوب:</b> تعدیل هفتگی، سود و زیان روزانه. <b>نمونه:</b> <span dir="ltr">۲۰۲۰-۰۲</span> تا <span dir="ltr">۲۰۲۶-۰۸</span>.</p>
+<h3>گام ۱. ساخت سیگنال</h3>
+<p>سه پرداخت funding هشت‌ساعته هر روز را جمع بزنید تا funding روزانه به دست آید. سیگنال = میانگین هفت‌روزه funding روزانه، با داده تا روز قبل.</p>
+<h3>گام ۲. دسته‌بندی به یک‌سوم‌ها در هر یکشنبه</h3>
+<p>از میان کوین‌هایی که آن روز قابل معامله‌اند (قیمت و حجم مثبت دارند) و به شرط وجود حداقل ۶ کوین: k = تعداد کوین‌ها / 3. k کوین با بالاترین funding را بفروشید (وزن هر کدام ‎−0.5/k‎) و k کوین با پایین‌ترین را بخرید (هر کدام ‎+0.5/k‎). هر طرف ۵۰٪ سرمایه است، پس پرتفوی خنثی نسبت به دلار و با اهرم ناخالص 1 است.</p>
+<h3>گام ۳. سود و زیان روزانه = قیمت + funding</h3>
+</div>
+<div class="formula" dir="ltr">price P&amp;L   = Σ w_k,t−1 × return_k,t
+funding P&amp;L = − Σ w_k,t−1 × funding_k,t      (a short, w &lt; 0, receives positive funding)
+net         = price + funding − turnover × 5 bp</div>
+<div class="work">
+  <div class="eyebrow">مثال حل‌شده: یک روز short در DOGE (اعداد فرضی)</div>
+  <div class="step"><b class="i">الف</b><div>۱۱ کوین قابل معامله است، پس k = 3 و وزن هر short برابر ‎−0.5/3 = −16.7%‎ است.</div></div>
+  <div class="step"><b class="i">ب</b><div>funding امروز DOGE برابر 0.04% (حدود ۱۵٪ سالانه). سود funding = <span dir="ltr">−(−0.167) × 0.04% = <b>+0.0067%</b></span></div></div>
+  <div class="step"><b class="i">ج</b><div>قیمت DOGE امروز ۲٪ بالا می‌رود. سود و زیان قیمت = <span dir="ltr">−0.167 × 2% = <b>−0.33%</b></span></div></div>
+  <div class="step"><b class="i">د</b><div>یک حرکت معمولی قیمت، funding حدود ۵۰ روز را از بین می‌برد. این نکته کلیدی پشت نتایج استراتژی C است: درآمد funding واقعی است اما حرکات قیمت غالب‌اند.</div></div>
+</div>
+<div class="prose">
+<h3>گام ۴. کوین‌های مرده</h3>
+<p>هر کوین فقط در روزهایی قابل معامله است که قیمت و حجم مثبت داشته باشد. این LUNA را بعد از <span dir="ltr">۲۰۲۲-۰۵-۱۲</span> و FTT را بعد از <span dir="ltr">۲۰۲۲-۱۱-۱۴</span> حذف می‌کند (آرشیو بایننس بعد از آن تاریخ قیمت ثابتی برای FTT نشان می‌دهد). کوینی که بین دو تعدیل از معامله بازبماند بسته می‌شود. فقط ۵ روزی که در آرشیو بایننس نیست با مقدار قبلی پر می‌شود.</p>
+<h3>پارامترهای از پیش تعیین‌شده</h3></div>
+<div class="tbl"><table>
+<tr><th>پارامتر</th><th>مقدار</th></tr>
+<tr><td class="t">دوره نگاه به گذشته funding</td><td class="t">۷ روز</td></tr>
+<tr><td class="t">تعدیل</td><td class="t">هفتگی (بسته شدن یکشنبه)</td></tr>
+<tr><td class="t">اندازه هر طرف</td><td class="t">یک‌سوم بالا و پایین</td></tr>
+<tr><td class="t">حداقل کوین برای معامله</td><td>6</td></tr>
+<tr><td class="t">هزینه</td><td class="t">۵ bp به ازای هر واحد گردش</td></tr>
+<tr><td class="t">شروع خارج از نمونه</td><td>2024-01-01</td></tr>
+<tr><td class="t">کنترل ریسک (جداگانه آزمون شد)</td><td class="t">سقف 1/6 هر طرف برای هر کوین؛ خرید نکردن کوینی که funding هفت‌روزه‌اش زیر ‎−50%‎ سالانه است</td></tr>
+</table></div>
+</section>
+
+<section id="method">
+<h2><span class="n">07</span>صادق نگه داشتن آزمون</h2>
+<div class="grid2">
+  <div class="card"><h4>پارامترها از قبل ثابت شدند</h4><p>همه پنجره‌ها، آستانه‌ها و هزینه‌ها قبل از اجرای بک‌تست نوشته شدند و بعداً تغییر نکردند.</p></div>
+  <div class="card"><h4>تقسیم درون/خارج از نمونه</h4><p>A: ۱۹۹۹–۲۰۱۰ در برابر ۲۰۱۱–۲۰۲۶. C: ۲۰۲۰–۲۰۲۳ در برابر ۲۰۲۴–۲۰۲۶.</p></div>
+  <div class="card"><h4>بدون نگاه به آینده</h4><p>وزن‌های t بازده t+1 را می‌گیرند. CFTC فقط بعد از انتشار. سیگنال کریپتو funding تا روز قبل را به کار می‌برد.</p></div>
+  <div class="card"><h4>هزینه‌ها لحاظ شده‌اند</h4><p>همه اعداد اصلی خالص از هزینه‌اند؛ ناخالص هم گزارش شده.</p></div>
+  <div class="card"><h4>بدون سوگیری بقا</h4><p>LUNA و FTT در دامنه کریپتو می‌مانند.</p></div>
+  <div class="card"><h4>استحکام گزارش شد، نه بهینه‌سازی</h4><p>شبکه‌ها پارامترهای جایگزین را نشان می‌دهند؛ نتیجه اصلی همان حالت از پیش تعیین‌شده می‌ماند، حتی وقتی حالت دیگری بهتر به نظر می‌رسد.</p></div>
+  <div class="card"><h4>اعتبارسنجی بیرونی</h4><p>استراتژی A با فاکتور کری منتشرشده LRV برای کشورهای توسعه‌یافته مقایسه شد.</p></div>
+  <div class="card"><h4>یک کنترل ریسک، از قبل تعیین‌شده</h4><p>کنار حالت پایه گزارش شد، صرف‌نظر از نتیجه، که منفی از آب درآمد.</p></div>
+</div>
+</section>
+
+<section id="resA">
+<h2><span class="n">08</span>نتایج استراتژی A <span class="tag fx">ارز</span></h2>
+<div class="chart"><div class="legend"><span><i style="background:var(--fx)"></i>کری (خالص)</span><span><i style="background:var(--cx)"></i>با فیلتر شلوغی (خالص)</span><span><i style="background:var(--muted)"></i>شروع خارج از نمونه ۲۰۱۱</span></div><div id="chA" dir="ltr"></div></div>
+<p class="cap">رشد یک دلار، مقیاس لگاریتمی، <span dir="ltr">۱۹۹۹-۰۵</span> تا <span dir="ltr">۲۰۲۶-۰۸</span>. یک دلار در هر دو نسخه حدود 2.19 دلار شد. افت بزرگ مربوط به ۲۰۰۸ است.</p>
+<h3>عملکرد (خالص از هزینه)</h3>
+<div class="tbl"><table class="p2">
+<tr><th></th><th>دوره</th><th>میانگین سالانه</th><th>نوسان سالانه</th><th>شارپ</th><th>بیشترین افت</th><th>چولگی</th><th>گردش</th></tr>
+<tr><td class="t">کری</td><td class="t">کل ۱۹۹۹–۲۰۲۶</td><td>3.27%</td><td>8.91%</td><td>0.37</td><td class="neg">−37.0%</td><td>−0.49</td><td>1.2×</td></tr>
+<tr><td class="t">کری</td><td class="t">درون نمونه ۱۹۹۹–۲۰۱۰</td><td>4.96%</td><td>10.55%</td><td>0.47</td><td class="neg">−37.0%</td><td>−0.71</td><td>1.6×</td></tr>
+<tr><td class="t">کری</td><td class="t">خارج از نمونه ۲۰۱۱–۲۰۲۶</td><td>2.01%</td><td>7.46%</td><td>0.27</td><td class="neg">−15.5%</td><td>−0.10</td><td>0.9×</td></tr>
+<tr><td class="t">فیلترشده</td><td class="t">کل</td><td>3.23%</td><td>8.55%</td><td>0.38</td><td class="neg">−37.0%</td><td>−0.45</td><td>2.0×</td></tr>
+<tr><td class="t">فیلترشده</td><td class="t">درون نمونه</td><td>4.47%</td><td>10.12%</td><td>0.44</td><td class="neg">−37.0%</td><td>−0.69</td><td>1.8×</td></tr>
+<tr class="em"><td class="t">فیلترشده</td><td class="t">خارج از نمونه</td><td>2.31%</td><td>7.16%</td><td>0.32</td><td class="neg">−14.4%</td><td>−0.02</td><td>2.1×</td></tr>
+</table></div>
+<p class="prose"><b>چطور بخوانیم.</b> کری حدود ۳٪ در سال با شارپ 0.37 می‌دهد: کم اما مثبت. بازده بعد از ۲۰۱۰ کمتر است (نرخ‌های پایین در همه‌جا اختلاف‌ها را کوچک کرد). فیلتر خارج از نمونه کمی کمک می‌کند (0.27 به 0.32) و نوسان و چولگی را کم می‌کند، اما نمی‌تواند از افت ۲۰۰۸ جلوگیری کند.</p>
+<h3>سیگنال شلوغی در طول زمان</h3>
+<div class="chart"><div class="legend"><span><i style="background:var(--ink)"></i>شلوغی پرتفوی (واحد z)</span><span><i style="background:var(--bad)"></i>آستانه = 1</span></div><div id="chCrowd" dir="ltr"></div></div>
+<p class="cap">شلوغی در ۳۳ ماه بالای 1 بوده است. فاصله‌های خالی ماه‌هایی‌اند که امتیاز z در دسترس نبود (مثلاً قرارداد آتی NZD از ۲۰۰۰ تا ۲۰۰۳ وجود نداشت).</p>
+<h3>آیا شلوغی ماه‌های بد را پیش‌بینی می‌کند؟ (RQ2)</h3>
+<div class="tbl"><table>
+<tr><th></th><th>تعداد ماه</th><th>میانگین ماه بعد</th><th>نوسان ماه بعد</th><th>چولگی</th></tr>
+<tr><td class="t">غیرشلوغ</td><td>295</td><td>0.30%</td><td>2.56%</td><td>−0.46</td></tr>
+<tr class="em"><td class="t">شلوغ</td><td>33</td><td>0.02%</td><td>2.67%</td><td>−0.71</td></tr>
+</table></div>
+<p class="prose">بعد از ماه‌های شلوغ، کری تقریباً هیچ سودی نمی‌دهد و چولگی منفی‌تری دارد، دقیقاً در جهتی که فرضیه پیش‌بینی می‌کند. اما ۳۳ ماه نمونه کوچکی است، پس این تفاوت از نظر آماری قوی نیست.</p>
+<h3>شبکه استحکام (شارپ خالص)</h3>
+<div class="tbl"><table>
+<tr><th>آستانه</th><th>اندازه موقعیت هنگام شلوغی</th><th>شارپ کل</th><th>شارپ خارج از نمونه</th><th>بیشترین افت</th></tr>
+<tr><td>0.5</td><td>0%</td><td>0.37</td><td>0.31</td><td>−37.0%</td></tr>
+<tr><td>0.5</td><td>50%</td><td>0.38</td><td>0.30</td><td>−37.0%</td></tr>
+<tr><td>1.0</td><td>0%</td><td>0.38</td><td>0.37</td><td>−37.0%</td></tr>
+<tr class="em"><td class="t">1.0 (از پیش تعیین‌شده)</td><td>50%</td><td>0.38</td><td>0.32</td><td>−37.0%</td></tr>
+<tr><td>1.5</td><td>0%</td><td>0.35</td><td>0.40</td><td>−37.0%</td></tr>
+<tr><td>1.5</td><td>50%</td><td>0.36</td><td>0.33</td><td>−37.0%</td></tr>
+</table></div>
+<p class="prose">همه حالت‌ها از شارپ خارج از نمونه بدون فیلتر (0.27) بهترند، پس بهبود حاصل شانسِ یک انتخاب پارامتر نیست.</p>
+<h3>اعتبارسنجی با فاکتور دانشگاهی (RQ1)</h3>
+<p class="prose">در دوره <span dir="ltr">۱۹۹۹-۰۵</span> تا <span dir="ltr">۲۰۲۱-۰۵</span> (۲۶۴ ماه)، استراتژی A با پرتفوی HML کری کشورهای توسعه‌یافته LRV از فایل درس <b>همبستگی 0.82</b> دارد. استراتژی A: ۳.۲۲٪ در سال، شارپ 0.34. LRV HML: ۲.۳۴٪، شارپ 0.23. پیاده‌سازی ما فاکتور کری شناخته‌شده را بازتولید می‌کند.</p>
+<h3>چه وقت زیان می‌دهد؟ (RQ3)</h3>
+<div class="tbl"><table>
+<tr><th>مدل</th><th>فاکتور دلار RX</th><th>نوآوری نوسان</th><th>آلفای ماهانه</th><th>R²</th></tr>
+<tr><td class="t">فقط RX</td><td>0.42 (t = 4.4)</td><td>–</td><td>0.26% (t = 1.6)</td><td>0.12</td></tr>
+<tr><td class="t">فقط نوسان</td><td>–</td><td>−1.93 (t = −4.3)</td><td>0.26% (t = 1.6)</td><td>0.10</td></tr>
+<tr class="em"><td class="t">هر دو</td><td>0.35 (t = 4.1)</td><td>−1.55 (t = −3.7)</td><td>0.25% (t = 1.7)</td><td>0.18</td></tr>
+</table></div>
+<p class="prose"><b>چطور بخوانیم.</b> کری وقتی نوسان جهانی سهام جهش می‌کند زیان می‌دهد (بتای منفی کاملاً معنادار). بعد از کنترل دلار و نوسان، آلفا معنادار نیست (t ≈ 1.7). این نتیجه کتاب درسی است: کری پاداش ریسک است، نه پول مجانی.</p>
+<p class="prose"><b>بدترین ماه‌ها:</b> <span dir="ltr">۲۰۰۸-۱۰</span> (‎−12.0%‎)، <span dir="ltr">۲۰۰۷-۰۸</span> (‎−7.8%‎)، <span dir="ltr">۲۰۰۰-۰۵</span> (‎−7.0%‎)، <span dir="ltr">۲۰۰۹-۰۱</span> (‎−6.8%‎)، <span dir="ltr">۲۰۰۸-۰۳</span> (‎−6.5%‎)، <span dir="ltr">۲۰۱۵-۰۱</span> (‎−6.4%‎، برداشتن سقف فرانک سوئیس). از ژوئیه ۲۰۰۸ تا مارس ۲۰۰۹ در مجموع ‎−20.5%‎، چون JPY و CHF (ارزهای تأمین مالی) تقویت شدند.</p>
+</section>
+
+<section id="resC">
+<h2><span class="n">09</span>نتایج استراتژی C <span class="tag cx">کریپتو</span></h2>
+<div class="chart"><div class="legend"><span><i style="background:var(--cx)"></i>خالص</span><span><i style="background:var(--muted)"></i>ناخالص</span></div><div id="chC" dir="ltr"></div></div>
+<p class="cap">رشد یک دلار، مقیاس لگاریتمی. علامت‌ها: LUNA (مه ۲۰۲۲)، FTX (نوامبر ۲۰۲۲)، شروع خارج از نمونه (۲۰۲۴).</p>
+<div class="tbl"><table class="p2">
+<tr><th></th><th>دوره</th><th>میانگین سالانه</th><th>نوسان سالانه</th><th>شارپ</th><th>بیشترین افت</th><th>بدترین هفته</th><th>گردش</th></tr>
+<tr><td class="t">ناخالص</td><td class="t">کل ۲۰۲۰–۲۰۲۶</td><td>6.38%</td><td>29.87%</td><td>0.21</td><td class="neg">−66.0%</td><td class="neg">−27.2%</td><td>45×</td></tr>
+<tr class="em"><td class="t">خالص</td><td class="t">کل</td><td>4.13%</td><td>29.87%</td><td>0.14</td><td class="neg">−67.3%</td><td class="neg">−27.3%</td><td>45×</td></tr>
+<tr><td class="t">خالص</td><td class="t">درون نمونه ۲۰۲۰–۲۰۲۳</td><td>−2.52%</td><td>36.05%</td><td>−0.07</td><td class="neg">−67.3%</td><td class="neg">−27.3%</td><td>45×</td></tr>
+<tr><td class="t">خالص</td><td class="t">خارج از نمونه ۲۰۲۴–۲۰۲۶</td><td>13.87%</td><td>17.21%</td><td>0.81</td><td class="neg">−13.3%</td><td class="neg">−9.2%</td><td>44×</td></tr>
+</table></div>
+<div class="prose key"><b>معمایی که باید بفهمید:</b> میانگین خالص ‎+4.1%‎ در سال است، اما یک دلار در پایان حدود 0.98 دلار می‌شود. چرا؟ با نوسان ۳۰٪، بازده مرکب (هندسی) تقریباً برابر میانگین حسابی منهای نصف واریانس است: <span dir="ltr">4.1% − 0.5 × 0.30² ≈ 4.1% − 4.5% ≈ −0.4%</span> در سال. این «کشش نوسان» (volatility drag) است.</div>
+<h3>بازده از کجا می‌آید؟ (RQ4)</h3>
+<div class="chart"><div class="legend"><span><i style="background:var(--good)"></i>جزء funding</span><span><i style="background:var(--bad)"></i>جزء قیمت</span></div><div id="chDec" dir="ltr"></div></div>
+<p class="cap">سهم تجمعی، واحد درصد.</p>
+<div class="tbl"><table>
+<tr><th>درصد در سال</th><th>funding</th><th>قیمت</th><th>هزینه</th><th>خالص</th></tr>
+<tr><td class="t">کل</td><td class="pos">+8.55</td><td class="neg">−2.17</td><td class="neg">−2.25</td><td>+4.13</td></tr>
+<tr><td class="t">درون نمونه</td><td class="pos">+12.26</td><td class="neg">−12.51</td><td class="neg">−2.27</td><td class="neg">−2.52</td></tr>
+<tr><td class="t">خارج از نمونه</td><td class="pos">+3.10</td><td class="pos">+12.99</td><td class="neg">−2.22</td><td>+13.87</td></tr>
+</table></div>
+<p class="prose">درآمد funding پایدار و واقعی است. در ۲۰۲۰ تا ۲۰۲۳، کوین‌هایی که short بودیم (کوین‌های پرطرفدار مثل DOGE و XRP) مدام بالا رفتند و آن را از بین بردند. از ۲۰۲۴ سود عمدتاً از حرکت قیمت آمد نه funding، پس عدد قوی خارج از نمونه شاهد روشنی برای یک صرف funding پایدار نیست.</p>
+<h3>استحکام: دوره نگاه × تعدیل (شارپ خالص)</h3>
+<div class="tbl"><table>
+<tr><th>دوره نگاه</th><th>تعدیل</th><th>شارپ کل</th><th>شارپ خارج از نمونه</th><th>بیشترین افت</th><th>گردش</th></tr>
+<tr><td class="t">۳ روز</td><td class="t">روزانه</td><td>0.68</td><td>0.41</td><td>−40.5%</td><td>160×</td></tr>
+<tr><td class="t">۳ روز</td><td class="t">هفتگی</td><td>0.49</td><td>1.29</td><td>−61.2%</td><td>52×</td></tr>
+<tr><td class="t">۷ روز</td><td class="t">روزانه</td><td>0.56</td><td>0.92</td><td>−59.7%</td><td>97×</td></tr>
+<tr class="em"><td class="t">۷ روز (از پیش تعیین‌شده)</td><td class="t">هفتگی</td><td>0.14</td><td>0.81</td><td>−67.3%</td><td>45×</td></tr>
+<tr><td class="t">۳۰ روز</td><td class="t">روزانه</td><td>0.28</td><td>0.83</td><td>−73.3%</td><td>33×</td></tr>
+<tr><td class="t">۳۰ روز</td><td class="t">هفتگی</td><td>0.07</td><td>0.42</td><td>−82.2%</td><td>19×</td></tr>
+</table></div>
+<p class="prose">سیگنال‌های کوتاه‌تر و سریع‌تر حتی بعد از هزینه بهترند؛ یعنی اطلاعات funding ظرف چند روز کهنه می‌شود. با این حال حالت از پیش تعیین‌شده را نتیجه اصلی گزارش می‌کنیم؛ عوض کردن آن بعد از دیدن شبکه، داده‌کاوی (data snooping) است.</p>
+<h3>چه چیزی زیان‌ها را ایجاد می‌کند؟ (RQ5)</h3>
+<ul class="prose">
+  <li><b>بدون حساسیت به بازار:</b> بتا نسبت به بازده روزانه BTC برابر ‎−0.02‎ است (t = ‎−0.75‎). استراتژی نسبت به بازار خنثی است.</li>
+  <li><b>زیان‌ها مختص کوین‌اند.</b> سود و زیان کل به تفکیک کوین (واحد درصد): LUNA ‎−87‎، XRP ‎−58‎، DOGE ‎−44‎، FTT ‎−13‎؛ SOL ‎+102‎، BNB ‎+51‎، AVAX ‎+36‎، ADA ‎+32‎، LINK ‎+27‎.</li>
+  <li><b>هفته LUNA</b> (منتهی به <span dir="ltr">۲۰۲۲-۰۵-۱۵</span>) ‎27.3%‎ زیان داد. استراتژی LUNA را <i>خریده</i> بود: معامله‌گران آن را short می‌کردند، funding آن منفی شد، و قاعده کوین‌های با کمترین funding را در طرف خرید می‌گذارد.</li>
+  <li>دیگر هفته‌های بد: <span dir="ltr">۲۰۲۱-۰۹-۱۲</span> (‎−12.3%‎)، <span dir="ltr">۲۰۲۲-۱۱-۱۳</span> FTX (‎−11.6%‎)، <span dir="ltr">۲۰۲۰-۱۱-۲۹</span> (‎−11.0%‎)، <span dir="ltr">۲۰۲۱-۰۸-۱۵</span> (‎−10.0%‎).</li>
+</ul>
+<div class="prose key"><b>تصویر آینه‌ای بازار ارز.</b> کری ارز وقتی سقوط می‌کند که longهای شلوغ بسته می‌شوند. کری funding کریپتو در نهایت هر چیزی را می‌خرد که معامله‌گران بیشتر از همه short کرده‌اند، پس وقتی یک کوینِ به‌شدت short‌شده واقعاً فرو می‌پاشد، سقوط می‌کند.</div>
+<h3>کنترل ریسک از پیش تعیین‌شده</h3>
+<div class="tbl"><table>
+<tr><th>خالص</th><th>شارپ کل</th><th>شارپ خارج از نمونه</th><th>بیشترین افت</th><th>بدترین هفته</th><th>میانگین اهرم ناخالص</th></tr>
+<tr><td class="t">پایه</td><td>0.14</td><td>0.81</td><td class="neg">−67.3%</td><td class="neg">−27.3%</td><td>1.00</td></tr>
+<tr><td class="t">با کنترل ریسک</td><td class="neg">−0.16</td><td>0.74</td><td class="neg">−43.3%</td><td class="neg">−18.9%</td><td>0.49</td></tr>
+</table></div>
+<p class="prose">زیان هفته‌های LUNA و FTX را نصف کرد، اما عمدتاً چون سقف 1/6 حدود نیمی از سرمایه را بلااستفاده گذاشت. funding لونا فقط وسط هفته (۱۰ مه ۲۰۲۲)، بعد از تعدیل یکشنبه، از ‎−50%‎ عبور کرد، و فیلتر BNB و SOL، دو برنده بزرگ را هم مسدود کرد. درس: در کریپتو، funding به‌شدت منفی معمولاً نشانه <i>shortهای</i> شلوغ است که بستن اجباری‌شان قیمت را بالا می‌برد، نه نشانه بحران.</p>
+</section>
+
+<section id="combo">
+<h2><span class="n">10</span>پرتفوی ترکیبی (RQ6)</h2>
+<div class="chart"><div class="legend"><span><i style="background:var(--fx)"></i>A با نوسان ۱۰٪</span><span><i style="background:var(--cx)"></i>C با نوسان ۱۰٪</span><span><i style="background:var(--ink)"></i>ترکیب ۵۰/۵۰</span></div><div id="chComb" dir="ltr"></div></div>
+<p class="cap">رشد یک دلار، <span dir="ltr">۲۰۲۱-۰۲</span> تا <span dir="ltr">۲۰۲۶-۰۸</span> (۶۷ ماه). هر استراتژی فقط با نوسان گذشته به نوسان ۱۰٪ رسانده شده (۳۶ ماه برای A و ۱۲ ماه برای C).</p>
+<div class="tbl"><table>
+<tr><th></th><th>میانگین سالانه</th><th>نوسان سالانه</th><th>شارپ</th><th>بیشترین افت</th><th>بدترین ماه</th></tr>
+<tr><td class="t">A (نوسان ۱۰٪)</td><td>6.70%</td><td>9.43%</td><td>0.71</td><td class="neg">−11.0%</td><td class="neg">−7.4%</td></tr>
+<tr><td class="t">C (نوسان ۱۰٪)</td><td>0.44%</td><td>9.28%</td><td>0.05</td><td class="neg">−21.4%</td><td class="neg">−10.2%</td></tr>
+<tr class="em"><td class="t">ترکیب ۵۰/۵۰</td><td>3.57%</td><td>6.96%</td><td>0.51</td><td class="neg">−10.6%</td><td class="neg">−5.9%</td></tr>
+</table></div>
+<p class="prose">همبستگی 0.11. ترکیب، نوسان کمتر و بدترین ماه کوچک‌تری از هر دو جزء دارد. از نظر شارپ از A به‌تنهایی بهتر نیست چون C در این سال‌ها ضعیف بود، اما خود اثر تنوع‌بخشی روشن است.</p>
+</section>
+
+<section id="verdicts">
+<h2><span class="n">11</span>نتیجه‌گیری</h2>
+<div class="tbl"><table>
+<tr><th>فرضیه</th><th>حکم</th><th>شاهد</th></tr>
+<tr><td class="t">A1: کری G10 صرف دارد</td><td class="t"><span class="verdict y">تأیید</span></td><td class="t">شارپ خالص 0.37؛ همبستگی 0.82 با LRV HML.</td></tr>
+<tr><td class="t">A2: شلوغی کری ضعیف‌تر را پیش‌بینی می‌کند؛ فیلتر خارج از نمونه کمک می‌کند</td><td class="t"><span class="verdict m">متمایل به بله</span></td><td class="t">میانگین ماه بعد 0.02% در برابر 0.30%؛ شارپ خارج از نمونه 0.27 به 0.32 در کل شبکه. فقط ۳۳ ماه شلوغ؛ از ۲۰۰۸ جلوگیری نکرد.</td></tr>
+<tr><td class="t">A3: کری در جهش نوسان زیان می‌دهد</td><td class="t"><span class="verdict y">تأیید</span></td><td class="t">بتای نوسان ‎−1.55‎، t = ‎−3.7‎؛ آلفا بی‌معنا.</td></tr>
+<tr><td class="t">C1: کری funding کریپتو صرف دارد، عمدتاً از funding</td><td class="t"><span class="verdict m">مختلط</span></td><td class="t">funding ‎+8.6%‎ در سال، اما شارپ خالص فقط 0.14 و حرکت قیمت غالب است؛ درون نمونه ‎−0.07‎ در برابر خارج از نمونه 0.81.</td></tr>
+<tr><td class="t">C2: بدون حساسیت به BTC؛ سقوط‌ها مختص کوین</td><td class="t"><span class="verdict y">تأیید</span></td><td class="t">بتای BTC تقریباً صفر؛ LUNA ‎−87‎ واحد، بدترین هفته ‎−27%‎.</td></tr>
+<tr><td class="t">کنترل ریسک زیان را بدون نابودی بازده کم می‌کند</td><td class="t"><span class="verdict n">رد</span></td><td class="t">شارپ از 0.14 به ‎−0.16‎؛ زمان LUNA را از دست داد.</td></tr>
+<tr><td class="t">کری ارز و کریپتو تنوع‌بخش‌اند</td><td class="t"><span class="verdict y">تأیید</span></td><td class="t">همبستگی 0.11؛ نوسان ترکیب ۷.۰٪ در برابر ۹.۳ تا ۹.۴٪.</td></tr>
+</table></div>
+<div class="prose">
+<p><b>دلالت‌ها.</b> در هر دو بازار، کری مثل دستمزدِ تحمل ریسک سقوط به نظر می‌رسد. در بازار ارز، شلوغی مبتنی بر موقعیت‌ها یک لایه ارزان و نسبتاً مفید است. در کریپتو، funding تقاضای اهرمی را اندازه می‌گیرد، اما مرتب‌سازی فقط بر اساس آن، پرتفوی را در معرض فروپاشی تک‌کوین‌ها قرار می‌دهد. طراحی بهتر برای کریپتو سریع‌تر از هفتگی واکنش نشان می‌دهد، funding به‌شدت منفی را نشانه shortهای شلوغ می‌داند نه سیگنال خرید، و اندازه موقعیت را بر اساس ریسک هر کوین تعیین می‌کند.</p>
+</div>
+</section>
+
+<section id="limits">
+<h2><span class="n">12</span>محدودیت‌ها</h2>
+<ul class="prose">
+  <li><b>شروع نمونه.</b> سری DEXGEUS قبل از یورو در دسترس نیست، نرخ JPY از ۲۰۰۲ و نرخ CHF از ۱۹۹۹ شروع می‌شود، پس استراتژی A عملاً از <span dir="ltr">۱۹۹۹-۰۵</span> آغاز می‌شود.</li>
+  <li><b>نمونه کوچک کریپتو:</b> حدود ۶.۵ سال، ۱۲ کوین، ۳ تا ۴ کوین در هر طرف، پس رویدادهای تکی غالب‌اند.</li>
+  <li><b>معکوس شدن درون/خارج از نمونه کریپتو</b> (‎−0.07‎ در برابر 0.81). دوره خارج از نمونه کوتاه است و از قیمت آمده، نه funding.</li>
+  <li><b>وابستگی به افق سیگنال:</b> سیگنال‌های سریع‌تر بهتر به نظر می‌رسند، اما حالت از پیش تعیین‌شده را نگه داشتیم.</li>
+  <li><b>داده LRV در <span dir="ltr">۲۰۲۱-۰۵</span> تمام می‌شود،</b> پس رگرسیون‌های نوسان فقط ۱۹۹۹–۲۰۲۱ را پوشش می‌دهند.</li>
+  <li><b>هزینه‌های ساده:</b> لغزش قیمت در بحران، محدودیت قرض گرفتن، سقف funding و ریسک طرف مقابل صرافی مدل نشده‌اند (FTX نشان می‌دهد این ریسک واقعی است).</li>
+  <li><b>فقط ۳۳ ماه شلوغ،</b> پس اثر شلوغی دقیق برآورد نشده است.</li>
+</ul>
+</section>
+
+<section id="qa">
+<h2><span class="n">13</span>پرسش‌های احتمالی استاد</h2>
+<p class="prose">برای دیدن پاسخ پیشنهادی کلیک کنید. اول خودتان بلند جواب بدهید. پرسش‌ها به انگلیسی هم آمده‌اند چون ارائه به انگلیسی است.</p>
+<details><summary>چرا بدون نرخ آتی می‌توانید بازده کری را حساب کنید؟ <span class="en">Why can you compute carry returns without forward rates?</span></summary><div class="a">به خاطر برابری نرخ بهره پوشش‌داده: موقعیت آتی معادل قرض گرفتن دلار و سپرده‌گذاری در ارز خارجی است. پس بازده آتی برابر بهره خارجی به‌علاوه تغییر نرخ لحظه‌ای منهای بهره آمریکاست، که همان فرمول rx ماست. انحراف از CIP وجود دارد (به‌ویژه بعد از ۲۰۰۸) اما در مقایسه با بازده ماهانه کری کوچک است.</div></details>
+<details><summary>چرا برای شلوغی از داده CFTC استفاده کردید؟ <span class="en">Why use CFTC data for crowding?</span></summary><div class="a">تنها معیار عمومی، طولانی و هفتگی از موقعیت‌های سفته‌بازی در ارزهاست که تا ۱۹۸۶ عقب می‌رود. مستقیماً اندازه می‌گیرد چه کسی معامله را نگه داشته، که همان سازوکار مقاله Brunnermeier، Nagel و Pedersen است. محدودیتش: فقط قراردادهای آتی بورسی را پوشش می‌دهد که بخش کوچکی از بازار ارز است، پس یک جانشین (proxy) است.</div></details>
+<details><summary>چرا امتیاز z به جای موقعیت خام؟ <span class="en">Why z-score positioning instead of raw positions?</span></summary><div class="a">موقعیت «عادی» بین ارزها خیلی فرق می‌کند و در طول زمان تغییر می‌کند (مثلاً سفته‌بازان به‌طور ساختاری JPY را short هستند). امتیاز z ۳۶ ماهه می‌پرسد «آیا این در مقایسه با تاریخچه اخیر غیرعادی شلوغ است؟» که بین ارزها قابل مقایسه است.</div></details>
+<details><summary>فیلتر از ۲۰۰۸ جلوگیری نکرد. آیا این فرضیه را رد نمی‌کند؟ <span class="en">The filter didn't avoid 2008. Doesn't that kill your hypothesis?</span></summary><div class="a">نشان می‌دهد شلوغی تنها محرک نیست. ۲۰۰۸ از یک وضعیت غیرشلوغ شروع شد؛ شوک از بازارهای تأمین مالی و نوسان آمد که رگرسیون‌های ما آن را نشان می‌دهند (بتای نوسان ‎−1.55‎). با این حال شلوغی بازده ضعیف‌تر ماه بعد را پیش‌بینی می‌کند (0.02% در برابر 0.30%) و در همه حالت‌های شبکه شارپ خارج از نمونه را بهتر می‌کند. پس یک لایه مفید است، نه آشکارساز سقوط.</div></details>
+<details><summary>از کجا می‌دانید سوگیری نگاه به آینده ندارید؟ <span class="en">How do you know there's no look-ahead bias?</span></summary><div class="a">وزن‌های پایان t بازده t+1 را می‌گیرند (شیفت یک دوره در کد). موقعیت‌های سه‌شنبه CFTC فقط بعد از انتشار جمعه استفاده می‌شوند (تأخیر ۳ روزه). سیگنال کریپتو funding تا روز قبل را به کار می‌برد. امتیازهای z متحرک فقط از داده گذشته استفاده می‌کنند.</div></details>
+<details><summary>شارپ خارج از نمونه کریپتو 0.81 است. عالی نیست؟ <span class="en">Crypto out-of-sample Sharpe is 0.81. Isn't that great?</span></summary><div class="a">امیدوارکننده است اما زیاد رویش حساب نمی‌کنیم. فقط حدود ۲.۷ سال را پوشش می‌دهد، و تجزیه نشان می‌دهد بیشتر سود از حرکت قیمت (‎+13%‎) آمده نه funding (‎+3%‎). درون نمونه منفی بود. آن را شاهد ضعیف می‌دانیم، نه صرف پایدار.</div></details>
+<details><summary>چرا LUNA و FTT را نگه داشتید؟ <span class="en">Why keep LUNA and FTT?</span></summary><div class="a">برای جلوگیری از سوگیری بقا. حذف کوین‌های مرده دقیقاً همان سقوط‌هایی را حذف می‌کند که می‌خواهیم مطالعه کنیم. LUNA به‌تنهایی ۸۷ واحد درصد زیان داد.</div></details>
+<details><summary>چرا استراتژی هنگام سقوط LUNA آن را خریده بود؟ <span class="en">Why was the strategy long LUNA when it crashed?</span></summary><div class="a">وقتی LUNA سقوط می‌کرد، معامله‌گران قرارداد دائمی آن را short کردند و funding منفی شد. قاعده، کوین‌های با کمترین funding را می‌خرد (چون برای long بودن به شما پول می‌دهند). پس استراتژی چیزی را خرید که سفته‌بازان بیشتر از همه short کرده بودند، درست وقتی فرو می‌پاشید. تصویر آینه‌ای سقوط کری ارز است.</div></details>
+<details><summary>چرا به نسخه ۳ روزه روزانه که بهتر است تغییر ندادید؟ <span class="en">Why not switch to the 3-day daily version?</span></summary><div class="a">انتخاب بهترین حالت بعد از دیدن نتایج داده‌کاوی است و عملکرد مورد انتظار را بیش از واقع نشان می‌دهد. پارامترها را از قبل ثابت کردیم و شبکه را برای شفافیت گزارش کردیم. الگوی «سریع‌تر بهتر است» یک یافته برای کار آینده است، نه دلیلی برای تغییر نتیجه اصلی.</div></details>
+<details><summary>چرا شارپ پرتفوی ترکیبی از A به‌تنهایی کمتر است؟ <span class="en">Why is the combined Sharpe lower than A alone?</span></summary><div class="a">C در ۲۰۲۱–۲۰۲۶ شارپ 0.05 داشت، پس اضافه کردنش بازده را رقیق می‌کند. اما نوسان از حدود ۹.۴٪ به ۷.۰٪ و بدترین ماه از ‎−7.4%‎ به ‎−5.9%‎ بهبود می‌یابد، چون همبستگی فقط 0.11 است. با یک جزء کریپتوی بهتر، تنوع‌بخشی شارپ را بالا می‌برد.</div></details>
+<details><summary>پیاده‌سازی ارز را چطور اعتبارسنجی کردید؟ <span class="en">How did you validate your FX implementation?</span></summary><div class="a">همبستگی 0.82 با فاکتور HML کشورهای توسعه‌یافته LRV در ۲۶۴ ماه مشترک، با میانگین و شارپ مشابه. تفاوت‌ها از دامنه کوچک‌تر ما (۷ ارز)، انتخاب ۲ ارز در هر طرف و داده نرخ بهره متفاوت می‌آید.</div></details>
+<details><summary>با وقت بیشتر چه می‌کردید؟ <span class="en">What would you do with more time?</span></summary><div class="a">اضافه کردن DEXGEUS قبل از یورو برای گسترش نمونه ارز؛ استفاده از VIX بعد از ۲۰۲۱ برای آزمون نوسان؛ برای کریپتو، سیگنال‌های سریع‌تر، تلقی funding به‌شدت منفی به عنوان هشدار shortهای شلوغ، اندازه‌گیری موقعیت بر اساس ریسک هر کوین، و گسترش فهرست کوین‌ها.</div></details>
+</section>
+
+<section id="flash">
+<h2><span class="n">14</span>کارت‌های خودآزمایی</h2>
+<p class="prose">یادآوری فعال: پرسش را بخوانید، در ذهن جواب دهید، بعد پاسخ را ببینید. با «مخلوط کن» ترتیب عوض می‌شود.</p>
+<div class="cardsbar">
+  <button id="prev" type="button">قبلی</button>
+  <button id="reveal" type="button">نمایش پاسخ</button>
+  <button id="next" type="button">بعدی</button>
+  <button id="shuffle" type="button">مخلوط کن</button>
+</div>
+<div class="flash" aria-live="polite">
+  <div class="meta" id="fmeta" dir="ltr">1 / 1</div>
+  <div class="q" id="fq"></div>
+  <div class="ans" id="fa" hidden></div>
+</div>
+</section>
+
+<section id="code">
+<h2><span class="n">15</span>نقشه کد و نحوه اجرا</h2>
+<div class="tbl"><table>
+<tr><th>فایل</th><th>کارکرد</th></tr>
+<tr><td><code>code/01_download_data_strategyA.py</code></td><td class="t">ارز، نرخ بهره، CFTC ← data/clean/</td></tr>
+<tr><td><code>code/02_backtest_strategyA.py</code></td><td class="t"><code>excess_returns</code>، <code>carry_weights</code>، <code>crowding_signal</code>، <code>backtest</code>، <code>perf</code> ← output/strategyA/</td></tr>
+<tr><td><code>code/03_download_data_strategyC.py</code></td><td class="t">قیمت، حجم و funding بایننس ← data/clean/</td></tr>
+<tr><td><code>code/04_backtest_strategyC.py</code></td><td class="t"><code>carry_weights</code> (دسته‌بندی به یک‌سوم‌ها)، <code>backtest</code> (قیمت + funding − هزینه) ← output/strategyC/</td></tr>
+<tr><td><code>code/05_risk_analysis.py</code></td><td class="t">مقایسه LRV، رگرسیون‌ها، بتای BTC، سود و زیان کوین‌ها، کنترل ریسک، ترکیبی ← output/risk/</td></tr>
+<tr><td><code>code/06_build_web.py</code></td><td class="t">صفحه تعاملی نتایج ← web/index.html</td></tr>
+<tr><td><code>code/07_build_slides.py</code></td><td class="t">اسلایدها ← slides/presentation.pptx</td></tr>
+<tr><td><code>notebooks/01–05</code></td><td class="t">نسخه قدم به قدم ۰۱ تا ۰۵ برای مطالعه</td></tr>
+</table></div>
+<div class="formula" dir="ltr">conda activate carry
+pip install -r requirements.txt
+SKIP_DOWNLOAD=1 python run_all.py     # rebuild everything from the committed data/clean snapshot
+python run_all.py                     # full pipeline including downloads</div>
+<p class="prose">مخزن: <a href="https://github.com/rezazamani2329/currency-crypto-carry" dir="ltr">github.com/rezazamani2329/currency-crypto-carry</a></p>
+</section>
+
+<footer>همه اعداد از فایل‌های پوشه <code>output/</code> مخزن آمده‌اند (شاخه main، نتایج ساخته‌شده در <span dir="ltr">۲۰۲۶-۱۰-۰۲</span>). مثال‌های حل‌شده از اعداد فرضی استفاده می‌کنند و همین‌طور علامت خورده‌اند.</footer>
+</main>
+</div>
+
+<script>
+const DATA = {"A":{"x":["1999-05-31","1999-06-30","1999-07-31","1999-08-31","1999-09-30","1999-10-31","1999-11-30","1999-12-31","2000-01-31","2000-02-29","2000-03-31","2000-04-30","2000-05-31","2000-06-30","2000-07-31","2000-08-31","2000-09-30","2000-10-31","2000-11-30","2000-12-31","2001-01-31","2001-02-28","2001-03-31","2001-04-30","2001-05-31","2001-06-30","2001-07-31","2001-08-31","2001-09-30","2001-10-31","2001-11-30","2001-12-31","2002-01-31","2002-02-28","2002-03-31","2002-04-30","2002-05-31","2002-06-30","2002-07-31","2002-08-31","2002-09-30","2002-10-31","2002-11-30","2002-12-31","2003-01-31","2003-02-28","2003-03-31","2003-04-30","2003-05-31","2003-06-30","2003-07-31","2003-08-31","2003-09-30","2003-10-31","2003-11-30","2003-12-31","2004-01-31","2004-02-29","2004-03-31","2004-04-30","2004-05-31","2004-06-30","2004-07-31","2004-08-31","2004-09-30","2004-10-31","2004-11-30","2004-12-31","2005-01-31","2005-02-28","2005-03-31","2005-04-30","2005-05-31","2005-06-30","2005-07-31","2005-08-31","2005-09-30","2005-10-31","2005-11-30","2005-12-31","2006-01-31","2006-02-28","2006-03-31","2006-04-30","2006-05-31","2006-06-30","2006-07-31","2006-08-31","2006-09-30","2006-10-31","2006-11-30","2006-12-31","2007-01-31","2007-02-28","2007-03-31","2007-04-30","2007-05-31","2007-06-30","2007-07-31","2007-08-31","2007-09-30","2007-10-31","2007-11-30","2007-12-31","2008-01-31","2008-02-29","2008-03-31","2008-04-30","2008-05-31","2008-06-30","2008-07-31","2008-08-31","2008-09-30","2008-10-31","2008-11-30","2008-12-31","2009-01-31","2009-02-28","2009-03-31","2009-04-30","2009-05-31","2009-06-30","2009-07-31","2009-08-31","2009-09-30","2009-10-31","2009-11-30","2009-12-31","2010-01-31","2010-02-28","2010-03-31","2010-04-30","2010-05-31","2010-06-30","2010-07-31","2010-08-31","2010-09-30","2010-10-31","2010-11-30","2010-12-31","2011-01-31","2011-02-28","2011-03-31","2011-04-30","2011-05-31","2011-06-30","2011-07-31","2011-08-31","2011-09-30","2011-10-31","2011-11-30","2011-12-31","2012-01-31","2012-02-29","2012-03-31","2012-04-30","2012-05-31","2012-06-30","2012-07-31","2012-08-31","2012-09-30","2012-10-31","2012-11-30","2012-12-31","2013-01-31","2013-02-28","2013-03-31","2013-04-30","2013-05-31","2013-06-30","2013-07-31","2013-08-31","2013-09-30","2013-10-31","2013-11-30","2013-12-31","2014-01-31","2014-02-28","2014-03-31","2014-04-30","2014-05-31","2014-06-30","2014-07-31","2014-08-31","2014-09-30","2014-10-31","2014-11-30","2014-12-31","2015-01-31","2015-02-28","2015-03-31","2015-04-30","2015-05-31","2015-06-30","2015-07-31","2015-08-31","2015-09-30","2015-10-31","2015-11-30","2015-12-31","2016-01-31","2016-02-29","2016-03-31","2016-04-30","2016-05-31","2016-06-30","2016-07-31","2016-08-31","2016-09-30","2016-10-31","2016-11-30","2016-12-31","2017-01-31","2017-02-28","2017-03-31","2017-04-30","2017-05-31","2017-06-30","2017-07-31","2017-08-31","2017-09-30","2017-10-31","2017-11-30","2017-12-31","2018-01-31","2018-02-28","2018-03-31","2018-04-30","2018-05-31","2018-06-30","2018-07-31","2018-08-31","2018-09-30","2018-10-31","2018-11-30","2018-12-31","2019-01-31","2019-02-28","2019-03-31","2019-04-30","2019-05-31","2019-06-30","2019-07-31","2019-08-31","2019-09-30","2019-10-31","2019-11-30","2019-12-31","2020-01-31","2020-02-29","2020-03-31","2020-04-30","2020-05-31","2020-06-30","2020-07-31","2020-08-31","2020-09-30","2020-10-31","2020-11-30","2020-12-31","2021-01-31","2021-02-28","2021-03-31","2021-04-30","2021-05-31","2021-06-30","2021-07-31","2021-08-31","2021-09-30","2021-10-31","2021-11-30","2021-12-31","2022-01-31","2022-02-28","2022-03-31","2022-04-30","2022-05-31","2022-06-30","2022-07-31","2022-08-31","2022-09-30","2022-10-31","2022-11-30","2022-12-31","2023-01-31","2023-02-28","2023-03-31","2023-04-30","2023-05-31","2023-06-30","2023-07-31","2023-08-31","2023-09-30","2023-10-31","2023-11-30","2023-12-31","2024-01-31","2024-02-29","2024-03-31","2024-04-30","2024-05-31","2024-06-30","2024-07-31","2024-08-31","2024-09-30","2024-10-31","2024-11-30","2024-12-31","2025-01-31","2025-02-28","2025-03-31","2025-04-30","2025-05-31","2025-06-30","2025-07-31","2025-08-31","2025-09-30","2025-10-31","2025-11-30","2025-12-31","2026-01-31","2026-02-28","2026-03-31","2026-04-30","2026-05-31","2026-06-30","2026-07-31","2026-08-31"],"carry":[1.021,1.0261,1.0141,1.0139,1.0308,1.0339,1.0635,1.0909,1.101,1.0926,1.1139,1.1406,1.0608,1.0705,1.0668,1.0798,1.0222,1.0286,1.0248,1.0196,1.0258,1.0065,1.0087,1.0117,1.0241,1.0078,1.0092,1.0391,1.0046,1.0166,1.0092,1.0149,1.0306,1.0477,1.0817,1.0669,1.1009,1.062,1.0263,1.0361,1.0403,1.0798,1.1051,1.0814,1.129,1.1556,1.1516,1.1889,1.2132,1.2724,1.2593,1.2575,1.2428,1.2917,1.3144,1.3195,1.3527,1.4076,1.3498,1.3316,1.3104,1.2981,1.3412,1.3496,1.3905,1.3715,1.3788,1.3955,1.4223,1.4503,1.4642,1.4828,1.4943,1.5351,1.5381,1.5191,1.5771,1.5969,1.6355,1.6044,1.6095,1.589,1.5178,1.5339,1.5074,1.4943,1.5368,1.6091,1.6124,1.6595,1.661,1.7316,1.734,1.7396,1.7793,1.8551,1.8825,1.975,1.9412,1.7899,1.9082,1.9746,1.8723,1.8847,1.8551,1.8645,1.7425,1.7971,1.831,1.8015,1.8064,1.7392,1.6339,1.4372,1.3755,1.3346,1.2442,1.2988,1.4324,1.4369,1.4802,1.5529,1.5285,1.5755,1.6258,1.6419,1.6161,1.6333,1.6346,1.6434,1.6349,1.6919,1.6492,1.5853,1.6387,1.5572,1.6309,1.6549,1.6659,1.6692,1.6736,1.6635,1.6916,1.7287,1.7148,1.713,1.6944,1.6637,1.6074,1.7088,1.6806,1.7075,1.7682,1.837,1.8005,1.7826,1.6974,1.7999,1.8444,1.806,1.8257,1.8041,1.8033,1.7889,1.7775,1.8096,1.8696,1.8503,1.7608,1.686,1.6592,1.6423,1.704,1.7124,1.7072,1.7089,1.6694,1.6978,1.7743,1.7596,1.764,1.7969,1.7965,1.8164,1.771,1.7934,1.7875,1.7994,1.6849,1.7646,1.7941,1.7764,1.7142,1.6659,1.6455,1.5807,1.5904,1.6694,1.7324,1.7309,1.6822,1.688,1.7222,1.7237,1.7114,1.7777,1.7933,1.8075,1.8131,1.8338,1.8598,1.8274,1.8784,1.9103,1.8686,1.8113,1.7895,1.8269,1.8632,1.8097,1.8232,1.7978,1.759,1.8048,1.8017,1.7837,1.7777,1.792,1.818,1.7778,1.7869,1.7253,1.7405,1.76,1.8329,1.7558,1.8262,1.8012,1.818,1.8168,1.7754,1.7899,1.8067,1.7702,1.7849,1.7859,1.8023,1.8269,1.783,1.7499,1.6651,1.716,1.716,1.7317,1.6951,1.7142,1.711,1.7153,1.7603,1.7569,1.7704,1.8043,1.8396,1.8338,1.8352,1.83,1.8067,1.8189,1.8333,1.8743,1.8249,1.84,1.8268,1.8414,1.8629,1.8567,1.8386,1.8067,1.8401,1.8606,1.7934,1.8709,1.8382,1.7838,1.804,1.8108,1.7873,1.779,1.7892,1.8501,1.8387,1.8295,1.8672,1.8461,1.8855,1.8447,1.8761,1.9163,1.9351,1.9765,2.0221,2.0337,1.9391,1.9529,1.975,1.96,1.9552,1.9651,1.9609,1.9384,1.9478,1.8907,1.9209,1.9303,1.9426,1.9473,1.9616,1.9811,2.0096,2.0404,2.0712,2.0828,2.0614,2.106,2.1452,2.1107,2.1475,2.1857],"filt":[1.021,1.0261,1.0141,1.0139,1.0308,1.0339,1.0635,1.0909,1.101,1.0926,1.1139,1.1406,1.0608,1.0705,1.0668,1.0798,1.0222,1.0286,1.0248,1.0196,1.0258,1.0065,1.0087,1.0117,1.0241,1.0078,1.0092,1.0391,1.0046,1.0166,1.0092,1.0149,1.0306,1.0477,1.0817,1.0669,1.1009,1.062,1.0263,1.0361,1.0403,1.0798,1.1051,1.0814,1.129,1.1556,1.1516,1.1889,1.2132,1.2724,1.2593,1.2575,1.2428,1.2917,1.3144,1.3195,1.3527,1.4076,1.3498,1.3316,1.3104,1.2981,1.3412,1.3496,1.3905,1.3715,1.3788,1.3955,1.4223,1.4503,1.4642,1.4828,1.4943,1.5351,1.5381,1.5191,1.5771,1.5969,1.6355,1.6044,1.6095,1.589,1.5178,1.5339,1.5074,1.4943,1.5368,1.6091,1.6102,1.6338,1.6345,1.6692,1.6704,1.6731,1.6922,1.7283,1.741,1.7838,1.7685,1.6996,1.8114,1.8745,1.7773,1.7891,1.761,1.7699,1.6541,1.706,1.7382,1.7101,1.7148,1.651,1.551,1.3643,1.3057,1.2669,1.1811,1.2329,1.3597,1.364,1.4051,1.4741,1.451,1.4956,1.5433,1.5587,1.5342,1.5505,1.5517,1.5601,1.552,1.6061,1.5655,1.5049,1.5556,1.4782,1.5481,1.571,1.5814,1.5845,1.5887,1.5791,1.6058,1.641,1.6339,1.6317,1.614,1.5847,1.5311,1.6277,1.6008,1.6264,1.6843,1.7499,1.7319,1.7233,1.6821,1.7832,1.8273,1.7892,1.8088,1.7874,1.7866,1.7723,1.7611,1.7929,1.8523,1.8331,1.7445,1.6704,1.6438,1.6271,1.6882,1.6965,1.6914,1.6931,1.654,1.682,1.7578,1.7433,1.7477,1.7803,1.7799,1.7995,1.7765,1.7985,1.7926,1.8045,1.6897,1.7696,1.7992,1.7815,1.7191,1.6706,1.6502,1.5852,1.595,1.6742,1.7373,1.7358,1.687,1.6928,1.7271,1.7286,1.7162,1.7827,1.7984,1.8126,1.8183,1.839,1.8515,1.8353,1.8861,1.918,1.8762,1.8187,1.7967,1.8343,1.8707,1.8171,1.8306,1.8051,1.7662,1.8122,1.809,1.791,1.7849,1.7993,1.8254,1.7851,1.7941,1.7323,1.7476,1.7672,1.8404,1.7629,1.8336,1.8085,1.8254,1.8241,1.7826,1.7971,1.814,1.7774,1.7922,1.7932,1.8097,1.8343,1.7902,1.757,1.6718,1.723,1.723,1.7387,1.7019,1.7212,1.718,1.7223,1.7674,1.7641,1.7776,1.8117,1.8471,1.8412,1.8427,1.8395,1.8155,1.8278,1.8423,1.8835,1.8581,1.8729,1.8595,1.8743,1.8962,1.8899,1.8715,1.839,1.8729,1.8829,1.8143,1.8927,1.8596,1.8045,1.825,1.8318,1.808,1.7996,1.81,1.8716,1.8653,1.8606,1.8985,1.8769,1.917,1.8756,1.9075,1.9483,1.9573,1.9782,2.0011,2.0068,1.9601,1.9671,1.9888,1.9737,1.9688,1.9787,1.9746,1.9519,1.9614,1.9038,1.9342,1.9437,1.9561,1.9608,1.9753,1.9949,2.0236,2.0546,2.0856,2.0908,2.0801,2.1026,2.1411,2.1066,2.1434,2.1815]},"crowd":{"x":["1999-05-31","1999-07-31","1999-08-31","1999-09-30","1999-10-31","1999-11-30","2006-08-31","2006-09-30","2006-10-31","2006-11-30","2006-12-31","2007-01-31","2007-02-28","2007-03-31","2007-04-30","2007-05-31","2007-06-30","2007-07-31","2007-08-31","2007-09-30","2007-10-31","2007-11-30","2007-12-31","2008-01-31","2008-02-29","2008-03-31","2008-04-30","2008-05-31","2008-06-30","2008-07-31","2008-08-31","2008-09-30","2008-10-31","2008-11-30","2008-12-31","2009-01-31","2009-02-28","2009-03-31","2009-04-30","2009-05-31","2009-06-30","2009-07-31","2009-08-31","2009-09-30","2009-10-31","2009-11-30","2009-12-31","2010-01-31","2010-02-28","2010-03-31","2010-04-30","2010-05-31","2010-06-30","2010-07-31","2010-08-31","2010-09-30","2010-10-31","2010-11-30","2010-12-31","2011-01-31","2011-02-28","2011-03-31","2011-04-30","2011-05-31","2011-06-30","2011-07-31","2011-08-31","2011-09-30","2011-10-31","2011-11-30","2011-12-31","2012-01-31","2012-02-29","2012-03-31","2012-04-30","2012-05-31","2012-06-30","2012-07-31","2012-08-31","2012-09-30","2012-10-31","2012-11-30","2012-12-31","2013-01-31","2013-02-28","2013-03-31","2013-04-30","2013-05-31","2013-06-30","2013-07-31","2013-08-31","2013-09-30","2013-10-31","2013-11-30","2013-12-31","2014-01-31","2014-02-28","2014-03-31","2014-04-30","2014-05-31","2014-06-30","2014-07-31","2014-08-31","2014-09-30","2014-10-31","2014-11-30","2014-12-31","2015-01-31","2015-02-28","2015-03-31","2015-04-30","2015-05-31","2015-06-30","2015-07-31","2015-08-31","2015-09-30","2015-10-31","2015-11-30","2015-12-31","2016-01-31","2016-02-29","2016-03-31","2016-04-30","2016-05-31","2016-06-30","2016-07-31","2016-08-31","2016-09-30","2016-10-31","2016-11-30","2016-12-31","2017-01-31","2017-02-28","2017-03-31","2017-04-30","2017-05-31","2017-06-30","2017-07-31","2017-08-31","2017-09-30","2017-10-31","2017-11-30","2017-12-31","2018-01-31","2018-02-28","2018-03-31","2018-04-30","2018-05-31","2018-06-30","2018-07-31","2018-08-31","2018-09-30","2018-10-31","2018-11-30","2018-12-31","2019-01-31","2019-02-28","2019-03-31","2019-04-30","2019-05-31","2019-06-30","2019-07-31","2019-08-31","2019-09-30","2019-10-31","2019-11-30","2019-12-31","2020-01-31","2020-02-29","2020-03-31","2020-04-30","2020-05-31","2020-06-30","2020-07-31","2020-08-31","2020-09-30","2020-10-31","2020-11-30","2020-12-31","2021-01-31","2021-02-28","2021-03-31","2021-04-30","2021-05-31","2021-06-30","2021-07-31","2021-08-31","2021-09-30","2021-10-31","2021-11-30","2021-12-31","2022-01-31","2022-02-28","2022-03-31","2022-04-30","2022-05-31","2022-06-30","2022-07-31","2022-08-31","2022-09-30","2022-10-31","2022-11-30","2022-12-31","2023-01-31","2023-02-28","2023-03-31","2023-04-30","2023-05-31","2023-06-30","2023-07-31","2023-08-31","2023-09-30","2023-10-31","2023-11-30","2023-12-31","2024-01-31","2024-02-29","2024-03-31","2024-04-30","2024-05-31","2024-06-30","2024-07-31","2024-08-31","2024-09-30","2024-10-31","2024-11-30","2024-12-31","2025-01-31","2025-02-28","2025-03-31","2025-04-30","2025-05-31","2025-06-30","2025-07-31","2025-08-31","2025-09-30","2025-10-31","2025-11-30","2025-12-31","2026-01-31","2026-02-28","2026-03-31","2026-04-30","2026-05-31","2026-06-30","2026-07-31","2026-08-31"],"y":[-0.173,-1.372,-0.635,0.275,-0.336,0.841,1.818,2.75,3.384,2.523,2.462,2.308,2.258,1.758,1.681,2.014,2.093,1.117,-2.261,-0.528,-0.3,-2.36,-1.09,-2.835,-1.449,-0.826,-1.475,-1.54,-1.116,-1.324,-2.002,-2.839,-2.143,-2.204,-2.543,-2.491,-2.224,-0.617,0.393,-0.729,-0.745,-0.848,-0.889,-0.795,-0.728,-0.873,-0.034,-0.499,-0.009,-0.293,0.608,0.67,0.004,0.142,-0.561,0.163,-0.263,-0.194,-0.423,-0.416,0.858,-1.247,1.378,0.325,0.123,0.414,-0.187,-1.067,-0.565,-0.468,0.097,0.982,1.813,1.512,1.753,-1.341,-1.019,-0.111,0.505,0.981,0.067,0.817,-0.749,-0.124,-0.231,0.855,-0.141,-0.26,-3.24,-2.238,-2.623,-1.979,-0.364,-0.251,-0.89,-0.452,-0.25,-0.53,0.162,0.757,0.52,0.989,1.435,0.082,-0.74,-0.6,-0.523,-0.848,-0.893,-0.222,0.132,-1.014,-1.649,-1.135,-0.363,-0.669,-0.226,0.571,-0.167,-0.379,-0.289,0.166,0.452,-0.116,-0.646,0.783,0.497,0.393,1.156,1.388,-0.433,-0.065,0.408,-0.139,-0.23,-1.166,0.189,0.689,0.566,0.159,0.018,-0.222,-1.597,-0.218,-0.309,0.214,-0.045,-0.477,-0.991,-0.974,-0.644,-1.673,-1.534,-0.909,0.279,-0.396,0.139,0.281,0.343,0.228,-0.166,0.425,-0.76,-0.391,-0.103,0.237,0.255,-0.05,-0.166,-2.356,0.0,-1.863,-1.284,-1.393,-1.645,-1.448,-1.084,-0.888,0.073,0.118,0.154,0.218,0.699,1.013,0.148,0.002,0.187,0.407,1.869,0.946,-0.222,0.159,0.112,0.22,0.152,0.095,0.732,1.214,0.743,-0.193,0.094,0.597,0.256,0.005,0.347,-0.85,0.575,0.593,1.546,1.395,0.914,0.053,-0.009,-0.212,-0.017,0.393,1.889,1.447,1.478,2.346,3.755,2.65,-0.602,-0.729,0.708,-0.224,-0.68,-0.674,-0.706,-0.825,-0.946,-0.748,-1.216,-1.46,-1.739,-0.973,-1.083,-1.158,0.365,1.014,1.065,1.142,0.78,0.919,0.375,-0.007,-0.269]},"C":{"x":["2020-01-01","2020-01-08","2020-01-15","2020-01-22","2020-01-29","2020-02-05","2020-02-12","2020-02-19","2020-02-26","2020-03-04","2020-03-11","2020-03-18","2020-03-25","2020-04-01","2020-04-08","2020-04-15","2020-04-22","2020-04-29","2020-05-06","2020-05-13","2020-05-20","2020-05-27","2020-06-03","2020-06-10","2020-06-17","2020-06-24","2020-07-01","2020-07-08","2020-07-15","2020-07-22","2020-07-29","2020-08-05","2020-08-12","2020-08-19","2020-08-26","2020-09-02","2020-09-09","2020-09-16","2020-09-23","2020-09-30","2020-10-07","2020-10-14","2020-10-21","2020-10-28","2020-11-04","2020-11-11","2020-11-18","2020-11-25","2020-12-02","2020-12-09","2020-12-16","2020-12-23","2020-12-30","2021-01-06","2021-01-13","2021-01-20","2021-01-27","2021-02-03","2021-02-10","2021-02-17","2021-02-24","2021-03-03","2021-03-10","2021-03-17","2021-03-24","2021-03-31","2021-04-07","2021-04-14","2021-04-21","2021-04-28","2021-05-05","2021-05-12","2021-05-19","2021-05-26","2021-06-02","2021-06-09","2021-06-16","2021-06-23","2021-06-30","2021-07-07","2021-07-14","2021-07-21","2021-07-28","2021-08-04","2021-08-11","2021-08-18","2021-08-25","2021-09-01","2021-09-08","2021-09-15","2021-09-22","2021-09-29","2021-10-06","2021-10-13","2021-10-20","2021-10-27","2021-11-03","2021-11-10","2021-11-17","2021-11-24","2021-12-01","2021-12-08","2021-12-15","2021-12-22","2021-12-29","2022-01-05","2022-01-12","2022-01-19","2022-01-26","2022-02-02","2022-02-09","2022-02-16","2022-02-23","2022-03-02","2022-03-09","2022-03-16","2022-03-23","2022-03-30","2022-04-06","2022-04-13","2022-04-20","2022-04-27","2022-05-04","2022-05-11","2022-05-18","2022-05-25","2022-06-01","2022-06-08","2022-06-15","2022-06-22","2022-06-29","2022-07-06","2022-07-13","2022-07-20","2022-07-27","2022-08-03","2022-08-10","2022-08-17","2022-08-24","2022-08-31","2022-09-07","2022-09-14","2022-09-21","2022-09-28","2022-10-05","2022-10-12","2022-10-19","2022-10-26","2022-11-02","2022-11-09","2022-11-16","2022-11-23","2022-11-30","2022-12-07","2022-12-14","2022-12-21","2022-12-28","2023-01-04","2023-01-11","2023-01-18","2023-01-25","2023-02-01","2023-02-08","2023-02-15","2023-02-22","2023-03-01","2023-03-08","2023-03-15","2023-03-22","2023-03-29","2023-04-05","2023-04-12","2023-04-19","2023-04-26","2023-05-03","2023-05-10","2023-05-17","2023-05-24","2023-05-31","2023-06-07","2023-06-14","2023-06-21","2023-06-28","2023-07-05","2023-07-12","2023-07-19","2023-07-26","2023-08-02","2023-08-09","2023-08-16","2023-08-23","2023-08-30","2023-09-06","2023-09-13","2023-09-20","2023-09-27","2023-10-04","2023-10-11","2023-10-18","2023-10-25","2023-11-01","2023-11-08","2023-11-15","2023-11-22","2023-11-29","2023-12-06","2023-12-13","2023-12-20","2023-12-27","2024-01-03","2024-01-10","2024-01-17","2024-01-24","2024-01-31","2024-02-07","2024-02-14","2024-02-21","2024-02-28","2024-03-06","2024-03-13","2024-03-20","2024-03-27","2024-04-03","2024-04-10","2024-04-17","2024-04-24","2024-05-01","2024-05-08","2024-05-15","2024-05-22","2024-05-29","2024-06-05","2024-06-12","2024-06-19","2024-06-26","2024-07-03","2024-07-10","2024-07-17","2024-07-24","2024-07-31","2024-08-07","2024-08-14","2024-08-21","2024-08-28","2024-09-04","2024-09-11","2024-09-18","2024-09-25","2024-10-02","2024-10-09","2024-10-16","2024-10-23","2024-10-30","2024-11-06","2024-11-13","2024-11-20","2024-11-27","2024-12-04","2024-12-11","2024-12-18","2024-12-25","2025-01-01","2025-01-08","2025-01-15","2025-01-22","2025-01-29","2025-02-05","2025-02-12","2025-02-19","2025-02-26","2025-03-05","2025-03-12","2025-03-19","2025-03-26","2025-04-02","2025-04-09","2025-04-16","2025-04-23","2025-04-30","2025-05-07","2025-05-14","2025-05-21","2025-05-28","2025-06-04","2025-06-11","2025-06-18","2025-06-25","2025-07-02","2025-07-09","2025-07-16","2025-07-23","2025-07-30","2025-08-06","2025-08-13","2025-08-20","2025-08-27","2025-09-03","2025-09-10","2025-09-17","2025-09-24","2025-10-01","2025-10-08","2025-10-15","2025-10-22","2025-10-29","2025-11-05","2025-11-12","2025-11-19","2025-11-26","2025-12-03","2025-12-10","2025-12-17","2025-12-24","2025-12-31","2026-01-07","2026-01-14","2026-01-21","2026-01-28","2026-02-04","2026-02-11","2026-02-18","2026-02-25","2026-03-04","2026-03-11","2026-03-18","2026-03-25","2026-04-01","2026-04-08","2026-04-15","2026-04-22","2026-04-29","2026-05-06","2026-05-13","2026-05-20","2026-05-27","2026-06-03","2026-06-10","2026-06-17","2026-06-24","2026-07-01","2026-07-08","2026-07-15","2026-07-22","2026-07-29","2026-08-05","2026-08-12","2026-08-19","2026-08-26","2026-08-31"],"net":[1.0,1.0,1.0,1.0,1.0,0.9791,0.969,0.9744,0.9585,1.0207,0.9781,0.9149,0.9248,0.9235,0.9668,1.0257,1.0365,0.968,0.9916,0.9757,0.9587,0.9548,0.8908,0.8857,0.8893,0.9048,0.9511,1.033,1.0219,0.9993,0.8555,0.8878,1.0526,1.0566,1.0687,1.0572,1.0837,1.1415,1.1446,1.1092,1.088,1.1499,1.1549,1.2261,1.1476,1.2108,1.2564,1.0947,1.0618,1.0324,1.0505,1.0166,0.9699,0.967,1.3199,1.4864,1.4781,1.4019,1.9776,1.7077,1.6308,1.642,1.5935,1.426,1.3423,1.3658,1.3221,1.196,1.3957,1.4529,1.3159,1.4382,1.2577,1.4128,1.4007,1.3,1.2843,1.3257,1.3026,1.2255,1.2422,1.2755,1.2854,1.2397,1.1487,1.1868,1.1077,1.0627,1.1448,1.0021,0.9434,0.9397,0.9753,1.0261,1.048,1.1001,1.1339,1.1357,1.1641,1.2126,1.1725,1.1979,1.2026,1.1801,1.1884,1.1453,1.1484,1.2035,1.2362,1.1893,1.1428,1.1828,1.125,1.077,1.1198,1.0812,1.0804,1.0721,1.0672,1.0593,1.0206,1.0309,1.0596,0.8407,0.7437,0.7415,0.7357,0.7199,0.8056,0.809,0.8031,0.843,0.8463,0.8453,0.8665,0.895,0.8956,0.8765,0.8976,0.8993,0.9203,0.898,0.8713,0.8564,0.8627,0.8829,0.8847,0.8797,0.8128,0.6462,0.7103,0.7046,0.665,0.6742,0.6967,0.6924,0.6824,0.7254,0.7563,0.7819,0.7925,0.7441,0.7506,0.7508,0.7512,0.7507,0.7606,0.7819,0.8129,0.8093,0.7879,0.7918,0.765,0.7874,0.7888,0.7956,0.776,0.7872,0.7913,0.7971,0.8215,0.8056,0.7788,0.7754,0.7876,0.7931,0.7765,0.7821,0.7822,0.8011,0.7872,0.7965,0.7898,0.7806,0.7617,0.7449,0.768,0.7749,0.7909,0.7767,0.8085,0.7633,0.7836,0.785,0.7794,0.7809,0.7619,0.7349,0.699,0.7147,0.7223,0.7357,0.7545,0.7408,0.7555,0.7789,0.8135,0.8378,0.8204,0.8319,0.7726,0.7593,0.7551,0.7482,0.7947,0.8105,0.8031,0.782,0.7858,0.7732,0.7735,0.7957,0.7978,0.7834,0.7959,0.7819,0.7968,0.807,0.8134,0.83,0.8144,0.8172,0.8324,0.8543,0.8552,0.8552,0.8754,0.8897,0.8942,0.8937,0.8922,0.8952,0.8802,0.8967,0.8826,0.822,0.8341,0.8077,0.8411,0.8307,0.8376,0.8463,0.8754,0.8509,0.9002,0.8834,0.87,0.8856,0.8291,0.83,0.8766,0.9174,0.935,0.9198,0.929,0.9543,0.9655,0.948,0.9521,0.9546,0.9146,0.9241,0.9195,0.9054,0.9081,0.9042,0.9142,0.9281,0.9182,0.9053,0.9093,0.9133,0.8938,0.899,0.8631,0.8808,0.8572,0.8488,0.876,0.8912,0.9071,0.9432,0.9411,0.9174,0.9288,0.9165,0.9282,0.9274,0.946,0.9138,0.896,0.8866,0.8847,0.8853,0.9116,0.9014,0.9073,0.899,0.908,0.9069,0.9249,0.9349,0.9437,0.9397,0.9453,0.9471,0.9271,0.9378,0.943,0.951,0.9313,0.9196,0.9234,0.9395,0.9408,0.9372,0.9098,0.9435,0.9516,0.9729,1.0061,1.0023,1.0117,0.989,1.0191,0.995,0.986,0.9863,0.9798],"gross":[1.0,1.0,1.0,1.0,1.0,0.9796,0.9702,0.9763,0.9609,1.0236,0.9813,0.9186,0.929,0.9281,0.9719,1.0314,1.0425,0.974,0.9983,0.9823,0.966,0.9625,0.8982,0.8937,0.8976,0.9137,0.9609,1.0442,1.0337,1.0113,0.8663,0.8992,1.0665,1.0711,1.0839,1.0724,1.1002,1.1591,1.1626,1.1269,1.1058,1.169,1.1743,1.2473,1.1683,1.233,1.28,1.1157,1.0824,1.0529,1.0719,1.0378,0.9908,0.9882,1.3494,1.5204,1.5124,1.4349,2.0245,1.7497,1.6714,1.6843,1.6353,1.4641,1.3791,1.404,1.3599,1.2303,1.436,1.4962,1.356,1.4827,1.2975,1.458,1.4462,1.3431,1.3276,1.3709,1.3476,1.2688,1.2862,1.3209,1.3318,1.2847,1.1908,1.231,1.1496,1.1035,1.189,1.0418,0.9812,0.9779,1.0152,1.0684,1.0917,1.1464,1.182,1.1842,1.2145,1.2658,1.2247,1.2521,1.2579,1.2347,1.2441,1.1993,1.203,1.2611,1.2956,1.247,1.1987,1.241,1.181,1.1314,1.1772,1.1368,1.1361,1.1276,1.123,1.115,1.0748,1.0862,1.1166,0.8862,0.7844,0.7824,0.7763,0.7599,0.8505,0.8545,0.8485,0.891,0.8947,0.8941,0.9173,0.9481,0.9492,0.9293,0.9522,0.9547,0.9774,0.9544,0.9265,0.9111,0.918,0.9399,0.9422,0.9371,0.8662,0.6888,0.7574,0.7515,0.7095,0.7194,0.7436,0.7395,0.7289,0.775,0.8083,0.8358,0.8475,0.7961,0.8035,0.8041,0.8047,0.8046,0.8155,0.8388,0.8725,0.8691,0.8465,0.851,0.8226,0.8469,0.8487,0.8562,0.8352,0.8477,0.8524,0.859,0.8861,0.8693,0.8409,0.8375,0.8507,0.8572,0.8395,0.846,0.8466,0.8675,0.8529,0.8632,0.8564,0.8469,0.8268,0.8087,0.8343,0.8419,0.8597,0.8449,0.8798,0.831,0.8535,0.8555,0.85,0.8521,0.8317,0.8026,0.7639,0.7814,0.7901,0.8049,0.8258,0.8112,0.8276,0.8535,0.8917,0.9187,0.8996,0.9125,0.8475,0.8334,0.8293,0.822,0.8736,0.8916,0.8838,0.8609,0.8655,0.8521,0.8528,0.8776,0.8802,0.8649,0.8788,0.8638,0.8804,0.892,0.8997,0.9184,0.9014,0.9049,0.9221,0.9467,0.9481,0.9486,0.9714,0.9876,0.9931,0.9932,0.9918,0.9953,0.979,0.9979,0.9825,0.9156,0.9296,0.9011,0.9388,0.9277,0.9357,0.9456,0.9783,0.9512,1.0067,0.9881,0.9733,0.9913,0.9285,0.9299,0.9825,1.0288,1.049,1.0327,1.0433,1.0721,1.0847,1.0652,1.0702,1.0734,1.0287,1.0399,1.0356,1.0202,1.0235,1.0194,1.031,1.0473,1.0367,1.0227,1.0272,1.0321,1.0107,1.0169,0.977,0.9973,0.9712,0.9622,0.9935,1.0113,1.0298,1.0712,1.0692,1.0427,1.0561,1.0428,1.0564,1.0561,1.0778,1.0414,1.0217,1.0113,1.0096,1.0106,1.0409,1.0297,1.0368,1.028,1.0387,1.0377,1.0587,1.0705,1.0811,1.077,1.0842,1.0868,1.0642,1.0769,1.0835,1.0932,1.0712,1.0578,1.0626,1.082,1.0843,1.0805,1.0493,1.0884,1.0981,1.1233,1.162,1.1582,1.1695,1.1436,1.179,1.1517,1.1416,1.1427,1.136]},"comb":{"x":["2021-02-28","2021-03-31","2021-04-30","2021-05-31","2021-06-30","2021-07-31","2021-08-31","2021-09-30","2021-10-31","2021-11-30","2021-12-31","2022-01-31","2022-02-28","2022-03-31","2022-04-30","2022-05-31","2022-06-30","2022-07-31","2022-08-31","2022-09-30","2022-10-31","2022-11-30","2022-12-31","2023-01-31","2023-02-28","2023-03-31","2023-04-30","2023-05-31","2023-06-30","2023-07-31","2023-08-31","2023-09-30","2023-10-31","2023-11-30","2023-12-31","2024-01-31","2024-02-29","2024-03-31","2024-04-30","2024-05-31","2024-06-30","2024-07-31","2024-08-31","2024-09-30","2024-10-31","2024-11-30","2024-12-31","2025-01-31","2025-02-28","2025-03-31","2025-04-30","2025-05-31","2025-06-30","2025-07-31","2025-08-31","2025-09-30","2025-10-31","2025-11-30","2025-12-31","2026-01-31","2026-02-28","2026-03-31","2026-04-30","2026-05-31","2026-06-30","2026-07-31","2026-08-31"],"a":[1.027,1.0549,1.0503,1.0515,1.0473,1.0288,1.0386,1.0501,1.0846,1.0432,1.0554,1.044,1.0575,1.0788,1.0726,1.0544,1.0226,1.0558,1.0762,1.009,1.0811,1.0521,1.005,1.0217,1.0273,1.0073,1.0002,1.0099,1.0701,1.0591,1.0501,1.0871,1.0664,1.1043,1.0642,1.0938,1.1319,1.15,1.1903,1.2346,1.2458,1.154,1.1659,1.1851,1.172,1.1678,1.1767,1.1729,1.1525,1.1609,1.1093,1.1352,1.1433,1.1542,1.1583,1.1711,1.1896,1.2189,1.2513,1.2857,1.2988,1.2746,1.3249,1.3694,1.33,1.3726,1.417],"c":[1.0384,1.0065,1.013,1.0087,0.9981,0.9814,0.9653,0.9435,0.9704,0.9832,0.9867,0.9825,0.9549,0.964,0.9555,0.8582,0.8762,0.8958,0.9006,0.8937,0.8825,0.8344,0.8404,0.8606,0.864,0.8779,0.8746,0.8734,0.8638,0.8691,0.8735,0.8555,0.8776,0.8671,0.8159,0.8394,0.8858,0.8411,0.8819,0.8676,0.8758,0.8953,0.9028,0.9164,0.9217,0.8984,0.9059,0.9122,0.8998,0.9554,0.9661,0.9421,0.948,0.9424,0.9129,0.9355,0.948,0.9492,0.9162,0.9298,0.9468,0.9483,0.9444,0.9654,0.9807,1.0161,1.0003],"m":[1.0327,1.0309,1.0319,1.0303,1.0229,1.0053,1.0018,0.9961,1.0266,1.0138,1.0215,1.0139,1.0061,1.0211,1.0136,0.9534,0.9491,0.9751,0.9871,0.9525,0.9806,0.9407,0.923,0.9418,0.9462,0.9446,0.9395,0.9434,0.9664,0.9644,0.9627,0.9698,0.973,0.9845,0.9376,0.9641,1.0076,0.9902,1.0316,1.0424,1.0521,1.025,1.0346,1.0509,1.0481,1.033,1.0412,1.0432,1.027,1.0625,1.0448,1.044,1.051,1.0529,1.0383,1.0569,1.0723,1.0862,1.0818,1.1047,1.1204,1.1108,1.1305,1.162,1.1545,1.1938,1.2039]},"dec":{"x":["2020-02-03","2020-02-10","2020-02-17","2020-02-24","2020-03-02","2020-03-09","2020-03-16","2020-03-23","2020-03-30","2020-04-06","2020-04-13","2020-04-20","2020-04-27","2020-05-04","2020-05-11","2020-05-18","2020-05-25","2020-06-01","2020-06-08","2020-06-15","2020-06-22","2020-06-29","2020-07-06","2020-07-13","2020-07-20","2020-07-27","2020-08-03","2020-08-10","2020-08-17","2020-08-24","2020-08-31","2020-09-07","2020-09-14","2020-09-21","2020-09-28","2020-10-05","2020-10-12","2020-10-19","2020-10-26","2020-11-02","2020-11-09","2020-11-16","2020-11-23","2020-11-30","2020-12-07","2020-12-14","2020-12-21","2020-12-28","2021-01-04","2021-01-11","2021-01-18","2021-01-25","2021-02-01","2021-02-08","2021-02-15","2021-02-22","2021-03-01","2021-03-08","2021-03-15","2021-03-22","2021-03-29","2021-04-05","2021-04-12","2021-04-19","2021-04-26","2021-05-03","2021-05-10","2021-05-17","2021-05-24","2021-05-31","2021-06-07","2021-06-14","2021-06-21","2021-06-28","2021-07-05","2021-07-12","2021-07-19","2021-07-26","2021-08-02","2021-08-09","2021-08-16","2021-08-23","2021-08-30","2021-09-06","2021-09-13","2021-09-20","2021-09-27","2021-10-04","2021-10-11","2021-10-18","2021-10-25","2021-11-01","2021-11-08","2021-11-15","2021-11-22","2021-11-29","2021-12-06","2021-12-13","2021-12-20","2021-12-27","2022-01-03","2022-01-10","2022-01-17","2022-01-24","2022-01-31","2022-02-07","2022-02-14","2022-02-21","2022-02-28","2022-03-07","2022-03-14","2022-03-21","2022-03-28","2022-04-04","2022-04-11","2022-04-18","2022-04-25","2022-05-02","2022-05-09","2022-05-16","2022-05-23","2022-05-30","2022-06-06","2022-06-13","2022-06-20","2022-06-27","2022-07-04","2022-07-11","2022-07-18","2022-07-25","2022-08-01","2022-08-08","2022-08-15","2022-08-22","2022-08-29","2022-09-05","2022-09-12","2022-09-19","2022-09-26","2022-10-03","2022-10-10","2022-10-17","2022-10-24","2022-10-31","2022-11-07","2022-11-14","2022-11-21","2022-11-28","2022-12-05","2022-12-12","2022-12-19","2022-12-26","2023-01-02","2023-01-09","2023-01-16","2023-01-23","2023-01-30","2023-02-06","2023-02-13","2023-02-20","2023-02-27","2023-03-06","2023-03-13","2023-03-20","2023-03-27","2023-04-03","2023-04-10","2023-04-17","2023-04-24","2023-05-01","2023-05-08","2023-05-15","2023-05-22","2023-05-29","2023-06-05","2023-06-12","2023-06-19","2023-06-26","2023-07-03","2023-07-10","2023-07-17","2023-07-24","2023-07-31","2023-08-07","2023-08-14","2023-08-21","2023-08-28","2023-09-04","2023-09-11","2023-09-18","2023-09-25","2023-10-02","2023-10-09","2023-10-16","2023-10-23","2023-10-30","2023-11-06","2023-11-13","2023-11-20","2023-11-27","2023-12-04","2023-12-11","2023-12-18","2023-12-25","2024-01-01","2024-01-08","2024-01-15","2024-01-22","2024-01-29","2024-02-05","2024-02-12","2024-02-19","2024-02-26","2024-03-04","2024-03-11","2024-03-18","2024-03-25","2024-04-01","2024-04-08","2024-04-15","2024-04-22","2024-04-29","2024-05-06","2024-05-13","2024-05-20","2024-05-27","2024-06-03","2024-06-10","2024-06-17","2024-06-24","2024-07-01","2024-07-08","2024-07-15","2024-07-22","2024-07-29","2024-08-05","2024-08-12","2024-08-19","2024-08-26","2024-09-02","2024-09-09","2024-09-16","2024-09-23","2024-09-30","2024-10-07","2024-10-14","2024-10-21","2024-10-28","2024-11-04","2024-11-11","2024-11-18","2024-11-25","2024-12-02","2024-12-09","2024-12-16","2024-12-23","2024-12-30","2025-01-06","2025-01-13","2025-01-20","2025-01-27","2025-02-03","2025-02-10","2025-02-17","2025-02-24","2025-03-03","2025-03-10","2025-03-17","2025-03-24","2025-03-31","2025-04-07","2025-04-14","2025-04-21","2025-04-28","2025-05-05","2025-05-12","2025-05-19","2025-05-26","2025-06-02","2025-06-09","2025-06-16","2025-06-23","2025-06-30","2025-07-07","2025-07-14","2025-07-21","2025-07-28","2025-08-04","2025-08-11","2025-08-18","2025-08-25","2025-09-01","2025-09-08","2025-09-15","2025-09-22","2025-09-29","2025-10-06","2025-10-13","2025-10-20","2025-10-27","2025-11-03","2025-11-10","2025-11-17","2025-11-24","2025-12-01","2025-12-08","2025-12-15","2025-12-22","2025-12-29","2026-01-05","2026-01-12","2026-01-19","2026-01-26","2026-02-02","2026-02-09","2026-02-16","2026-02-23","2026-03-02","2026-03-09","2026-03-16","2026-03-23","2026-03-30","2026-04-06","2026-04-13","2026-04-20","2026-04-27","2026-05-04","2026-05-11","2026-05-18","2026-05-25","2026-06-01","2026-06-08","2026-06-15","2026-06-22","2026-06-29","2026-07-06","2026-07-13","2026-07-20","2026-07-27","2026-08-03","2026-08-10","2026-08-17","2026-08-24","2026-08-31"],"f":[-0.04,-0.27,-0.08,0.16,0.53,0.94,1.12,1.28,1.48,1.65,1.89,2.66,2.9,3.34,3.62,3.69,3.79,3.87,3.81,3.94,3.98,4.11,4.59,4.59,4.71,4.94,5.89,6.74,7.09,7.18,7.39,7.59,8.22,8.58,8.88,9.62,10.19,10.52,10.76,10.75,10.85,10.92,11.26,11.86,12.22,12.2,12.46,12.7,13.68,15.09,15.62,16.23,17.01,18.3,18.8,19.16,19.39,19.49,19.62,19.72,20.1,20.81,21.61,22.41,22.38,22.52,22.66,22.69,22.92,22.95,23.01,23.06,23.12,23.29,23.38,23.56,23.82,23.88,23.94,24.03,24.18,24.28,24.43,24.71,24.63,24.7,24.76,24.96,25.13,25.4,25.63,25.84,26.21,26.38,26.42,26.45,26.46,26.66,26.73,26.86,26.94,27.02,27.35,27.54,27.63,27.69,27.76,27.82,27.84,27.99,28.18,28.32,28.43,28.52,28.61,28.69,28.78,28.88,28.98,29.85,30.01,30.2,30.29,30.42,30.51,30.63,30.78,31.03,31.13,31.17,31.22,31.25,31.34,31.37,31.42,31.5,31.57,31.82,31.95,32.05,32.06,32.1,32.24,32.29,32.41,40.89,41.57,42.09,42.38,42.44,42.55,42.8,43.2,43.92,44.04,44.08,44.12,44.16,44.24,44.3,44.35,44.42,44.49,44.79,44.97,45.08,45.17,45.21,45.34,45.61,45.78,45.89,45.93,45.97,46.0,46.01,46.1,46.15,46.19,46.26,46.52,46.55,46.56,46.61,46.69,46.79,46.91,46.96,47.05,47.13,47.18,47.22,47.29,47.35,47.37,47.37,47.43,47.46,47.46,47.46,47.49,47.57,47.47,47.67,48.02,48.29,48.32,48.49,48.54,48.59,48.77,48.94,49.26,49.52,49.74,49.87,49.88,50.0,50.1,50.21,50.27,50.47,50.57,50.62,50.77,50.78,50.79,50.82,50.86,50.9,50.94,50.99,51.02,51.05,51.12,51.22,51.33,51.41,51.44,51.49,51.52,51.53,51.59,51.62,51.63,51.71,51.77,51.86,51.94,51.95,51.97,51.98,51.95,52.0,52.01,52.07,52.16,52.23,52.37,52.42,52.47,52.53,52.58,52.65,52.71,52.75,52.78,52.84,52.87,52.97,53.07,53.19,53.29,53.33,53.41,53.45,53.47,53.48,53.51,53.56,53.6,53.65,53.67,53.7,53.73,53.77,53.79,53.81,53.85,53.87,53.87,53.88,53.91,53.93,53.95,53.98,54.04,54.28,54.33,54.36,54.43,54.48,54.57,54.62,54.7,54.75,54.79,54.84,54.88,54.93,54.97,55.0,55.04,55.12,55.25,55.32,55.36,55.41,55.43,55.45,55.47,55.53,55.57,55.57,55.62,55.66,55.7,55.74,55.72,55.74,55.79,55.88,55.93,55.98,56.05,56.06,56.07,56.12,56.17,56.18,56.19,56.23,56.23,56.24],"p":[-0.03,-2.67,-2.68,-5.54,-1.51,-0.59,-9.77,-7.94,-9.63,-8.74,1.93,2.67,-4.49,-3.39,-5.37,-5.47,-6.26,-14.81,-15.33,-12.18,-14.04,-10.63,-4.64,0.65,-1.56,-15.22,-15.91,-5.75,0.57,2.91,0.22,1.69,9.19,8.63,5.73,4.4,6.76,9.67,13.26,9.91,13.23,15.67,4.02,-3.15,-2.17,-3.72,-0.5,-4.08,-6.6,14.02,35.13,30.63,27.91,44.7,52.19,42.21,45.29,41.76,31.1,24.32,23.68,22.39,17.27,23.83,30.55,28.33,28.55,21.44,25.47,26.42,22.1,19.61,21.77,21.84,19.07,14.7,19.41,14.83,13.43,11.32,6.01,5.04,2.86,7.65,-5.76,-0.36,-10.89,-11.56,-4.46,1.43,4.98,6.18,7.94,11.11,12.06,11.72,14.54,16.15,13.77,11.81,11.18,5.17,11.65,17.27,10.82,8.81,10.22,10.05,-0.21,4.58,6.78,3.83,2.1,1.92,-0.66,-2.72,-2.93,0.85,-6.82,-33.47,-33.67,-35.14,-36.42,-31.6,-23.86,-24.08,-24.28,-22.84,-21.14,-20.14,-17.83,-14.98,-18.33,-15.66,-16.11,-14.65,-14.85,-18.15,-20.46,-18.79,-17.62,-16.77,-16.22,-23.65,-31.69,-46.05,-48.2,-52.66,-53.02,-51.01,-48.93,-50.16,-49.52,-41.65,-37.46,-37.14,-41.73,-41.47,-41.8,-42.15,-41.43,-40.46,-38.54,-35.73,-34.77,-37.58,-37.42,-41.32,-37.37,-37.18,-36.68,-38.84,-38.79,-38.5,-37.92,-33.52,-34.52,-39.34,-39.98,-37.98,-37.18,-38.48,-39.19,-38.6,-38.36,-38.29,-37.25,-38.64,-38.97,-41.32,-43.81,-39.74,-40.64,-38.1,-39.72,-38.49,-39.95,-35.92,-36.74,-38.23,-37.48,-44.5,-42.6,-49.34,-50.43,-46.41,-43.42,-41.03,-43.84,-43.97,-40.69,-39.15,-33.56,-37.03,-33.35,-40.7,-41.13,-44.87,-44.21,-39.83,-35.81,-36.56,-36.9,-38.92,-40.1,-41.6,-39.23,-37.42,-38.75,-38.31,-38.98,-38.47,-36.34,-34.08,-34.09,-34.31,-33.56,-36.7,-29.43,-31.16,-30.4,-28.64,-25.53,-27.86,-25.04,-24.57,-26.65,-25.21,-27.15,-23.61,-34.1,-31.63,-31.59,-31.1,-32.79,-31.02,-28.99,-28.57,-27.02,-26.33,-24.87,-25.93,-27.07,-28.37,-32.41,-25.25,-24.79,-21.24,-21.04,-20.07,-18.34,-16.57,-18.27,-19.96,-17.99,-22.04,-22.75,-21.15,-22.43,-22.38,-22.54,-22.58,-21.0,-20.99,-24.69,-26.01,-20.62,-24.34,-22.55,-26.97,-25.62,-26.64,-28.93,-25.83,-24.37,-21.69,-18.0,-17.22,-22.1,-20.85,-20.9,-19.98,-20.57,-18.71,-19.77,-22.59,-24.42,-25.32,-25.16,-21.57,-22.22,-23.72,-23.61,-22.45,-22.04,-20.27,-20.37,-19.55,-19.22,-18.93,-18.15,-19.41,-19.91,-18.05,-18.56,-18.5,-19.64,-21.95,-19.04,-19.19,-18.5,-20.91,-18.38,-18.86,-16.83,-12.03,-12.92,-11.95,-14.28,-10.57,-12.71,-14.28,-12.29,-14.28]}};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const NS = "http://www.w3.org/2000/svg";
+
+function lineChart(id, x, series, o = {}) {
+  const el = document.getElementById(id); if (!el) return;
+  const W = 760, H = o.h || 300, m = {l: 48, r: 14, t: 12, b: 26};
+  const t = x.map(d => new Date(d).getTime());
+  const t0 = t[0], t1 = t[t.length - 1];
+  const tf = o.log ? (v => Math.log(v)) : (v => v);
+  let lo = Infinity, hi = -Infinity;
+  series.forEach(s => s.y.forEach(v => { if (v != null) { lo = Math.min(lo, v); hi = Math.max(hi, v); } }));
+  (o.hlines || []).forEach(h => { lo = Math.min(lo, h.y); hi = Math.max(hi, h.y); });
+  if (o.log) { lo *= 0.95; hi *= 1.05; } else { const pad = (hi - lo) * 0.06; lo -= pad; hi += pad; }
+  const X = v => m.l + (v - t0) / (t1 - t0) * (W - m.l - m.r);
+  const Y = v => m.t + (1 - (tf(v) - tf(lo)) / (tf(hi) - tf(lo))) * (H - m.t - m.b);
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("role", "img");
+  svg.setAttribute("aria-label", o.label || "chart");
+  const add = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; svg.appendChild(e); return e; };
+  const grid = css("--line"), muted = css("--muted");
+  // y ticks
+  let ticks = o.yticks;
+  if (!ticks) { const n = 5, step = (hi - lo) / n; ticks = Array.from({length: n + 1}, (_, i) => lo + step * i); }
+  ticks.filter(v => v >= lo && v <= hi).forEach(v => {
+    add("line", {x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: grid, "stroke-width": 1});
+    add("text", {x: m.l - 6, y: Y(v) + 4, "text-anchor": "end", "font-size": 11, fill: muted, "font-family": "IBM Plex Mono, monospace"}, (o.yfmt || (d => d.toFixed(1)))(v));
+  });
+  // x ticks: years
+  const y0 = new Date(t0).getFullYear(), y1 = new Date(t1).getFullYear();
+  const every = Math.max(1, Math.ceil((y1 - y0) / 8));
+  for (let yr = y0 + 1; yr <= y1; yr++) {
+    if ((yr - y0) % every) continue;
+    const tx = new Date(`${yr}-01-01`).getTime(); if (tx < t0 || tx > t1) continue;
+    add("text", {x: X(tx), y: H - 6, "text-anchor": "middle", "font-size": 11, fill: muted, "font-family": "IBM Plex Mono, monospace"}, yr);
+  }
+  (o.vlines || []).forEach(v => {
+    const tx = new Date(v.x).getTime();
+    add("line", {x1: X(tx), x2: X(tx), y1: m.t, y2: H - m.b, stroke: muted, "stroke-dasharray": "3 3", "stroke-width": 1});
+    add("text", {x: X(tx) + 4, y: m.t + 11, "font-size": 10.5, fill: muted, "font-family": "IBM Plex Sans, sans-serif"}, v.label);
+  });
+  (o.hlines || []).forEach(h => add("line", {x1: m.l, x2: W - m.r, y1: Y(h.y), y2: Y(h.y), stroke: css(h.color), "stroke-dasharray": h.dash || "", "stroke-width": 1.2}));
+  series.forEach(s => {
+    let d = "", pen = false;
+    s.y.forEach((v, i) => { if (v == null || (i > 0 && t[i] - t[i - 1] > 40 * 864e5)) pen = false; if (v == null) return; d += (pen ? "L" : "M") + X(t[i]).toFixed(1) + "," + Y(v).toFixed(1); pen = true; });
+    add("path", {d, fill: "none", stroke: css(s.color), "stroke-width": s.w || 1.8, "stroke-linejoin": "round"});
+  });
+  el.replaceChildren(svg);
+}
+
+function drawAll() {
+  lineChart("chA", DATA.A.x, [{y: DATA.A.carry, color: "--fx"}, {y: DATA.A.filt, color: "--cx", w: 1.4}],
+    {log: true, yticks: [0.8, 1, 1.25, 1.5, 2, 2.5, 3], yfmt: v => "$" + v.toFixed(2), vlines: [{x: "2011-01-01", label: "خارج از نمونه"}], label: "Strategy A growth of one dollar"});
+  lineChart("chCrowd", DATA.crowd.x, [{y: DATA.crowd.y, color: "--ink", w: 1.1}],
+    {h: 220, yticks: [-3, -2, -1, 0, 1, 2, 3], yfmt: v => v.toFixed(0), hlines: [{y: 1, color: "--bad", dash: "5 4"}], label: "Crowding signal"});
+  lineChart("chC", DATA.C.x, [{y: DATA.C.gross, color: "--muted", w: 1.2}, {y: DATA.C.net, color: "--cx"}],
+    {log: true, yticks: [0.4, 0.6, 0.8, 1, 1.25, 1.5, 2], yfmt: v => "$" + v.toFixed(2),
+     vlines: [{x: "2022-05-09", label: "LUNA"}, {x: "2022-11-08", label: "FTX"}, {x: "2024-01-01", label: "خارج از نمونه"}], label: "Strategy C growth of one dollar"});
+  lineChart("chDec", DATA.dec.x, [{y: DATA.dec.f, color: "--good"}, {y: DATA.dec.p, color: "--bad"}],
+    {h: 240, yfmt: v => v.toFixed(0), hlines: [{y: 0, color: "--muted"}], label: "Return decomposition"});
+  lineChart("chComb", DATA.comb.x, [{y: DATA.comb.a, color: "--fx", w: 1.4}, {y: DATA.comb.c, color: "--cx", w: 1.4}, {y: DATA.comb.m, color: "--ink", w: 2.6}],
+    {yfmt: v => "$" + v.toFixed(2), label: "Combined portfolio"});
+}
+drawAll();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
+new MutationObserver(drawAll).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+
+const CARDS = [
+  ["کری‌ترید چیست؟", "قرض گرفتن در دارایی کم‌بازده و سرمایه‌گذاری در دارایی پربازده، و کسب اختلاف آن‌ها، مگر این‌که قیمت‌ها علیه شما حرکت کنند."],
+  ["UIP چه پیش‌بینی می‌کند و آیا برقرار است؟", "ارزهای پربهره به اندازه اختلاف نرخ بهره تضعیف می‌شوند، پس کری سودی ندارد. در عمل برقرار نیست (معمای صرف آتی) و به همین دلیل کری سود می‌دهد."],
+  ["فرمول بازده مازاد ماهانه ارز را بنویسید.", "rx = (1 + i_k,t−1/1200) × S_t/S_t−1 − (1 + i_US,t−1/1200)، با S به صورت دلار به ازای واحد ارز خارجی."],
+  ["چرا می‌توانیم به جای نرخ آتی از نرخ لحظه‌ای و بهره استفاده کنیم؟", "برابری نرخ بهره پوشش‌داده (CIP) موقعیت آتی را معادل قرض گرفتن دلار و سپرده‌گذاری در ارز خارجی می‌کند."],
+  ["استراتژی A چطور ساخته می‌شود؟", "در پایان هر ماه، ۷ ارز G10 را بر اساس اختلاف نرخ با دلار رتبه‌بندی کنید؛ دو ارز بالا را بخرید (هر کدام ‎+0.5‎) و دو ارز پایین را بفروشید (هر کدام ‎−0.5‎)."],
+  ["شلوغی پرتفوی چطور تعریف می‌شود؟", "میانگین امتیاز z سی‌وشش‌ماهه موقعیت خالص سفته‌بازی CFTC در طرف خرید منهای همین مقدار در طرف فروش."],
+  ["وقتی شلوغی بیشتر از 1 است چه می‌شود؟", "همه موقعیت‌های استراتژی A برای ماه بعد به ۵۰٪ کاهش می‌یابند."],
+  ["چرا داده CFTC را ۳ روز عقب می‌اندازیم؟", "موقعیت‌ها مربوط به سه‌شنبه‌اند ولی جمعه منتشر می‌شوند؛ استفاده زودتر سوگیری نگاه به آینده است."],
+  ["کدام باگ داده CFTC را تا ۱۹۸۶ گسترش داد؟", "قراردادهای قبل از اوت ۲۰۰۰ با نام INTERNATIONAL MONETARY MARKET ثبت شده‌اند نه CHICAGO MERCANTILE؛ تطبیق هر دو نام مشکل را حل کرد."],
+  ["شارپ خالص و بیشترین افت استراتژی A در کل نمونه؟", "0.37 و ‎−37%‎ (۲۰۰۸)."],
+  ["شارپ خارج از نمونه با و بدون فیلتر شلوغی؟", "0.32 با فیلتر در برابر 0.27 بدون فیلتر (۲۰۱۱–۲۰۲۶)."],
+  ["بازده کری در ماه بعد از ماه‌های شلوغ و غیرشلوغ؟", "0.02% در برابر 0.30%، با چولگی منفی‌تر (‎−0.71‎ در برابر ‎−0.46‎). فقط ۳۳ ماه شلوغ."],
+  ["همبستگی استراتژی A با LRV HML؟", "0.82 در دوره ۱۹۹۹-۰۵ تا ۲۰۲۱-۰۵."],
+  ["بتای استراتژی A نسبت به نوآوری نوسان (مدل دو فاکتوری)؟", "‎−1.55‎ با t = ‎−3.7‎. کری در جهش نوسان زیان می‌دهد؛ آلفا بی‌معنا می‌شود."],
+  ["نرخ تأمین مالی (funding rate) چیست؟", "پرداخت دوره‌ای بین longها و shortها در قرارداد دائمی، هر ۸ ساعت در بایننس. مثبت: longها به shortها می‌پردازند."],
+  ["استراتژی C چطور ساخته می‌شود؟", "هر یکشنبه، کوین‌های قابل معامله را بر اساس میانگین هفت‌روزه funding رتبه‌بندی کنید؛ یک‌سوم بالا را بفروشید و یک‌سوم پایین را بخرید، هر طرف ۵۰٪ سرمایه."],
+  ["شارپ خالص استراتژی C: کل، درون نمونه، خارج از نمونه؟", "0.14 کل، ‎−0.07‎ در ۲۰۲۰–۲۳، و 0.81 از ۲۰۲۴."],
+  ["بازده استراتژی C از کجا آمد؟", "funding ‎+8.55%‎ در سال، قیمت ‎−2.17%‎، هزینه ‎−2.25%‎، خالص ‎+4.13%‎. در هر زیردوره قیمت غالب بود."],
+  ["چرا استراتژی C هنگام فروپاشی LUNA آن را خریده بود؟", "معامله‌گران LUNA را short کردند، funding منفی شد، و قاعده کوین‌های با کمترین funding را می‌خرد."],
+  ["چرا یک دلار در C با وجود میانگین ‎+4.1%‎ حدود 0.98 می‌شود؟", "کشش نوسان: هندسی ≈ حسابی − σ²/2 = ‎4.1% − 4.5% ≈ −0.4%‎ در سال."],
+  ["آیا کنترل ریسک کریپتو کار کرد؟", "نه. شارپ کل به ‎−0.16‎ رسید؛ عمدتاً اهرم را نصف کرد، زمان LUNA را از دست داد و BNB و SOL را مسدود کرد."],
+  ["همبستگی A و C و شارپ ترکیب؟", "0.11؛ ترکیب ۵۰/۵۰ با نوسان ۱۰٪ شارپ 0.51 و نوسان ۷.۰٪ دارد."],
+  ["سه راهی که بک‌تست از سوگیری دوری می‌کند را نام ببرید.", "پارامترهای از پیش تعیین‌شده؛ زمان‌بندی t به t+1 و تأخیر انتشار؛ نگه داشتن LUNA و FTT؛ لحاظ هزینه‌ها؛ تقسیم خارج از نمونه."],
+  ["نکته آینه‌ای بین سقوط کری ارز و کریپتو چیست؟", "کری ارز وقتی سقوط می‌کند که longهای شلوغ بسته می‌شوند؛ کری funding کریپتو با خریدن کوین‌هایی که معامله‌گران بیشتر از همه short کرده‌اند سقوط می‌کند."],
+];
+let order = CARDS.map((_, i) => i), pos = 0;
+const fq = document.getElementById("fq"), fa = document.getElementById("fa"), fm = document.getElementById("fmeta"), rb = document.getElementById("reveal");
+function show() {
+  const c = CARDS[order[pos]];
+  fq.textContent = c[0]; fa.textContent = c[1]; fa.hidden = true; rb.textContent = "نمایش پاسخ";
+  fm.textContent = `${pos + 1} / ${CARDS.length}`;
+}
+rb.addEventListener("click", () => { fa.hidden = !fa.hidden; rb.textContent = fa.hidden ? "نمایش پاسخ" : "پنهان کردن پاسخ"; });
+document.getElementById("next").addEventListener("click", () => { pos = (pos + 1) % CARDS.length; show(); });
+document.getElementById("prev").addEventListener("click", () => { pos = (pos - 1 + CARDS.length) % CARDS.length; show(); });
+document.getElementById("shuffle").addEventListener("click", () => {
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  pos = 0; show();
+});
+show();
+</script>
