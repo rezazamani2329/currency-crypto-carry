@@ -5,7 +5,7 @@ Authors: Reza Zamani and Paraj Goyal
 
 Interactive results page: [`web/index.html`](web/index.html) · Slides: [`slides/presentation.pptx`](slides/presentation.pptx) · Step-by-step notebooks: [`notebooks/`](notebooks/)
 
-Study guide (concepts, process, worked examples, results, Q&A): [`docs/study-guide.html`](docs/study-guide.html) · [PDF](docs/study-guide.pdf) · [online](https://claude.ai/artifact/Tv8XvTn1KokTAM95pUza1A) · Persian: [`docs/study-guide-fa.html`](docs/study-guide-fa.html) · [PDF](docs/study-guide-fa.pdf)
+Study guide (concepts, process, worked examples, results, Q&A): [`docs/study-guide.html`](docs/study-guide.html) · [PDF](docs/study-guide.pdf) · [online](https://claude.ai/artifact/Tv8XvTn1KokTAM95pUza1A) · Persian: [`docs/study-guide-fa.html`](docs/study-guide-fa.html) · [PDF](docs/study-guide-fa.pdf) · [online](https://claude.ai/artifact/WnkwK7rEePWsyeNaQCD8HP) · All online links: [`docs/LINKS.md`](docs/LINKS.md)
 
 ---
 
