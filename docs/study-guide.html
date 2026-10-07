@@ -104,6 +104,16 @@ button:hover { background: var(--soft); } button:focus-visible { outline: 2px so
 .flash .meta { font-size: 0.78rem; color: var(--muted); font-family: var(--f-mono); }
 footer { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 0.84rem; color: var(--muted); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+@media print {
+  .tbl { overflow: visible; }
+  table { font-size: 0.74rem; }
+  th, td { padding: 5px 7px; white-space: normal; }
+  td.t { min-width: 0; }
+  .formula { white-space: pre-wrap; overflow: visible; font-size: 0.8rem; }
+  h3, h4 { break-after: avoid; page-break-after: avoid; }
+  .kpis, .key, .grid2 .card, .pipe .s { break-inside: avoid; }
+}
 </style>
 
 <div class="shell">
@@ -316,7 +326,7 @@ i in % per year, so /1200 turns it into a monthly decimal. S in USD per foreign 
 <div class="prose">
 <p><b>Universe:</b> 12 Binance USDT-margined perpetuals: BTC, ETH, BNB, XRP, ADA, DOGE, SOL, LTC, LINK, AVAX, plus LUNA and FTT, which collapsed in 2022. <b>Frequency:</b> weekly rebalance, daily P&amp;L. <b>Sample:</b> 2020-02 to 2026-08.</p>
 <h3>Step 1. Build the signal</h3>
-<p>Sum each day's three 8-hour funding payments into daily funding. Signal = trailing 7-day average of daily funding, using data up to the previous day.</p>
+<p>Sum each day's three 8-hour funding payments into daily funding. Signal = trailing 7-day average of daily funding, computed at the end of day t and used for the positions held on day t+1.</p>
 <h3>Step 2. Sort into thirds every Sunday</h3>
 <p>Among coins that are tradable that day (price and positive volume), with at least 6 coins available: k = number of coins / 3. Short the k coins with the highest funding (weight −0.5/k each), long the k with the lowest (+0.5/k each). Each leg is 50% of capital, so the portfolio is dollar-neutral with gross exposure 1.</p>
 <h3>Step 3. Daily P&amp;L = price + funding</h3>
@@ -457,7 +467,7 @@ net         = price + funding − turnover × 5 bp</div>
 <tr><td>Base</td><td>0.14</td><td>0.81</td><td class="neg">−67.3%</td><td class="neg">−27.3%</td><td>1.00</td></tr>
 <tr><td>Risk-controlled</td><td class="neg">−0.16</td><td>0.74</td><td class="neg">−43.3%</td><td class="neg">−18.9%</td><td>0.49</td></tr>
 </table></div>
-<p class="prose">It halved the LUNA and FTX losses, but mostly because the 1/6 cap left about half the capital unused. LUNA's funding crossed −50% only mid-week (10 May 2022), after the Sunday rebalance, and the filter blocked BNB and SOL, the two biggest winners. Lesson: in crypto, deeply negative funding usually signals crowded <i>shorts</i>, whose forced covering pushes prices up, not distress.</p>
+<p class="prose">It cut the LUNA week loss from −27.3% to −18.9% and halved the FTX week loss, but mostly because the 1/6 cap left about half the capital unused. LUNA's funding crossed −50% only mid-week (10 May 2022), after the Sunday rebalance, and the filter blocked BNB and SOL, the two biggest winners. Lesson: in crypto, deeply negative funding usually signals crowded <i>shorts</i>, whose forced covering pushes prices up, not distress.</p>
 </section>
 
 <section id="combo">
