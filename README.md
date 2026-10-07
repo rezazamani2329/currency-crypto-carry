@@ -5,6 +5,8 @@ Authors: Reza Zamani and Paraj Goyal
 
 Interactive results page: [`web/index.html`](web/index.html) · Slides: [`slides/presentation.pptx`](slides/presentation.pptx) · Step-by-step notebooks: [`notebooks/`](notebooks/)
 
+Study guide (concepts, process, worked examples, results, Q&A): [`docs/study-guide.html`](docs/study-guide.html) · [PDF](docs/study-guide.pdf) · [online](https://claude.ai/artifact/Tv8XvTn1KokTAM95pUza1A)
+
 ---
 
 ## 1. Project
@@ -320,6 +322,7 @@ data/clean/    processed data snapshot used for all results (committed)
 output/        tables and figures
 web/           interactive HTML page
 slides/        presentation
+docs/          study guide (HTML and PDF)
 ai_log.md      documentation of AI-assisted work
 ```
 
