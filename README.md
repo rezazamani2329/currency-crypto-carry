@@ -5,6 +5,8 @@ Authors: Reza Zamani and Paraj Goyal
 
 Interactive results page: [`web/index.html`](web/index.html) · Slides: [`slides/presentation.pptx`](slides/presentation.pptx) · Step-by-step notebooks: [`notebooks/`](notebooks/)
 
+10-minute presentation: [`slides/presentation_10min.pptx`](slides/presentation_10min.pptx) · [PDF](slides/presentation_10min.pdf) · speaker notes: [`slides/speaker_notes_10min.md`](slides/speaker_notes_10min.md) · [PDF](slides/speaker_notes_10min.pdf)
+
 Study guide (concepts, process, worked examples, results, Q&A): [`docs/study-guide.html`](docs/study-guide.html) · [PDF](docs/study-guide.pdf) · [online](https://claude.ai/artifact/Tv8XvTn1KokTAM95pUza1A) · Persian: [`docs/study-guide-fa.html`](docs/study-guide-fa.html) · [PDF](docs/study-guide-fa.pdf) · [online](https://claude.ai/artifact/WnkwK7rEePWsyeNaQCD8HP) · All online links: [`docs/LINKS.md`](docs/LINKS.md)
 
 ---
@@ -316,6 +318,7 @@ code/          numbered scripts, run in order (see run_all.py)
   05_risk_analysis.py             LRV check, risk, risk control, combined -> output/risk/
   06_build_web.py                 interactive page -> web/index.html
   07_build_slides.py              presentation -> slides/presentation.pptx
+  08_build_slides_10min.py        10-minute deck with speaker notes -> slides/presentation_10min.pptx
 notebooks/     step-by-step Jupyter versions of the scripts (01-05)
 data/raw/      downloaded files (not committed; re-created by the scripts)
 data/clean/    processed data snapshot used for all results (committed)
