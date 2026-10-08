@@ -4,6 +4,8 @@
 
 Authors: Reza Zamani and Paraj Goyal · Professor: Amir Kermani
 
+**GitHub repository:** [https://github.com/rezazamani2329/currency-crypto-carry](https://github.com/rezazamani2329/currency-crypto-carry)
+
 **Presentation (10 minutes):** [`slides/presentation_10min.pptx`](slides/presentation_10min.pptx) · [PDF](slides/presentation_10min.pdf) · [slides with speaker notes (PDF)](slides/presentation_10min_with_notes.pdf) · speaker notes: [`md`](slides/speaker_notes_10min.md) · [PDF](slides/speaker_notes_10min.pdf)
 
 **Other material:** interactive results page [`web/index.html`](web/index.html) · long deck [`slides/presentation.pptx`](slides/presentation.pptx) · step-by-step notebooks [`notebooks/`](notebooks/) · study guide [`docs/study-guide.html`](docs/study-guide.html) ([PDF](docs/study-guide.pdf), Persian [HTML](docs/study-guide-fa.html) / [PDF](docs/study-guide-fa.pdf)) · all online links [`docs/LINKS.md`](docs/LINKS.md)
