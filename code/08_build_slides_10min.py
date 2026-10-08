@@ -178,7 +178,8 @@ def build():
 
     # 2 idea + hypotheses -----------------------------------------------------
     s = new()
-    title(s, "Carry pays because it crashes", "Our question: do carry trades crash when they are crowded?")
+    title(s, "Carry pays because it crashes")
+    text(s, 0.6, 1.2, 11.5, 0.5, "Our question: do carry trades crash when they are crowded?", size=18, bold=True, color=NAVY)
     text(s, 0.6, 1.85, 5.6, 5.4, [
         ("We test it in two markets with the same economics: G10 currencies and crypto.", {"bullet": True}),
         ("Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter "
