@@ -52,6 +52,16 @@ def takeaways(slide, x, y, w, h, items, size=14):
     text(slide, x + 0.25, y + 0.65, w - 0.5, h - 0.8, [(t, {"bullet": True}) for t in items], size=size, space_after=8)
 
 
+def perf_box(slide, x, y, w, h, heading, cells):
+    """A tinted box with a heading and one column per metric: big value over a small label."""
+    box(slide, x, y, w, h)
+    text(slide, x + 0.25, y + 0.1, w - 0.5, 0.35, heading, size=13, bold=True, color=NAVY)
+    cw = (w - 0.5) / len(cells)
+    for i, (label, value, color) in enumerate(cells):
+        text(slide, x + 0.25 + i * cw, y + 0.42, cw - 0.1, 0.45, value, size=20, font=HEAD, bold=True, color=color)
+        text(slide, x + 0.25 + i * cw, y + 0.88, cw - 0.1, 0.3, label, size=11, color=SLATE)
+
+
 def share(path, start=None):
     """Share of trading periods each asset was held long and short."""
     w = pd.read_csv(path, index_col=0, parse_dates=True).loc[start:]
@@ -126,6 +136,7 @@ def build():
     crash08 = 100 * ((1 + a_net.loc["2008-07":"2009-03"]).prod() - 1)
     beta = pd.read_csv(OUT_R / "C_beta_btc.csv", index_col=[0, 1])
     contrib = pd.read_csv(OUT_R / "C_contribution_by_coin.csv", index_col=0)["total P&L (% pts)"]
+    grid_c = pd.read_csv(OUT_C / "robustness_grid.csv")
     a_long, a_short = share(OUT_A / "weights_carry.csv", a_net.index[0])
 
     A = lambda k, p, c="Sharpe": pa.loc[(k, p), c]
@@ -293,11 +304,14 @@ def build():
          "Next-month carry after non-crowded vs crowded months", h=1.45)
     stat(s, 8.75, 4.6, 4.0, f"{lrv['Correlation'].iloc[0]:.2f}",
          "Correlation with the academic LRV carry factor (1999–2021)", h=1.45)
-    text(s, 0.6, 5.95, 7.8, 0.9,
-         f"Full sample, net: Sharpe {A('Carry (net)', 'Full'):.2f} carry, {A('Crowd-filtered (net)', 'Full'):.2f} filtered; "
-         f"max drawdown {A('Carry (net)', 'Full', 'Max drawdown (%)'):.0f}% either way.", size=14, color=SLATE)
+    ab = lambda c, f: f"{A('Carry (net)', 'Full', c):{f}}% / {A('Crowd-filtered (net)', 'Full', c):{f}}%"
+    perf_box(s, 0.6, 5.85, 7.8, 1.3, "Full sample 1999–2026, net of costs: carry / crowd-filtered", [
+        ("Net return a year", ab("Ann. mean (%)", ".1f"), NAVY),
+        ("Volatility a year", ab("Ann. vol (%)", ".1f"), NAVY),
+        ("Max drawdown", ab("Max drawdown (%)", ".0f"), RED),
+    ])
     script.append(("Strategy A results", *notes(s, "1:20", [
-        f"Plain carry earns about {A('Carry (net)', 'Full', 'Ann. mean (%)'):.1f}% a year after costs, a net Sharpe of {A('Carry (net)', 'Full'):.2f}.",
+        f"Plain carry earns about {A('Carry (net)', 'Full', 'Ann. mean (%)'):.1f}% a year after costs with {A('Carry (net)', 'Full', 'Ann. vol (%)'):.1f}% volatility, a net Sharpe of {A('Carry (net)', 'Full'):.2f}.",
         f"Our carry has a {lrv['Correlation'].iloc[0]:.2f} correlation with the published Lustig–Roussanov–Verdelhan factor, which validates the code and data.",
         f"After crowded months, next-month carry averages only {cv.loc['Crowded', 'Next-month carry mean (%)']:.2f}% versus {cv.loc['Not crowded', 'Next-month carry mean (%)']:.2f}% otherwise, with more negative skew.",
         f"Out of sample the filter lifts the Sharpe from {A('Carry (net)', 'Out-of-sample'):.2f} to {A('Crowd-filtered (net)', 'Out-of-sample'):.2f}, and every variant in our robustness grid also beats {A('Carry (net)', 'Out-of-sample'):.2f}.",
@@ -341,6 +355,12 @@ def build():
     stat(s, 10.7, 4.15, 2.05, f"{C('Out-of-sample'):.2f}", "Net Sharpe, 2024–26", h=1.3)
     stat(s, 8.5, 5.6, 4.25, f"{cw['Base'].iloc[0]:.0f}%", "Worst week: LUNA (Terra) collapse, May 2022",
          color=RED, h=1.3)
+    cb_ = lambda c, f: f"{C('Full', c):{f}}% / {C('Out-of-sample', c):{f}}%"
+    perf_box(s, 0.6, 5.95, 7.6, 1.3, "Net of costs: full sample 2020–2026 / since 2024", [
+        ("Net return a year", cb_("Ann. mean (%)", ".1f"), NAVY),
+        ("Volatility a year", cb_("Ann. vol (%)", ".0f"), NAVY),
+        ("Max drawdown", cb_("Max drawdown (%)", ".0f"), RED),
+    ])
     script.append(("Strategy C", *notes(s, "1:20", [
         "Crypto perpetual futures have their own interest rate, the funding rate, paid every 8 hours between longs and shorts.",
         "High funding means many leveraged longs, so it is both a carry signal and a crowding signal.",
@@ -348,6 +368,7 @@ def build():
         "The twelve coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.",
         "We keep Terra (LUNA) and FTX Token (FTT), which both collapsed in 2022, to avoid survivorship bias.",
         f"Net Sharpe is {C('Full'):.2f} over the full sample: {C('In-sample'):.2f} in 2020 to 2023 and {C('Out-of-sample'):.2f} since 2024.",
+        f"After costs it earns {C('Full', 'Ann. mean (%)'):.1f}% a year with {C('Full', 'Ann. vol (%)'):.0f}% volatility, and its maximum drawdown is {C('Full', 'Max drawdown (%)'):.0f}%, much deeper than FX carry.",
         f"The worst week was the Terra (LUNA) collapse in May 2022, {cw['Base'].iloc[0]:.1f}%: traders were shorting Terra, its funding turned negative, and so our rule held it long.",
     ], [
         "A perpetual future has no expiry date, so the exchange uses the funding payment to keep its price close to the spot price.",
@@ -370,6 +391,10 @@ def build():
          f"Total P&L by coin, % pts: Solana +{contrib['SOL']:.0f}, BNB +{contrib['BNB']:.0f}, Avalanche +{contrib['AVAX']:.0f}; "
          f"Terra {contrib['LUNA']:.0f}, XRP {contrib['XRP']:.0f}, Dogecoin {contrib['DOGE']:.0f}, FTX Token {contrib['FTT']:.0f}.",
          size=12, color=SLATE)
+    text(s, 0.6, 6.45, 5.9, 0.8,
+         f"Robustness: all {len(grid_c)} lookback and rebalancing settings have a positive out-of-sample Sharpe "
+         f"({grid_c['Sharpe OOS net'].min():.2f} to {grid_c['Sharpe OOS net'].max():.2f}); our pre-set choice is in the bottom half.",
+         size=12, bold=True, color=NAVY)
     takeaways(s, 6.9, 3.5, 5.9, 3.65, [
         f"Funding income is steady at about {dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, but price moves decide the result.",
         f"The strategy has no market exposure, since its beta to Bitcoin is {beta.loc[('Base', 'BTC return'), 'coef']:.2f}.",
@@ -385,6 +410,7 @@ def build():
         f"Its losses come from single coins: Terra alone cost {abs(contrib['LUNA']):.0f} percentage points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}, while Solana and BNB were the biggest winners.",
         f"A risk control we fixed in advance made things worse and lowered the Sharpe to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}: the cap halved exposure and the filter missed the timing of Terra's collapse.",
         "Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.",
+        f"As a robustness check we tried {len(grid_c)} lookback and rebalancing settings; all have a positive out-of-sample Sharpe, and the setting we fixed in advance is in the bottom half, so we did not pick the best one after the fact.",
     ], [
         f"The table adds up: over the full sample, funding of {dec.loc['Full', 'Funding carry (% p.a.)']:+.1f}%, price of {dec.loc['Full', 'Price component (% p.a.)']:+.1f}% and costs of {dec.loc['Full', 'Costs (% p.a.)']:+.1f}% give a net return of {dec.loc['Full', 'Net total (% p.a.)']:+.1f}% a year.",
         f"In 2020 to 2023 funding paid {dec.loc['In-sample', 'Funding carry (% p.a.)']:.1f}% a year, but price moves took away {abs(dec.loc['In-sample', 'Price component (% p.a.)']):.1f}%, so the strategy lost money.",
@@ -427,25 +453,49 @@ def build():
     # 10 conclusions --------------------------------------------------------------
     s = new(dark=True)
     title(s, "Conclusions and limitations", dark=True)
-    text(s, 0.6, 1.7, 5.9, 0.5, "What we found", size=20, bold=True, color=AMBER)
-    text(s, 0.6, 2.3, 5.9, 4.5, [
-        (f"FX carry reproduces the academic factor (corr {lrv['Correlation'].iloc[0]:.2f}) and is exposed to volatility shocks.", {"bullet": True}),
-        ("Crowding predicts weaker carry, and the filter modestly improves the out-of-sample Sharpe.", {"bullet": True}),
-        ("Crypto funding carry is market-neutral, but its crashes are coin-specific: it ends up long what traders short hardest.", {"bullet": True}),
-        (f"FX and crypto carry are nearly uncorrelated ({corr:.2f}).", {"bullet": True}),
-    ], size=15, color=WHITE, space_after=12)
-    text(s, 7.0, 1.7, 5.7, 0.5, "Limitations", size=20, bold=True, color=AMBER)
-    text(s, 7.0, 2.3, 5.7, 4.5, [
+    text(s, 0.6, 1.45, 7.4, 0.5, "Hypotheses: verdict and evidence", size=18, bold=True, color=AMBER)
+    verdicts = [
+        ["Hypothesis", "Verdict", "Evidence"],
+        ["A1: G10 carry earns a premium", "Supported",
+         f"Net Sharpe {A('Carry (net)', 'Full'):.2f}; {lrv['Correlation'].iloc[0]:.2f} correlation with LRV"],
+        ["A2: crowding predicts weaker carry", "Leaning yes",
+         f"{cv.loc['Crowded', 'Next-month carry mean (%)']:.2f}% vs {cv.loc['Not crowded', 'Next-month carry mean (%)']:.2f}% next month; "
+         f"OOS Sharpe {A('Carry (net)', 'Out-of-sample'):.2f} → {A('Crowd-filtered (net)', 'Out-of-sample'):.2f}; missed 2008"],
+        ["A3: carry loses in volatility spikes", "Supported",
+         f"Vol beta {reg.loc[(m, 'dVol (LRV)'), 'coef']:.2f} (t = {reg.loc[(m, 'dVol (LRV)'), 'NW t-stat']:.1f}); alpha not significant"],
+        ["C1: funding carry earns a premium", "Mixed",
+         f"Funding +{dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, but net Sharpe {C('Full'):.2f}; price moves dominate"],
+        ["C2: no BTC exposure; coin-specific crashes", "Supported",
+         f"BTC beta ≈ 0; Terra {contrib['LUNA']:.0f} pts; worst week {cw['Base'].iloc[0]:.0f}%"],
+        ["Pre-set risk control helps", "Not supported",
+         f"Sharpe {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} → {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}"],
+        ["FX and crypto carry diversify", "Supported",
+         f"Correlation {corr:.2f}; vol {comb.loc['Combined 50/50', 'Ann. vol (%)']:.1f}% vs about 9%"],
+    ]
+    vt = table(s, 0.6, 2.0, 7.6, verdicts, col_w=[2.75, 1.25, 3.6], size=11, row_h=0.5, left=True)
+    tone = {"Supported": "2E7D4F", "Leaning yes": "B7700C", "Mixed": "B7700C", "Not supported": RED}
+    for r in range(1, len(verdicts)):
+        run = vt.cell(r, 1).text_frame.paragraphs[0].runs[0]
+        run.font.bold = True
+        run.font.color.rgb = deck.rgb(tone[verdicts[r][1]])
+    text(s, 8.6, 1.45, 4.2, 0.5, "What is new", size=18, bold=True, color=AMBER)
+    text(s, 8.6, 1.95, 4.2, 2.2, [
+        ("We use CFTC speculator positioning as a crowding filter on G10 carry.", {"bullet": True}),
+        ("We treat crypto funding as the crypto interest-rate gap and as a crowding signal, and test it with the coins that died.", {"bullet": True}),
+    ], size=13, color=WHITE, space_after=8)
+    text(s, 8.6, 4.15, 4.2, 0.5, "Limitations", size=18, bold=True, color=AMBER)
+    text(s, 8.6, 4.65, 4.2, 2.6, [
         ("The crypto history is short (2020–2026) and covers only 12 coins.", {"bullet": True}),
         (f"There are only {int(cv.loc['Crowded', 'Months'])} crowded FX months, and the 2008 crash was not flagged.", {"bullet": True}),
-        ("The crypto results depend on the lookback and the rebalancing frequency.", {"bullet": True}),
         ("Costs are simple estimates, and we ignore funding-rate caps, borrow limits and exchange risk.", {"bullet": True}),
-    ], size=15, color=WHITE, space_after=12)
+    ], size=13, color=WHITE, space_after=8)
     script.append(("Conclusions", *notes(s, "1:00", [
+        "The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.",
         "In both markets, carry looks like compensation for crash risk.",
         "In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.",
         "In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.",
         "Because the two crash at different times, they diversify each other.",
+        "What is new in our work is using CFTC positioning as a crowding filter on carry, and treating crypto funding as both the crypto interest-rate gap and a crowding signal, tested with the coins that died.",
         "The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.",
     ])))
 

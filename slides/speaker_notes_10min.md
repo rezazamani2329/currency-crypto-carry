@@ -49,7 +49,7 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 
 ## Slide 5. Strategy A results (about 1:20)
 
-- Plain carry earns about 3.3% a year after costs, a net Sharpe of 0.37.
+- Plain carry earns about 3.3% a year after costs with 8.9% volatility, a net Sharpe of 0.37.
 - Our carry has a 0.82 correlation with the published Lustig–Roussanov–Verdelhan factor, which validates the code and data.
 - After crowded months, next-month carry averages only 0.02% versus 0.30% otherwise, with more negative skew.
 - Out of sample the filter lifts the Sharpe from 0.27 to 0.32, and every variant in our robustness grid also beats 0.27.
@@ -71,6 +71,7 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - The twelve coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.
 - We keep Terra (LUNA) and FTX Token (FTT), which both collapsed in 2022, to avoid survivorship bias.
 - Net Sharpe is 0.14 over the full sample: -0.07 in 2020 to 2023 and 0.81 since 2024.
+- After costs it earns 4.1% a year with 30% volatility, and its maximum drawdown is -67%, much deeper than FX carry.
 - The worst week was the Terra (LUNA) collapse in May 2022, -27.3%: traders were shorting Terra, its funding turned negative, and so our rule held it long.
 - A perpetual future has no expiry date, so the exchange uses the funding payment to keep its price close to the spot price.
 - For example, if funding is +0.01% every 8 hours, longs pay shorts about 0.03% a day, which is roughly 11% a year.
@@ -87,6 +88,7 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - Its losses come from single coins: Terra alone cost 87 percentage points, XRP 58 and Dogecoin 43, while Solana and BNB were the biggest winners.
 - A risk control we fixed in advance made things worse and lowered the Sharpe to -0.16: the cap halved exposure and the filter missed the timing of Terra's collapse.
 - Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.
+- As a robustness check we tried 6 lookback and rebalancing settings; all have a positive out-of-sample Sharpe, and the setting we fixed in advance is in the bottom half, so we did not pick the best one after the fact.
 - The table adds up: over the full sample, funding of +8.5%, price of -2.2% and costs of -2.2% give a net return of +4.1% a year.
 - In 2020 to 2023 funding paid 12.3% a year, but price moves took away 12.5%, so the strategy lost money.
 - Since 2024 funding paid only 3.1%, and price moves added 13.0%, which is luck rather than carry.
@@ -108,8 +110,10 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 
 ## Slide 10. Conclusions (about 1:00)
 
+- The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.
 - In both markets, carry looks like compensation for crash risk.
 - In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.
 - In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.
 - Because the two crash at different times, they diversify each other.
+- What is new in our work is using CFTC positioning as a crowding filter on carry, and treating crypto funding as both the crypto interest-rate gap and a crowding signal, tested with the coins that died.
 - The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.
