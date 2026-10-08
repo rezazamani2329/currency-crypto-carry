@@ -12,6 +12,7 @@ Run from the project root:  python code/08_build_slides_10min.py
 """
 
 import importlib.util
+import shutil
 import tempfile
 from pathlib import Path
 
@@ -146,6 +147,9 @@ def build():
     ch = deck.make_charts()
     ch["c_decomp"] = decomp_chart()
     ch["c_cum"] = cum_chart()
+    # keep copies of the two annotated charts for the README
+    for k in ("c_cum", "c_decomp"):
+        shutil.copy(ch[k], deck.SLIDES / "img" / f"{k}_annotated.png")
 
     pa = pd.read_csv(OUT_A / "performance_table.csv", index_col=[0, 1])
     pc = pd.read_csv(OUT_C / "performance_table.csv", index_col=[0, 1])
@@ -153,7 +157,6 @@ def build():
     reg = pd.read_csv(OUT_R / "A_factor_regressions.csv", index_col=[0, 1])
     lrv = pd.read_csv(OUT_R / "A_vs_LRV_HML.csv", index_col=0)
     dec = pd.read_csv(OUT_C / "return_decomposition.csv", index_col=0)
-    ctl = pd.read_csv(OUT_R / "C_risk_control.csv", index_col=[0, 1])
     cw = pd.read_csv(OUT_R / "C_worst_weeks.csv", index_col=0)
     comb = pd.read_csv(OUT_R / "combined_portfolio.csv", index_col=0)
     cm = pd.read_csv(OUT_R / "combined_monthly_returns.csv", index_col=0)
@@ -427,7 +430,7 @@ def build():
         "The out-of-sample Sharpe since 2024 is strong, but it comes from less than three years of data, so we treat it with caution.",
     ])))
 
-    # 8 C drivers + risk control --------------------------------------------------
+    # 8 C drivers + robustness --------------------------------------------------
     s = new()
     title(s, "Funding is earned, but price moves dominate", "Where the return comes from, and what drives the losses")
     picture(s, ch["c_decomp"], 0.5, 1.75, w=6.0)
@@ -450,7 +453,6 @@ def build():
          {"bold": True, "color": NAVY}),
         (f"Its losses come from single coins: Terra lost {abs(contrib['LUNA']):.0f} points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}.",
          {"bold": True, "color": NAVY}),
-        f"Our pre-set risk control lowered the Sharpe from {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}, so it did not help.",
         "Deeply negative funding signals crowded shorts, not a cheap coin.",
     ], size=13)
     script.append(("Strategy C drivers", *notes(s, "1:10", [
@@ -459,15 +461,12 @@ def build():
         "Since 2024 most of the gain came from price, so we read the strong out-of-sample number with caution.",
         f"The beta to Bitcoin is about zero, so the strategy has no market exposure.",
         f"Its losses come from single coins: Terra alone cost {abs(contrib['LUNA']):.0f} percentage points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}, while Solana and BNB were the biggest winners.",
-        f"A risk control we fixed in advance made things worse and lowered the Sharpe to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}: the cap halved exposure and the filter missed the timing of Terra's collapse.",
         "Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.",
         f"As a robustness check we tried {len(grid_c)} lookback and rebalancing settings; all have a positive out-of-sample Sharpe, and the setting we fixed in advance is in the bottom half, so we did not pick the best one after the fact.",
     ], [
         f"The table adds up: over the full sample, funding of {dec.loc['Full', 'Funding carry (% p.a.)']:+.1f}%, price of {dec.loc['Full', 'Price component (% p.a.)']:+.1f}% and costs of {dec.loc['Full', 'Costs (% p.a.)']:+.1f}% give a net return of {dec.loc['Full', 'Net total (% p.a.)']:+.1f}% a year.",
         f"In 2020 to 2023 funding paid {dec.loc['In-sample', 'Funding carry (% p.a.)']:.1f}% a year, but price moves took away {abs(dec.loc['In-sample', 'Price component (% p.a.)']):.1f}%, so the strategy lost money.",
         f"Since 2024 funding paid only {dec.loc['Out-of-sample', 'Funding carry (% p.a.)']:.1f}%, and price moves added {dec.loc['Out-of-sample', 'Price component (% p.a.)']:.1f}%, which is luck rather than carry.",
-        "The risk control capped each coin at one sixth of its side of the book and refused to buy coins with 7-day funding below minus 50% a year.",
-        "It failed because the cap left part of the book in cash and halved the funding income, and on the Sunday before Terra collapsed its 7-day funding was only about minus 20% a year, so the filter did not remove it.",
     ])))
 
     # 9 combined ------------------------------------------------------------------
@@ -529,8 +528,6 @@ def build():
          f"Funding +{dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, but net Sharpe {C('Full'):.2f}; price moves dominate"],
         ["C2: no BTC exposure; coin-specific crashes", "Supported",
          f"BTC beta ≈ 0; Terra {contrib['LUNA']:.0f} pts; worst week {cw['Base'].iloc[0]:.0f}%"],
-        ["Pre-set risk control helps", "Not supported",
-         f"Sharpe {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} → {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}"],
         ["FX and crypto carry diversify", "Supported",
          f"Correlation {corr:.2f}; vol {comb.loc['Combined 50/50', 'Ann. vol (%)']:.1f}% vs about 9%"],
     ]
@@ -555,7 +552,7 @@ def build():
         "Our short answer is partly yes: crowding makes carry weaker, but it doesn't predict the biggest crashes.",
         "In FX, carry crashes are compensation for risk, and crowding is a modest warning sign, not a reliable crash predictor.",
         "In crypto, carry also earns a premium and also crashes, but the crashes come from single coins, mostly being long a coin that traders are crowding to short, so crowding tells you where the danger is rather than when it will hit.",
-        "The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.",
+        "The table sums up our hypotheses: four are supported, crowding in FX leans yes, and crypto funding carry is mixed.",
         "In both markets, carry looks like compensation for crash risk.",
         "In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.",
         "In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.",
@@ -590,5 +587,5 @@ if __name__ == "__main__":
 # What this builds: slides/presentation_10min.pptx, a 10-slide version of the deck for a
 # 10-minute talk: title, idea and hypotheses, data and methodology, Strategy A rule,
 # results (with the LRV check) and risk, Strategy C rule and results, its drivers and
-# risk control, combined portfolio, conclusions. Every slide has bullet speaker notes with
+# combined portfolio, conclusions. Every slide has bullet speaker notes with
 # a time cue (about 9:30 in total); slides/speaker_notes_10min.md has the same notes.

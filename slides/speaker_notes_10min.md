@@ -95,14 +95,11 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - Since 2024 most of the gain came from price, so we read the strong out-of-sample number with caution.
 - The beta to Bitcoin is about zero, so the strategy has no market exposure.
 - Its losses come from single coins: Terra alone cost 87 percentage points, XRP 58 and Dogecoin 43, while Solana and BNB were the biggest winners.
-- A risk control we fixed in advance made things worse and lowered the Sharpe to -0.16: the cap halved exposure and the filter missed the timing of Terra's collapse.
 - Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.
 - As a robustness check we tried 6 lookback and rebalancing settings; all have a positive out-of-sample Sharpe, and the setting we fixed in advance is in the bottom half, so we did not pick the best one after the fact.
 - The table adds up: over the full sample, funding of +8.5%, price of -2.2% and costs of -2.2% give a net return of +4.1% a year.
 - In 2020 to 2023 funding paid 12.3% a year, but price moves took away 12.5%, so the strategy lost money.
 - Since 2024 funding paid only 3.1%, and price moves added 13.0%, which is luck rather than carry.
-- The risk control capped each coin at one sixth of its side of the book and refused to buy coins with 7-day funding below minus 50% a year.
-- It failed because the cap left part of the book in cash and halved the funding income, and on the Sunday before Terra collapsed its 7-day funding was only about minus 20% a year, so the filter did not remove it.
 
 ## Slide 9. Combined portfolio (about 0:50)
 
@@ -122,7 +119,7 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - Our short answer is partly yes: crowding makes carry weaker, but it doesn't predict the biggest crashes.
 - In FX, carry crashes are compensation for risk, and crowding is a modest warning sign, not a reliable crash predictor.
 - In crypto, carry also earns a premium and also crashes, but the crashes come from single coins, mostly being long a coin that traders are crowding to short, so crowding tells you where the danger is rather than when it will hit.
-- The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.
+- The table sums up our hypotheses: four are supported, crowding in FX leans yes, and crypto funding carry is mixed.
 - In both markets, carry looks like compensation for crash risk.
 - In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.
 - In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.
