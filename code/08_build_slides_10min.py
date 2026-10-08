@@ -37,6 +37,26 @@ def notes(slide, minutes, bullets):
     return minutes, bullets
 
 
+CURRENCIES = ("Japanese yen (JPY), euro (EUR), British pound (GBP), Swiss franc (CHF), Canadian dollar (CAD), "
+              "Australian dollar (AUD) and New Zealand dollar (NZD), each against the US dollar.")
+COIN_NAMES = ("Bitcoin (BTC), Ethereum (ETH), BNB, XRP, Cardano (ADA), Dogecoin (DOGE), Solana (SOL), Litecoin (LTC), "
+              "Chainlink (LINK), Avalanche (AVAX), Terra (LUNA) and FTX Token (FTT).")
+
+
+def takeaways(slide, x, y, w, h, items, size=14):
+    """A tinted box headed 'Takeaways' with one full-sentence bullet per item."""
+    box(slide, x, y, w, h)
+    text(slide, x + 0.25, y + 0.18, w - 0.5, 0.4, "Takeaways", size=16, bold=True, color=NAVY)
+    text(slide, x + 0.25, y + 0.65, w - 0.5, h - 0.8, [(t, {"bullet": True}) for t in items], size=size, space_after=8)
+
+
+def share(path, start=None):
+    """Share of trading periods each asset was held long and short."""
+    w = pd.read_csv(path, index_col=0, parse_dates=True).loc[start:]
+    w = w[(w != 0).any(axis=1)]
+    return (100 * (w > 0).mean()).round().astype(int), (100 * (w < 0).mean()).round().astype(int)
+
+
 def build():
     # charts go to a temporary folder so the images of the 16-slide deck stay unchanged
     deck.IMG = Path(tempfile.mkdtemp())
@@ -56,6 +76,7 @@ def build():
     crash08 = 100 * ((1 + a_net.loc["2008-07":"2009-03"]).prod() - 1)
     beta = pd.read_csv(OUT_R / "C_beta_btc.csv", index_col=[0, 1])
     contrib = pd.read_csv(OUT_R / "C_contribution_by_coin.csv", index_col=0)["total P&L (% pts)"]
+    a_long, a_short = share(OUT_A / "weights_carry.csv", a_net.index[0])
 
     A = lambda k, p, c="Sharpe": pa.loc[(k, p), c]
     C = lambda p, c="Sharpe": pc.loc[("Crypto carry (net)", p), c]
@@ -85,7 +106,8 @@ def build():
     script.append(("Title", *notes(s, "0:20", [
         "Good morning. Our project asks one question: do carry trades crash when they are crowded?",
         "We test it in two markets with the same economics: G10 currencies and crypto.",
-        "Strategy A is G10 FX carry with a crowding filter; Strategy C is crypto funding carry.",
+        "Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter built from CFTC data.",
+        "Strategy C is funding carry in twelve crypto perpetual futures on Binance, including the coins that collapsed, Terra and FTX Token.",
     ])))
 
     # 2 idea + hypotheses -----------------------------------------------------
@@ -106,7 +128,7 @@ def build():
             ("", "A: G10 FX", "C: Crypto"),
             ("Carry signal", "3-month rate differential", "Perpetual funding rate"),
             ("Crowding data", "CFTC speculator positions", "Funding = leveraged demand"),
-            ("Universe", "7 currencies vs USD", "12 coins incl. LUNA, FTT"),
+            ("Universe", "7 currencies vs USD", "12 coins (listed below)"),
             ("Frequency", "Monthly, 1999–2026", "Weekly, 2020–2026")]):
         yy = 2.0 + i * 0.78
         if i == 0:
@@ -117,13 +139,19 @@ def build():
         text(s, 6.7, yy, 1.8, 0.5, k, size=13, bold=True, color=SLATE)
         text(s, 8.55, yy, 2.0, 0.5, v1, size=13)
         text(s, 10.65, yy, 2.0, 0.5, v2, size=13)
+    text(s, 6.5, 5.75, 6.3, 1.5, [
+        ("Currencies: " + CURRENCIES, {"size": 11}),
+        ("Coins: " + COIN_NAMES, {"size": 11}),
+    ], color=SLATE, space_after=6)
     script.append(("Carry pays because it crashes", *notes(s, "1:00", [
         "Carry means borrowing in a low-yield asset and holding a high-yield one.",
         "Uncovered interest parity says this should earn nothing, but in the data it earns a premium.",
         "The catch is crash risk: carry goes up the stairs and down the elevator.",
         "Brunnermeier, Nagel and Pedersen show crashes are worst when speculators are crowded into the trade.",
-        "In FX the yield is the interest differential and we measure crowding with CFTC positions.",
-        "In crypto the yield is the perpetual funding rate, which itself measures leveraged demand.",
+        "In FX the yield is the interest-rate differential, and we measure crowding with CFTC speculator positions.",
+        "Our FX universe is the yen, euro, British pound, Swiss franc, Canadian dollar, Australian dollar and New Zealand dollar, all against the US dollar.",
+        "In crypto the yield is the perpetual funding rate, which also measures leveraged demand.",
+        "Our coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.",
         "We wrote the hypotheses and all parameters down before running any backtest.",
     ])))
 
@@ -139,13 +167,13 @@ def build():
         ["Carry factor (validation)", "Lustig–Roussanov–Verdelhan", "1983–2021"],
     ], col_w=[2.5, 2.6, 1.5], size=12, row_h=0.42, left=True)
     text(s, 7.6, 1.9, 5.2, 4.8, [
-        ("Parameters fixed before the first backtest", {"bullet": True}),
-        ("Out-of-sample: A from 2011, C from 2024", {"bullet": True}),
-        ("Costs: 3 bp per unit traded in FX, 5 bp in crypto", {"bullet": True}),
-        ("No look-ahead: weights at t earn t+1; CFTC used after its Friday release", {"bullet": True}),
-        ("No survivorship bias: LUNA and FTT kept", {"bullet": True}),
-        ("Robustness grids reported, never used for tuning", {"bullet": True}),
-    ], size=16, space_after=12)
+        ("All parameters were fixed before the first backtest.", {"bullet": True}),
+        ("The out-of-sample period starts in 2011 for A and in 2024 for C.", {"bullet": True}),
+        ("Costs are 3 bp per unit traded in FX and 5 bp in crypto.", {"bullet": True}),
+        ("There is no look-ahead: weights set at t earn the return of t+1, and CFTC data are used only after their Friday release.", {"bullet": True}),
+        ("There is no survivorship bias, because Terra (LUNA) and FTX Token (FTT) stay in the sample.", {"bullet": True}),
+        ("Robustness grids are reported, but they were never used for tuning.", {"bullet": True}),
+    ], size=15, space_after=10)
     text(s, 0.6, 4.75, 6.6, 1.9, [
         ("Data fix: before Aug 2000 CFTC lists the same currency futures under "
          "'International Monetary Market'. Matching both names extended positioning back to 1986.",
@@ -154,29 +182,36 @@ def build():
     script.append(("Data and methodology", *notes(s, "0:50", [
         "All data are public: FRED for FX and rates, CFTC for positions, Binance for crypto.",
         "One data fix worth mentioning: before 2000 the CFTC lists currency futures under a different exchange name; matching both names gave us positioning back to 1986.",
-        "Every parameter was fixed in advance, and we hold out an out-of-sample period: 2011 on for FX, 2024 on for crypto.",
-        "Returns are net of costs, there is no look-ahead, and we keep the coins that died, LUNA and FTT.",
+        "Every parameter was fixed in advance, and our out-of-sample period starts in 2011 for FX and in 2024 for crypto.",
+        "Returns are net of costs, there is no look-ahead, and we keep the two coins that died, Terra (LUNA) and FTX Token (FTT).",
     ])))
 
     # 4 strategy A rule --------------------------------------------------------
     s = new()
-    title(s, "Strategy A: crowding-filtered G10 carry", "JPY, EUR, GBP, CHF, CAD, AUD, NZD vs USD, monthly")
+    title(s, "Strategy A: crowding-filtered G10 carry",
+          "Yen, euro, pound, Swiss franc, Canadian, Australian and New Zealand dollar vs USD, monthly")
     numbered(s, 0.6, 2.05, 7.4, [
-        ("Carry portfolio", "Each month-end: long the 2 highest-rate currencies, short the 2 lowest. "
-                            "Equal weights, dollar-neutral."),
-        ("Crowding signal", "CFTC net speculative position / open interest, as a 36-month z-score."),
-        ("Portfolio crowding", "Average z of the long leg minus average z of the short leg."),
-        ("Filter", "If crowding > 1, cut all positions to half for the next month."),
+        ("Carry portfolio", "At each month-end we buy the 2 highest-rate currencies and sell the 2 lowest, "
+                            "with equal weights and no net dollar bet."),
+        ("Crowding signal", "Each currency's CFTC net speculative position over open interest is z-scored over 36 months."),
+        ("Portfolio crowding", "It is the average z of the long leg minus the average z of the short leg."),
+        ("Filter", "If crowding is above 1, all positions are cut to half for the next month."),
     ], gap=1.2)
     stat(s, 8.6, 2.05, 4.1, f"{int(cv.loc['Crowded', 'Months'])}",
          f"crowded months out of {int(cv['Months'].sum())}, 1999–2026")
-    stat(s, 8.6, 3.85, 4.1, "1 SD", "Threshold for 'crowded': one standard deviation above normal positioning")
-    script.append(("Strategy A rule", *notes(s, "0:50", [
-        "Each month we rank seven currencies by their interest rate against the dollar.",
+    box(s, 8.6, 3.85, 4.1, 2.2)
+    text(s, 8.85, 4.03, 3.6, 2.5, [
+        ("Who we usually hold", {"size": 16, "bold": True, "color": NAVY}),
+        (f"Long: New Zealand dollar ({a_long['NZD']}% of months) and Australian dollar ({a_long['AUD']}%).", {"bullet": True}),
+        (f"Short: Swiss franc ({a_short['CHF']}%), Japanese yen ({a_short['JPY']}%) and euro ({a_short['EUR']}%).", {"bullet": True}),
+    ], size=13, space_after=8)
+    script.append(("Strategy A rule", *notes(s, "1:00", [
+        "Each month we rank the seven currencies by their three-month interest rate.",
         "We buy the two highest and sell the two lowest, so the portfolio has no net dollar bet.",
+        f"In practice we are almost always long the New Zealand and Australian dollars and short the Swiss franc, often with the yen or the euro.",
         "For crowding we take speculators' net futures position and z-score it over 36 months.",
         "Crowding is high when speculators are unusually long what we hold and short what we sell.",
-        f"Above one, we halve the position. This happened in {int(cv.loc['Crowded', 'Months'])} months.",
+        f"When this score is above one standard deviation, we halve the position, which happened in {int(cv.loc['Crowded', 'Months'])} months.",
     ])))
 
     # 5 A results + validation ---------------------------------------------------
@@ -199,7 +234,7 @@ def build():
         f"After crowded months, next-month carry averages only {cv.loc['Crowded', 'Next-month carry mean (%)']:.2f}% versus {cv.loc['Not crowded', 'Next-month carry mean (%)']:.2f}% otherwise, with more negative skew.",
         f"Out of sample the filter lifts the Sharpe from {A('Carry (net)', 'Out-of-sample'):.2f} to {A('Crowd-filtered (net)', 'Out-of-sample'):.2f}, and every variant in our robustness grid also beats {A('Carry (net)', 'Out-of-sample'):.2f}.",
         f"But it did not avoid 2008: the crash started from a non-crowded reading, so the max drawdown is {A('Carry (net)', 'Full', 'Max drawdown (%)'):.0f}% either way.",
-        f"Caveat: only {int(cv.loc['Crowded', 'Months'])} crowded months, so the effect is not precisely estimated.",
+        f"One caveat is that there are only {int(cv.loc['Crowded', 'Months'])} crowded months, so the effect is not precisely estimated.",
     ])))
 
     # 6 A risk --------------------------------------------------------------------
@@ -218,20 +253,21 @@ def build():
          size=16, bold=True, color=NAVY)
     picture(s, ch["a_2008"], 7.3, 2.45, w=5.5)
     script.append(("Strategy A risk", *notes(s, "0:50", [
-        f"When does it lose? We regress monthly carry on the dollar factor and on equity-volatility shocks.",
+        "To see when it loses, we regress monthly carry on the dollar factor and on equity-volatility shocks.",
         f"The volatility beta is {reg.loc[(m, 'dVol (LRV)'), 'coef']:.2f} with a t-stat of {reg.loc[(m, 'dVol (LRV)'), 'NW t-stat']:.1f}: carry loses when volatility jumps.",
         f"Once we control for these factors the alpha is not significant, so carry is pay for risk, not a free lunch.",
-        f"From July 2008 to March 2009 the strategy lost {abs(crash08):.1f}% as the funding currencies, yen and Swiss franc, rallied.",
+        f"From July 2008 to March 2009 the strategy lost {abs(crash08):.1f}% as the funding currencies, the Japanese yen and the Swiss franc, rallied against the Australian and New Zealand dollars.",
     ])))
 
     # 7 strategy C rule + results -------------------------------------------------
     s = new()
-    title(s, "Strategy C: crypto funding carry", "12 Binance perpetuals incl. LUNA and FTT, weekly, 2020–2026")
+    title(s, "Strategy C: crypto funding carry",
+          "Binance perpetuals on BTC, ETH, BNB, XRP, ADA, DOGE, SOL, LTC, LINK, AVAX, LUNA, FTT; weekly, 2020–2026")
     picture(s, ch["c_cum"], 0.5, 1.75, w=7.6)
     text(s, 8.5, 1.8, 4.3, 2.3, [
-        ("Funding is paid every 8 hours; positive funding means longs pay shorts.", {"bullet": True}),
-        ("Each Sunday: short the third of coins with the highest 7-day funding, long the lowest third.", {"bullet": True}),
-        ("Dollar-neutral, 5 bp costs.", {"bullet": True}),
+        ("Funding is paid every 8 hours, and positive funding means longs pay shorts.", {"bullet": True}),
+        ("Each Sunday we short the third of coins with the highest 7-day funding and buy the lowest third.", {"bullet": True}),
+        ("The book is dollar-neutral and pays 5 bp per trade.", {"bullet": True}),
     ], size=14, space_after=8)
     stat(s, 8.5, 4.15, 2.05, f"{C('Full'):.2f}", "Net Sharpe, full", h=1.3)
     stat(s, 10.7, 4.15, 2.05, f"{C('Out-of-sample'):.2f}", "Net Sharpe, 2024–26", h=1.3)
@@ -241,9 +277,10 @@ def build():
         "Crypto perpetual futures have their own interest rate, the funding rate, paid every 8 hours between longs and shorts.",
         "High funding means many leveraged longs, so it is both a carry signal and a crowding signal.",
         "Each Sunday we short the third of coins with the highest funding and buy the third with the lowest.",
-        "We keep LUNA and FTT, which collapsed in 2022, to avoid survivorship bias.",
+        "The twelve coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.",
+        "We keep Terra (LUNA) and FTX Token (FTT), which both collapsed in 2022, to avoid survivorship bias.",
         f"Net Sharpe is {C('Full'):.2f} over the full sample: {C('In-sample'):.2f} in 2020 to 2023 and {C('Out-of-sample'):.2f} since 2024.",
-        f"The worst week was the LUNA collapse, {cw['Base'].iloc[0]:.1f}%: traders were shorting LUNA, its funding turned negative, so our rule held it long.",
+        f"The worst week was the Terra (LUNA) collapse in May 2022, {cw['Base'].iloc[0]:.1f}%: traders were shorting Terra, its funding turned negative, and so our rule held it long.",
     ])))
 
     # 8 C drivers + risk control --------------------------------------------------
@@ -255,40 +292,50 @@ def build():
         rows.append([p, f"{dec.loc[p, 'Funding carry (% p.a.)']:+.1f}",
                      f"{dec.loc[p, 'Price component (% p.a.)']:+.1f}", f"{dec.loc[p, 'Net total (% p.a.)']:+.1f}"])
     table(s, 6.9, 1.85, 5.9, rows, col_w=[2.3, 1.2, 1.2, 1.2], size=13)
-    text(s, 6.9, 3.55, 5.9, 3.4, [
-        (f"Beta to BTC ≈ {beta.loc[('Base', 'BTC return'), 'coef']:.2f} (t = {beta.loc[('Base', 'BTC return'), 'NW t-stat']:.2f}): market-neutral.",
-         {"bullet": True}),
-        (f"Losses are coin-specific: LUNA {contrib['LUNA']:.0f}, XRP {contrib['XRP']:.0f}, DOGE {contrib['DOGE']:.0f} % pts.",
-         {"bullet": True}),
-        (f"Pre-set risk control (1/6 cap, no longs below −50% funding): Sharpe {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} → "
-         f"{ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}. It did not help.", {"bullet": True}),
-        ("Lesson: deeply negative funding means crowded shorts, not distress.", {"bullet": True, "bold": True, "color": NAVY}),
-    ], size=14, space_after=10)
+    text(s, 0.6, 5.75, 5.9, 1.3,
+         f"Total P&L by coin, % pts: Solana +{contrib['SOL']:.0f}, BNB +{contrib['BNB']:.0f}, Avalanche +{contrib['AVAX']:.0f}; "
+         f"Terra {contrib['LUNA']:.0f}, XRP {contrib['XRP']:.0f}, Dogecoin {contrib['DOGE']:.0f}, FTX Token {contrib['FTT']:.0f}.",
+         size=12, color=SLATE)
+    takeaways(s, 6.9, 3.5, 5.9, 3.65, [
+        f"Funding income is steady at about {dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, but price moves decide the result.",
+        f"The strategy has no market exposure, since its beta to Bitcoin is {beta.loc[('Base', 'BTC return'), 'coef']:.2f}.",
+        f"Its losses come from single coins: Terra lost {abs(contrib['LUNA']):.0f} points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}.",
+        f"Our pre-set risk control lowered the Sharpe from {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}, so it did not help.",
+        "Deeply negative funding signals crowded shorts, not a cheap coin.",
+    ], size=13)
     script.append(("Strategy C drivers", *notes(s, "1:10", [
         f"We split the return into funding and price. Funding adds about {dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, steadily.",
-        f"But price moves dominate: in 2020 to 2023 the coins we shorted, like DOGE and XRP, kept rallying and wiped out the funding.",
-        f"Since 2024 most of the gain came from price, so we read the strong out-of-sample number with caution.",
-        f"The strategy has no market exposure; its losses come from single coins, LUNA alone {contrib['LUNA']:.0f} percentage points.",
-        f"A risk control we fixed in advance made things worse, Sharpe {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}: the cap halved exposure and the filter missed LUNA's timing.",
-        "So crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.",
+        "But price moves dominate: in 2020 to 2023 the coins we shorted, like Dogecoin and XRP, kept rallying and wiped out the funding.",
+        "Since 2024 most of the gain came from price, so we read the strong out-of-sample number with caution.",
+        f"The beta to Bitcoin is about zero, so the strategy has no market exposure.",
+        f"Its losses come from single coins: Terra alone cost {abs(contrib['LUNA']):.0f} percentage points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}, while Solana and BNB were the biggest winners.",
+        f"A risk control we fixed in advance made things worse and lowered the Sharpe to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}: the cap halved exposure and the filter missed the timing of Terra's collapse.",
+        "Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.",
     ])))
 
     # 9 combined ------------------------------------------------------------------
     s = new()
     title(s, "Combining FX and crypto carry", "Each scaled to 10% vol with lagged volatility, 50/50, 2021–2026")
-    picture(s, ch["comb"], 0.5, 1.85, w=7.8)
-    stat(s, 8.75, 1.95, 4.0, f"{corr:.2f}", "Correlation between A and C")
-    table(s, 8.75, 3.75, 4.0, [
-        ["", "Sharpe", "Vol (%)", "MaxDD (%)"],
+    picture(s, ch["comb"], 0.5, 1.75, w=6.6)
+    table(s, 0.6, 5.4, 6.4, [
+        ["", "Sharpe", "Vol (%)", "Max DD (%)", "Worst month (%)"],
         *[[k.split(" (")[0], f"{comb.loc[k, 'Sharpe']:.2f}", f"{comb.loc[k, 'Ann. vol (%)']:.1f}",
-           f"{comb.loc[k, 'Max drawdown (%)']:.0f}"] for k in comb.index],
-    ], col_w=[1.3, 0.8, 0.8, 1.1], size=12)
+           f"{comb.loc[k, 'Max drawdown (%)']:.0f}", f"{comb.loc[k, 'Worst month (%)']:.1f}"] for k in comb.index],
+    ], col_w=[1.6, 0.9, 0.9, 1.3, 1.7], size=12, row_h=0.34)
     cb = "Combined 50/50"
+    stat(s, 7.5, 1.8, 5.25, f"{corr:.2f}", "Correlation between A and C, monthly, 2021–2026", h=1.4)
+    takeaways(s, 7.5, 3.4, 5.25, 3.75, [
+        "FX carry and crypto carry are almost uncorrelated, so they crash at different times.",
+        f"The 50/50 mix has {comb.loc[cb, 'Ann. vol (%)']:.1f}% volatility, compared with about 9% for each strategy alone.",
+        f"Its worst month is {comb.loc[cb, 'Worst month (%)']:.1f}%, smaller than for FX ({comb.loc['A (10% vol)', 'Worst month (%)']:.1f}%) or crypto ({comb.loc['C (10% vol)', 'Worst month (%)']:.1f}%).",
+        f"The mix does not beat FX alone on Sharpe ({comb.loc[cb, 'Sharpe']:.2f} vs {comb.loc['A (10% vol)', 'Sharpe']:.2f}), because crypto carry was weak in this window.",
+    ], size=13)
     script.append(("Combined portfolio", *notes(s, "0:50", [
-        f"Finally, we scale both strategies to 10% volatility and combine them 50/50.",
+        "Finally, we scale both strategies to 10% volatility and combine them 50/50.",
         f"Their correlation is only {corr:.2f}: FX and crypto carry crash at different times.",
-        f"The mix has {comb.loc[cb, 'Ann. vol (%)']:.1f}% volatility and a Sharpe of {comb.loc[cb, 'Sharpe']:.2f}, with a smaller worst month than either part.",
-        "It does not beat FX alone on Sharpe because crypto carry was weak in this window, but the diversification is clear.",
+        f"The mix has {comb.loc[cb, 'Ann. vol (%)']:.1f}% volatility and a Sharpe of {comb.loc[cb, 'Sharpe']:.2f}, and its worst month, {comb.loc[cb, 'Worst month (%)']:.1f}%, is smaller than either part's.",
+        "It does not beat FX alone on Sharpe, because crypto carry was weak in this window.",
+        "Our takeaway is that the benefit of combining them is lower risk, not a higher return.",
     ])))
 
     # 10 conclusions --------------------------------------------------------------
@@ -297,23 +344,23 @@ def build():
     text(s, 0.6, 1.7, 5.9, 0.5, "What we found", size=20, bold=True, color=AMBER)
     text(s, 0.6, 2.3, 5.9, 4.5, [
         (f"FX carry reproduces the academic factor (corr {lrv['Correlation'].iloc[0]:.2f}) and is exposed to volatility shocks.", {"bullet": True}),
-        ("Crowding predicts weaker carry and modestly improves the out-of-sample Sharpe.", {"bullet": True}),
+        ("Crowding predicts weaker carry, and the filter modestly improves the out-of-sample Sharpe.", {"bullet": True}),
         ("Crypto funding carry is market-neutral, but its crashes are coin-specific: it ends up long what traders short hardest.", {"bullet": True}),
         (f"FX and crypto carry are nearly uncorrelated ({corr:.2f}).", {"bullet": True}),
     ], size=15, color=WHITE, space_after=12)
     text(s, 7.0, 1.7, 5.7, 0.5, "Limitations", size=20, bold=True, color=AMBER)
     text(s, 7.0, 2.3, 5.7, 4.5, [
-        ("Short crypto history (2020–2026) and only 12 coins.", {"bullet": True}),
-        (f"Few crowded FX months ({int(cv.loc['Crowded', 'Months'])}); the 2008 crash was not flagged.", {"bullet": True}),
-        ("Crypto results depend on lookback and rebalancing frequency.", {"bullet": True}),
-        ("Costs are simple estimates; no funding-rate caps, borrow limits or exchange risk.", {"bullet": True}),
+        ("The crypto history is short (2020–2026) and covers only 12 coins.", {"bullet": True}),
+        (f"There are only {int(cv.loc['Crowded', 'Months'])} crowded FX months, and the 2008 crash was not flagged.", {"bullet": True}),
+        ("The crypto results depend on the lookback and the rebalancing frequency.", {"bullet": True}),
+        ("Costs are simple estimates, and we ignore funding-rate caps, borrow limits and exchange risk.", {"bullet": True}),
     ], size=15, color=WHITE, space_after=12)
     script.append(("Conclusions", *notes(s, "1:00", [
         "To conclude: in both markets carry looks like compensation for crash risk.",
         "In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.",
-        "In crypto, sorting on funding alone exposes you to single-coin collapses like LUNA and FTX.",
+        "In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.",
         "Because the two crash at different times, they diversify each other.",
-        "Main limitations: a short crypto sample, few crowded FX months, and simple cost estimates.",
+        "The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.",
         "Thank you, we are happy to take questions.",
     ])))
 
