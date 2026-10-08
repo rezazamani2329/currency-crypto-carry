@@ -49,7 +49,7 @@ def takeaways(slide, x, y, w, h, items, size=14):
     """A tinted box headed 'Takeaways' with one full-sentence bullet per item."""
     box(slide, x, y, w, h)
     text(slide, x + 0.25, y + 0.18, w - 0.5, 0.4, "Takeaways", size=16, bold=True, color=NAVY)
-    text(slide, x + 0.25, y + 0.65, w - 0.5, h - 0.8, [(t, {"bullet": True}) for t in items], size=size, space_after=8)
+    text(slide, x + 0.25, y + 0.65, w - 0.5, h - 0.8, [(t, {"bullet": True}) if isinstance(t, str) else (t[0], {"bullet": True, **t[1]}) for t in items], size=size, space_after=8)
 
 
 def perf_box(slide, x, y, w, h, heading, metrics, rows):
@@ -209,6 +209,8 @@ def build():
         ("Why carry crashes", {"bold": True, "color": NAVY}),
         ("Carry borrows the low-yield asset and holds the high-yield one. UIP says this earns nothing, "
          "but in the data it earns a premium, with rare large crashes.", {"bullet": True}),
+        ("Carry goes \u201cup the stairs and down the elevator\u201d: small steady gains most of the time, then large losses in a few weeks.",
+         {"bullet": True, "bold": True, "color": NAVY}),
         ("Crashes are worst when the trade is crowded and everyone unwinds at once "
          "(Brunnermeier, Nagel & Pedersen 2008).", {"bullet": True}),
         ("Hypotheses, fixed before testing", {"bold": True, "color": NAVY}),
@@ -444,8 +446,10 @@ def build():
          size=12, bold=True, color=NAVY)
     takeaways(s, 6.9, 3.5, 5.9, 3.65, [
         f"Funding income is steady at about {dec.loc['Full', 'Funding carry (% p.a.)']:.1f}% a year, but price moves decide the result.",
-        f"The strategy has no market exposure, since its beta to Bitcoin is {beta.loc[('Base', 'BTC return'), 'coef']:.2f}.",
-        f"Its losses come from single coins: Terra lost {abs(contrib['LUNA']):.0f} points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}.",
+        (f"The strategy has no market exposure, since its beta to Bitcoin is {beta.loc[('Base', 'BTC return'), 'coef']:.2f}.",
+         {"bold": True, "color": NAVY}),
+        (f"Its losses come from single coins: Terra lost {abs(contrib['LUNA']):.0f} points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}.",
+         {"bold": True, "color": NAVY}),
         f"Our pre-set risk control lowered the Sharpe from {ctl.loc[('Base', 'Full'), 'Sharpe']:.2f} to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}, so it did not help.",
         "Deeply negative funding signals crowded shorts, not a cheap coin.",
     ], size=13)
