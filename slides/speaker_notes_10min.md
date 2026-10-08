@@ -4,7 +4,7 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 
 ## Slide 1. Title (about 0:20)
 
-- Good morning. Our project asks one question: do carry trades crash when they are crowded?
+- Our project asks one question: do carry trades crash when they are crowded?
 - We test it in two markets with the same economics: G10 currencies and crypto.
 - Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter built from CFTC data.
 - Strategy C is funding carry in twelve crypto perpetual futures on Binance, including the coins that collapsed, Terra and FTX Token.
@@ -20,6 +20,11 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - In crypto the yield is the perpetual funding rate, which also measures leveraged demand.
 - Our coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.
 - We wrote the hypotheses and all parameters down before running any backtest.
+- Uncovered interest parity (UIP) says a high-rate currency should fall by exactly the rate gap, so carry would earn zero; in practice high-rate currencies tend not to fall that much, which is the forward premium puzzle.
+- 'Up the stairs and down the elevator' means carry earns small steady gains most of the time and then loses a lot in a few weeks, so its returns have negative skew.
+- Crowding matters because when many speculators hold the same trade, a shock forces them all to unwind together, which makes the crash larger.
+- Hypothesis A says three things: carry earns a premium, crowded months are followed by weaker carry, and carry loses when volatility spikes.
+- Hypothesis C says crypto funding carry earns a premium with little exposure to Bitcoin, and that its crashes come from single coins.
 
 ## Slide 3. Data and methodology (about 0:50)
 
@@ -27,6 +32,11 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - One data fix worth mentioning: before 2000 the CFTC lists currency futures under a different exchange name; matching both names gave us positioning back to 1986.
 - Every parameter was fixed in advance, and our out-of-sample period starts in 2011 for FX and in 2024 for crypto.
 - Returns are net of costs, there is no look-ahead, and we keep the two coins that died, Terra (LUNA) and FTX Token (FTT).
+- Out-of-sample means the later years that we did not look at while designing the strategy; if a rule still works there, it is less likely to be a result of data mining.
+- Look-ahead bias means using information that was not public at the time of the trade; we avoid it because weights set at t earn the return of t+1, and CFTC positions measured on Tuesday are used only after their Friday release.
+- Survivorship bias means testing only on assets that still exist today; we avoid it by keeping Terra and FTX Token, which together cost the crypto strategy about 100 percentage points of P&L.
+- A basis point (bp) is 0.01%, so a cost of 3 bp means we lose 0.03% of every dollar we trade.
+- The Lustig–Roussanov–Verdelhan (LRV) factor is the published academic carry factor, built by buying high-rate and selling low-rate currency portfolios; we use it only to check our own carry series.
 
 ## Slide 4. Strategy A rule (about 1:00)
 
@@ -62,6 +72,11 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - We keep Terra (LUNA) and FTX Token (FTT), which both collapsed in 2022, to avoid survivorship bias.
 - Net Sharpe is 0.14 over the full sample: -0.07 in 2020 to 2023 and 0.81 since 2024.
 - The worst week was the Terra (LUNA) collapse in May 2022, -27.3%: traders were shorting Terra, its funding turned negative, and so our rule held it long.
+- A perpetual future has no expiry date, so the exchange uses the funding payment to keep its price close to the spot price.
+- For example, if funding is +0.01% every 8 hours, longs pay shorts about 0.03% a day, which is roughly 11% a year.
+- So shorting a coin with high funding earns that payment, just as selling a low-rate currency and buying a high-rate one earns the interest gap in FX.
+- The book is dollar-neutral, which means the long and short sides have the same size, so a move of the whole crypto market should roughly cancel out.
+- The out-of-sample Sharpe since 2024 is strong, but it comes from less than three years of data, so we treat it with caution.
 
 ## Slide 8. Strategy C drivers (about 1:10)
 
@@ -72,6 +87,11 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - Its losses come from single coins: Terra alone cost 87 percentage points, XRP 58 and Dogecoin 43, while Solana and BNB were the biggest winners.
 - A risk control we fixed in advance made things worse and lowered the Sharpe to -0.16: the cap halved exposure and the filter missed the timing of Terra's collapse.
 - Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.
+- The table adds up: over the full sample, funding of +8.5%, price of -2.2% and costs of -2.2% give a net return of +4.1% a year.
+- In 2020 to 2023 funding paid 12.3% a year, but price moves took away 12.5%, so the strategy lost money.
+- Since 2024 funding paid only 3.1%, and price moves added 13.0%, which is luck rather than carry.
+- The risk control capped each coin at one sixth of its side of the book and refused to buy coins with 7-day funding below minus 50% a year.
+- It failed because the cap left part of the book in cash and halved the funding income, and on the Sunday before Terra collapsed its 7-day funding was only about minus 20% a year, so the filter did not remove it.
 
 ## Slide 9. Combined portfolio (about 0:50)
 
@@ -80,12 +100,16 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - The mix has 7.0% volatility and a Sharpe of 0.51, and its worst month, -5.9%, is smaller than either part's.
 - It does not beat FX alone on Sharpe, because crypto carry was weak in this window.
 - Our takeaway is that the benefit of combining them is lower risk, not a higher return.
+- We scale each strategy to 10% volatility so that neither one dominates the mix just because it is more volatile; crypto carry is about three times as volatile as FX carry before scaling.
+- The scaling uses past volatility only, so there is no look-ahead in the combined portfolio.
+- A correlation of 0.11 is close to zero, which means a bad month in one strategy says very little about the other.
+- The window starts in 2021 because that is when both strategies have enough history for the volatility estimate.
+- With only 67 months of overlap, these combined numbers are indicative rather than precise.
 
 ## Slide 10. Conclusions (about 1:00)
 
-- To conclude: in both markets carry looks like compensation for crash risk.
+- In both markets, carry looks like compensation for crash risk.
 - In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.
 - In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.
 - Because the two crash at different times, they diversify each other.
 - The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.
-- Thank you, we are happy to take questions.

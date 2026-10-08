@@ -5,7 +5,7 @@ Authors: Reza Zamani and Paraj Goyal
 
 Interactive results page: [`web/index.html`](web/index.html) · Slides: [`slides/presentation.pptx`](slides/presentation.pptx) · Step-by-step notebooks: [`notebooks/`](notebooks/)
 
-10-minute presentation: [`slides/presentation_10min.pptx`](slides/presentation_10min.pptx) · [PDF](slides/presentation_10min.pdf) · speaker notes: [`slides/speaker_notes_10min.md`](slides/speaker_notes_10min.md) · [PDF](slides/speaker_notes_10min.pdf)
+10-minute presentation: [`slides/presentation_10min.pptx`](slides/presentation_10min.pptx) · [PDF](slides/presentation_10min.pdf) · speaker notes: [`slides/speaker_notes_10min.md`](slides/speaker_notes_10min.md) · [PDF](slides/speaker_notes_10min.pdf) · [slides with notes (PDF)](slides/presentation_10min_with_notes.pdf)
 
 Study guide (concepts, process, worked examples, results, Q&A): [`docs/study-guide.html`](docs/study-guide.html) · [PDF](docs/study-guide.pdf) · [online](https://claude.ai/artifact/Tv8XvTn1KokTAM95pUza1A) · Persian: [`docs/study-guide-fa.html`](docs/study-guide-fa.html) · [PDF](docs/study-guide-fa.pdf) · [online](https://claude.ai/artifact/WnkwK7rEePWsyeNaQCD8HP) · All online links: [`docs/LINKS.md`](docs/LINKS.md)
 

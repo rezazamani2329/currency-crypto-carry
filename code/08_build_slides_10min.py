@@ -15,6 +15,7 @@ import importlib.util
 import tempfile
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 from pptx import Presentation
 from pptx.enum.text import PP_ALIGN
@@ -31,10 +32,11 @@ OUT_A, OUT_C, OUT_R = deck.OUT_A, deck.OUT_C, deck.OUT_R
 SLIDES = Path("slides")
 
 
-def notes(slide, minutes, bullets):
-    """Speaker notes: a time cue, then one bullet per line."""
-    slide.notes_slide.notes_text_frame.text = "\n".join([f"[about {minutes}]"] + [f"• {b}" for b in bullets])
-    return minutes, bullets
+def notes(slide, minutes, bullets, extra=()):
+    """Speaker notes: a time cue, one bullet per line, then optional background to use if asked."""
+    lines = [f"[about {minutes}]"] + [f"• {b}" for b in list(bullets) + list(extra)] if bullets else []
+    slide.notes_slide.notes_text_frame.text = "\n".join(lines)
+    return minutes, bullets, list(extra)
 
 
 CURRENCIES = ("Japanese yen (JPY), euro (EUR), British pound (GBP), Swiss franc (CHF), Canadian dollar (CAD), "
@@ -57,10 +59,58 @@ def share(path, start=None):
     return (100 * (w > 0).mean()).round().astype(int), (100 * (w < 0).mean()).round().astype(int)
 
 
+def cum_chart():
+    """Slide 7 chart: growth of $1 in Strategy C, as in the 16-slide deck, plus a band for
+    the Dogecoin and XRP rally while we were short them (April to May 2021)."""
+    cd = pd.read_csv(OUT_C / "daily_returns.csv", index_col=0, parse_dates=True)
+    fig, ax = plt.subplots(figsize=(8.2, 4.4))
+    s = deck.cum(cd["Crypto carry (net)"])
+    ax.axvspan(pd.Timestamp("2021-04-01"), pd.Timestamp("2021-05-31"), color="#" + deck.RED, alpha=0.10, lw=0)
+    ax.text(pd.Timestamp("2021-04-01"), s.max() * 1.05, " Dogecoin, XRP\n rally (short)", color="#" + deck.RED,
+            fontsize=9, va="bottom")
+    ax.plot(s, color="#" + NAVY, lw=1.5)
+    ax.set_yscale("log")
+    for d, lab in (("2020-03-12", "Covid"), ("2022-05-09", "LUNA\n(Terra)"), ("2022-11-08", "FTX")):
+        ax.axvline(pd.Timestamp(d), color="#" + deck.RED, lw=1, ls=":")
+        ax.text(pd.Timestamp(d), s.max() * 1.05, " " + lab, color="#" + deck.RED, fontsize=10, va="bottom")
+    ax.axvline(pd.Timestamp("2024-01-01"), color="#" + SLATE, ls=":", lw=1)
+    ax.text(pd.Timestamp("2024-02-01"), s.min(), "out-of-sample", color="#" + SLATE, fontsize=9, va="bottom")
+    ax.set_ylabel("Growth of $1 (net, log)", color="#" + SLATE)
+    ax.yaxis.set_major_formatter(deck.matplotlib.ticker.FormatStrFormatter("%.1f"))
+    ax.yaxis.set_minor_formatter(deck.matplotlib.ticker.FormatStrFormatter("%.1f"))
+    deck.style(ax)
+    return deck.save(fig, "c_cum_marked")
+
+
+def decomp_chart():
+    """Slide 8 chart: cumulative funding and price components of Strategy C, with the two
+    episodes the notes discuss marked: the Dogecoin and XRP rally while we were short them
+    (April to May 2021) and the FTX crash, when the long FTT position collected extreme
+    negative funding (10-14 Nov 2022)."""
+    cd = pd.read_csv(OUT_C / "daily_returns.csv", index_col=0, parse_dates=True)
+    fig, ax = plt.subplots(figsize=(6.4, 4.2))
+    ax.axvspan(pd.Timestamp("2021-04-01"), pd.Timestamp("2021-05-31"), color="#" + deck.RED, alpha=0.10, lw=0)
+    ax.axvline(pd.Timestamp("2022-11-10"), color="#" + deck.GREEN, lw=1, ls=":")
+    ax.plot(100 * cd["funding component"].cumsum(), color="#" + deck.GREEN, lw=1.8, label="Funding received")
+    ax.plot(100 * cd["price component"].cumsum(), color="#" + deck.RED, lw=1.8, label="Price moves")
+    ax.axhline(0, color="#B8BEC9", lw=0.8)
+    ax.text(pd.Timestamp("2021-06-10"), 70, "Dogecoin, XRP\nrally while\nwe were short",
+            color="#" + deck.RED, fontsize=8.5, va="top")
+    ax.text(pd.Timestamp("2022-11-25"), 70, "FTX crash: our long\nFTX Token collects\nextreme funding",
+            color="#" + deck.GREEN, fontsize=8.5, va="top")
+    ax.set_ylim(top=75)
+    ax.set_ylabel("Cumulative (% pts)", color="#" + SLATE)
+    ax.legend(frameon=False, fontsize=10, loc="lower left")
+    deck.style(ax)
+    return deck.save(fig, "c_decomp_marked")
+
+
 def build():
     # charts go to a temporary folder so the images of the 16-slide deck stay unchanged
     deck.IMG = Path(tempfile.mkdtemp())
     ch = deck.make_charts()
+    ch["c_decomp"] = decomp_chart()
+    ch["c_cum"] = cum_chart()
 
     pa = pd.read_csv(OUT_A / "performance_table.csv", index_col=[0, 1])
     pc = pd.read_csv(OUT_C / "performance_table.csv", index_col=[0, 1])
@@ -104,7 +154,7 @@ def build():
     text(s, 0.8, 6.0, 11.5, 0.5, "Currency Markets (MFE 230GB)  ·  Final project  ·  October 2026",
          size=15, color="C9D1E0")
     script.append(("Title", *notes(s, "0:20", [
-        "Good morning. Our project asks one question: do carry trades crash when they are crowded?",
+        "Our project asks one question: do carry trades crash when they are crowded?",
         "We test it in two markets with the same economics: G10 currencies and crypto.",
         "Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter built from CFTC data.",
         "Strategy C is funding carry in twelve crypto perpetual futures on Binance, including the coins that collapsed, Terra and FTX Token.",
@@ -112,18 +162,24 @@ def build():
 
     # 2 idea + hypotheses -----------------------------------------------------
     s = new()
-    title(s, "Carry pays because it crashes", "Same economic mechanism, two very different markets")
-    text(s, 0.6, 2.0, 5.6, 4.6, [
-        ("Carry: borrow the low-yield asset, hold the high-yield one.", {"bullet": True}),
-        ("UIP says this earns nothing; in the data it earns a premium, with rare large crashes.", {"bullet": True}),
+    title(s, "Carry pays because it crashes", "Our question: do carry trades crash when they are crowded?")
+    text(s, 0.6, 1.85, 5.6, 5.4, [
+        ("We test it in two markets with the same economics: G10 currencies and crypto.", {"bullet": True}),
+        ("Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter "
+         "built from CFTC data.", {"bullet": True}),
+        ("Strategy C is funding carry in twelve crypto perpetual futures on Binance, including the coins "
+         "that collapsed, Terra and FTX Token.", {"bullet": True}),
+        ("Why carry crashes", {"bold": True, "color": NAVY}),
+        ("Carry borrows the low-yield asset and holds the high-yield one. UIP says this earns nothing, "
+         "but in the data it earns a premium, with rare large crashes.", {"bullet": True}),
         ("Crashes are worst when the trade is crowded and everyone unwinds at once "
          "(Brunnermeier, Nagel & Pedersen 2008).", {"bullet": True}),
-        ("Hypotheses, fixed before testing:", {"bold": True, "color": NAVY}),
-        ("A: carry earns a premium; crowded months are followed by weaker carry; it loses in volatility spikes.",
-         {"bullet": True, "size": 15}),
-        ("C: funding carry earns a premium with little BTC exposure; its crashes are coin-specific.",
-         {"bullet": True, "size": 15}),
-    ], size=17, space_after=12)
+        ("Hypotheses, fixed before testing", {"bold": True, "color": NAVY}),
+        ("A: carry earns a premium, crowded months are followed by weaker carry, and it loses in volatility spikes.",
+         {"bullet": True}),
+        ("C: funding carry earns a premium with little BTC exposure, and its crashes are coin-specific.",
+         {"bullet": True}),
+    ], size=14, space_after=7)
     for i, (k, v1, v2) in enumerate([
             ("", "A: G10 FX", "C: Crypto"),
             ("Carry signal", "3-month rate differential", "Perpetual funding rate"),
@@ -153,6 +209,12 @@ def build():
         "In crypto the yield is the perpetual funding rate, which also measures leveraged demand.",
         "Our coins are Bitcoin, Ethereum, BNB, XRP, Cardano, Dogecoin, Solana, Litecoin, Chainlink, Avalanche, Terra and FTX Token.",
         "We wrote the hypotheses and all parameters down before running any backtest.",
+    ], [
+        "Uncovered interest parity (UIP) says a high-rate currency should fall by exactly the rate gap, so carry would earn zero; in practice high-rate currencies tend not to fall that much, which is the forward premium puzzle.",
+        "'Up the stairs and down the elevator' means carry earns small steady gains most of the time and then loses a lot in a few weeks, so its returns have negative skew.",
+        "Crowding matters because when many speculators hold the same trade, a shock forces them all to unwind together, which makes the crash larger.",
+        "Hypothesis A says three things: carry earns a premium, crowded months are followed by weaker carry, and carry loses when volatility spikes.",
+        "Hypothesis C says crypto funding carry earns a premium with little exposure to Bitcoin, and that its crashes come from single coins.",
     ])))
 
     # 3 data + methodology ------------------------------------------------------
@@ -184,6 +246,12 @@ def build():
         "One data fix worth mentioning: before 2000 the CFTC lists currency futures under a different exchange name; matching both names gave us positioning back to 1986.",
         "Every parameter was fixed in advance, and our out-of-sample period starts in 2011 for FX and in 2024 for crypto.",
         "Returns are net of costs, there is no look-ahead, and we keep the two coins that died, Terra (LUNA) and FTX Token (FTT).",
+    ], [
+        "Out-of-sample means the later years that we did not look at while designing the strategy; if a rule still works there, it is less likely to be a result of data mining.",
+        "Look-ahead bias means using information that was not public at the time of the trade; we avoid it because weights set at t earn the return of t+1, and CFTC positions measured on Tuesday are used only after their Friday release.",
+        "Survivorship bias means testing only on assets that still exist today; we avoid it by keeping Terra and FTX Token, which together cost the crypto strategy about 100 percentage points of P&L.",
+        "A basis point (bp) is 0.01%, so a cost of 3 bp means we lose 0.03% of every dollar we trade.",
+        "The Lustig–Roussanov–Verdelhan (LRV) factor is the published academic carry factor, built by buying high-rate and selling low-rate currency portfolios; we use it only to check our own carry series.",
     ])))
 
     # 4 strategy A rule --------------------------------------------------------
@@ -262,7 +330,7 @@ def build():
     # 7 strategy C rule + results -------------------------------------------------
     s = new()
     title(s, "Strategy C: crypto funding carry",
-          "Binance perpetuals on BTC, ETH, BNB, XRP, ADA, DOGE, SOL, LTC, LINK, AVAX, LUNA, FTT; weekly, 2020–2026")
+          "Binance perpetuals on BTC, ETH, BNB, XRP, ADA, DOGE, SOL, LTC, LINK, AVAX, LUNA (Terra), FTT; weekly, 2020–2026")
     picture(s, ch["c_cum"], 0.5, 1.75, w=7.6)
     text(s, 8.5, 1.8, 4.3, 2.3, [
         ("Funding is paid every 8 hours, and positive funding means longs pay shorts.", {"bullet": True}),
@@ -271,7 +339,7 @@ def build():
     ], size=14, space_after=8)
     stat(s, 8.5, 4.15, 2.05, f"{C('Full'):.2f}", "Net Sharpe, full", h=1.3)
     stat(s, 10.7, 4.15, 2.05, f"{C('Out-of-sample'):.2f}", "Net Sharpe, 2024–26", h=1.3)
-    stat(s, 8.5, 5.6, 4.25, f"{cw['Base'].iloc[0]:.0f}%", "Worst week: LUNA collapse, May 2022",
+    stat(s, 8.5, 5.6, 4.25, f"{cw['Base'].iloc[0]:.0f}%", "Worst week: LUNA (Terra) collapse, May 2022",
          color=RED, h=1.3)
     script.append(("Strategy C", *notes(s, "1:20", [
         "Crypto perpetual futures have their own interest rate, the funding rate, paid every 8 hours between longs and shorts.",
@@ -281,6 +349,12 @@ def build():
         "We keep Terra (LUNA) and FTX Token (FTT), which both collapsed in 2022, to avoid survivorship bias.",
         f"Net Sharpe is {C('Full'):.2f} over the full sample: {C('In-sample'):.2f} in 2020 to 2023 and {C('Out-of-sample'):.2f} since 2024.",
         f"The worst week was the Terra (LUNA) collapse in May 2022, {cw['Base'].iloc[0]:.1f}%: traders were shorting Terra, its funding turned negative, and so our rule held it long.",
+    ], [
+        "A perpetual future has no expiry date, so the exchange uses the funding payment to keep its price close to the spot price.",
+        "For example, if funding is +0.01% every 8 hours, longs pay shorts about 0.03% a day, which is roughly 11% a year.",
+        "So shorting a coin with high funding earns that payment, just as selling a low-rate currency and buying a high-rate one earns the interest gap in FX.",
+        "The book is dollar-neutral, which means the long and short sides have the same size, so a move of the whole crypto market should roughly cancel out.",
+        "The out-of-sample Sharpe since 2024 is strong, but it comes from less than three years of data, so we treat it with caution.",
     ])))
 
     # 8 C drivers + risk control --------------------------------------------------
@@ -311,6 +385,12 @@ def build():
         f"Its losses come from single coins: Terra alone cost {abs(contrib['LUNA']):.0f} percentage points, XRP {abs(contrib['XRP']):.0f} and Dogecoin {abs(contrib['DOGE']):.0f}, while Solana and BNB were the biggest winners.",
         f"A risk control we fixed in advance made things worse and lowered the Sharpe to {ctl.loc[('Risk-controlled', 'Full'), 'Sharpe']:.2f}: the cap halved exposure and the filter missed the timing of Terra's collapse.",
         "Our takeaway is that crypto carry crashes in the mirror image of FX: it ends up long whatever traders short hardest.",
+    ], [
+        f"The table adds up: over the full sample, funding of {dec.loc['Full', 'Funding carry (% p.a.)']:+.1f}%, price of {dec.loc['Full', 'Price component (% p.a.)']:+.1f}% and costs of {dec.loc['Full', 'Costs (% p.a.)']:+.1f}% give a net return of {dec.loc['Full', 'Net total (% p.a.)']:+.1f}% a year.",
+        f"In 2020 to 2023 funding paid {dec.loc['In-sample', 'Funding carry (% p.a.)']:.1f}% a year, but price moves took away {abs(dec.loc['In-sample', 'Price component (% p.a.)']):.1f}%, so the strategy lost money.",
+        f"Since 2024 funding paid only {dec.loc['Out-of-sample', 'Funding carry (% p.a.)']:.1f}%, and price moves added {dec.loc['Out-of-sample', 'Price component (% p.a.)']:.1f}%, which is luck rather than carry.",
+        "The risk control capped each coin at one sixth of its side of the book and refused to buy coins with 7-day funding below minus 50% a year.",
+        "It failed because the cap left part of the book in cash and halved the funding income, and on the Sunday before Terra collapsed its 7-day funding was only about minus 20% a year, so the filter did not remove it.",
     ])))
 
     # 9 combined ------------------------------------------------------------------
@@ -336,6 +416,12 @@ def build():
         f"The mix has {comb.loc[cb, 'Ann. vol (%)']:.1f}% volatility and a Sharpe of {comb.loc[cb, 'Sharpe']:.2f}, and its worst month, {comb.loc[cb, 'Worst month (%)']:.1f}%, is smaller than either part's.",
         "It does not beat FX alone on Sharpe, because crypto carry was weak in this window.",
         "Our takeaway is that the benefit of combining them is lower risk, not a higher return.",
+    ], [
+        "We scale each strategy to 10% volatility so that neither one dominates the mix just because it is more volatile; crypto carry is about three times as volatile as FX carry before scaling.",
+        "The scaling uses past volatility only, so there is no look-ahead in the combined portfolio.",
+        "A correlation of 0.11 is close to zero, which means a bad month in one strategy says very little about the other.",
+        "The window starts in 2021 because that is when both strategies have enough history for the volatility estimate.",
+        "With only 67 months of overlap, these combined numbers are indicative rather than precise.",
     ])))
 
     # 10 conclusions --------------------------------------------------------------
@@ -356,12 +442,11 @@ def build():
         ("Costs are simple estimates, and we ignore funding-rate caps, borrow limits and exchange risk.", {"bullet": True}),
     ], size=15, color=WHITE, space_after=12)
     script.append(("Conclusions", *notes(s, "1:00", [
-        "To conclude: in both markets carry looks like compensation for crash risk.",
+        "In both markets, carry looks like compensation for crash risk.",
         "In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.",
         "In crypto, sorting on funding alone exposes you to single-coin collapses like Terra and FTX Token.",
         "Because the two crash at different times, they diversify each other.",
         "The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.",
-        "Thank you, we are happy to take questions.",
     ])))
 
     path = SLIDES / "presentation_10min.pptx"
@@ -369,10 +454,10 @@ def build():
 
     md = ["# Speaker notes: 10-minute presentation", "",
           "Read alongside `slides/presentation_10min.pptx`. The same notes are in each slide's notes pane.", ""]
-    for i, (name, minutes, bullets) in enumerate(script, 1):
-        md += [f"## Slide {i}. {name} (about {minutes})", ""] + [f"- {b}" for b in bullets] + [""]
+    for i, (name, minutes, bullets, extra) in enumerate(script, 1):
+        md += [f"## Slide {i}. {name} (about {minutes})", ""] + ([f"- {b}" for b in bullets + extra] or ["No speaking on this slide."]) + [""]
     (SLIDES / "speaker_notes_10min.md").write_text("\n".join(md))
-    total = sum(int(t.split(":")[0]) * 60 + int(t.split(":")[1]) for _, t, _ in script)
+    total = sum(int(t.split(":")[0]) * 60 + int(t.split(":")[1]) for _, t, _, _ in script)
     print(f"Wrote {path} ({len(prs.slides)} slides, about {total // 60}:{total % 60:02d} of speaking time)")
 
 
