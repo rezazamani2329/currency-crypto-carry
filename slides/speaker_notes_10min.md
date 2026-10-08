@@ -2,14 +2,14 @@
 
 Read alongside `slides/presentation_10min.pptx`. The same notes are in each slide's notes pane.
 
-## Slide 1. Title (about 0:20)
+## Title (about 0:20)
 
 - Our project asks one question: do carry trades crash when they are crowded?
 - We test it in two markets with the same economics: G10 currencies and crypto.
 - Strategy A is carry in seven G10 currencies against the US dollar, with a crowding filter built from CFTC data.
 - Strategy C is funding carry in twelve crypto perpetual futures on Binance, including the coins that collapsed, Terra and FTX Token.
 
-## Slide 2. Carry pays because it crashes (about 1:00)
+## Slide 1. Carry pays because it crashes (about 1:00)
 
 - Carry means borrowing in a low-yield asset and holding a high-yield one.
 - Uncovered interest parity says this should earn nothing, but in the data it earns a premium.
@@ -25,6 +25,15 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 - Crowding matters because when many speculators hold the same trade, a shock forces them all to unwind together, which makes the crash larger.
 - Hypothesis A says three things: carry earns a premium, crowded months are followed by weaker carry, and carry loses when volatility spikes.
 - Hypothesis C says crypto funding carry earns a premium with little exposure to Bitcoin, and that its crashes come from single coins.
+
+## Slide 2. How the strategies trade (about 0:40)
+
+- Here is how each strategy trades, step by step.
+- Strategy A trades once a month: at each month-end we rank the seven currencies by their interest rate against the US dollar, buy the top two and sell the bottom two.
+- Before trading we check crowding from CFTC data, which we use only after its Friday release; if crowding is above one, we halve the positions.
+- We hold for one month and then rank again.
+- Strategy C trades every Sunday: we rank the coins that are trading by their average funding over the past week, short the third with the highest funding and buy the third with the lowest, which is usually three coins on each side.
+- We hold for seven days, collecting funding on the shorts, and then rank again.
 
 ## Slide 3. Data and methodology (about 0:50)
 
@@ -110,6 +119,9 @@ Read alongside `slides/presentation_10min.pptx`. The same notes are in each slid
 
 ## Slide 10. Conclusions (about 1:00)
 
+- Our short answer is partly yes: crowding makes carry weaker, but it doesn't predict the biggest crashes.
+- In FX, carry crashes are compensation for risk, and crowding is a modest warning sign, not a reliable crash predictor.
+- In crypto, carry also earns a premium and also crashes, but the crashes come from single coins, mostly being long a coin that traders are crowding to short, so crowding tells you where the danger is rather than when it will hit.
 - The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.
 - In both markets, carry looks like compensation for crash risk.
 - In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.

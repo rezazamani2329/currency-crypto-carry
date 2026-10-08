@@ -67,6 +67,26 @@ def perf_box(slide, x, y, w, h, heading, metrics, rows):
             text(slide, x + 0.25 + lw + j * cw, yy, cw - 0.1, 0.35, v, size=16, font=HEAD, bold=True, color=color)
 
 
+def steps(slide, x, y, w, h, heading, items, gap=0.9):
+    """A tinted panel with a heading and numbered steps, each a bold head over one short line."""
+    box(slide, x, y, w, h)
+    text(slide, x + 0.25, y + 0.18, w - 0.5, 0.4, heading, size=16, bold=True, color=NAVY)
+    for i, (head, body) in enumerate(items):
+        yy = y + 0.75 + i * gap
+        c = slide.shapes.add_shape(deck.MSO_SHAPE.OVAL, Inches(x + 0.25), Inches(yy), Inches(0.4), Inches(0.4))
+        c.fill.solid()
+        c.fill.fore_color.rgb = deck.rgb(NAVY)
+        c.line.fill.background()
+        p = c.text_frame.paragraphs[0]
+        p.alignment = PP_ALIGN.CENTER
+        r = p.add_run()
+        r.text = str(i + 1)
+        r.font.size, r.font.bold = deck.Pt(12), True
+        r.font.color.rgb = deck.rgb(WHITE)
+        text(slide, x + 0.85, yy - 0.04, w - 1.1, 0.3, head, size=14, bold=True, color=NAVY)
+        text(slide, x + 0.85, yy + 0.27, w - 1.1, gap - 0.3, body, size=12)
+
+
 def share(path, start=None):
     """Share of trading periods each asset was held long and short."""
     w = pd.read_csv(path, index_col=0, parse_dates=True).loc[start:]
@@ -232,6 +252,31 @@ def build():
         "Crowding matters because when many speculators hold the same trade, a shock forces them all to unwind together, which makes the crash larger.",
         "Hypothesis A says three things: carry earns a premium, crowded months are followed by weaker carry, and carry loses when volatility spikes.",
         "Hypothesis C says crypto funding carry earns a premium with little exposure to Bitcoin, and that its crashes come from single coins.",
+    ])))
+
+    # 3 how the two strategies trade --------------------------------------------
+    s = new()
+    title(s, "How the two strategies trade", "Each step uses only data available at the time of the trade")
+    steps(s, 0.6, 1.75, 5.95, 5.35, "Strategy A: G10 FX carry, monthly", [
+        ("Month-end: rank", "Compute each currency's 3-month rate minus the US rate."),
+        ("Trade", "Buy the 2 highest-rate currencies and sell the 2 lowest, 50% each, so there is no net dollar bet."),
+        ("Crowding check", "Z-score CFTC speculator positions over 36 months; if crowding is above 1, halve all positions."),
+        ("Hold one month", "Earn the currency move plus the interest-rate gap."),
+        ("Rebalance", "At the next month-end, rank again and swap, paying 3 bp per trade."),
+    ])
+    steps(s, 6.8, 1.75, 5.95, 5.35, "Strategy C: crypto funding carry, weekly", [
+        ("Sunday close: rank", "Average each coin's daily funding rate over the past 7 days, using data up to the day before."),
+        ("Trade", "Short the third of coins with the highest funding and buy the lowest third (usually 3 each), so the book is dollar-neutral."),
+        ("Hold 7 days", "Earn the price move plus funding; a short receives funding when it is positive."),
+        ("Rebalance", "Next Sunday, rank again and swap, paying 5 bp per trade."),
+    ])
+    script.append(("How the strategies trade", *notes(s, "0:40", [
+        "Here is how each strategy trades, step by step.",
+        "Strategy A trades once a month: at each month-end we rank the seven currencies by their interest rate against the US dollar, buy the top two and sell the bottom two.",
+        "Before trading we check crowding from CFTC data, which we use only after its Friday release; if crowding is above one, we halve the positions.",
+        "We hold for one month and then rank again.",
+        "Strategy C trades every Sunday: we rank the coins that are trading by their average funding over the past week, short the third with the highest funding and buy the third with the lowest, which is usually three coins on each side.",
+        "We hold for seven days, collecting funding on the shorts, and then rank again.",
     ])))
 
     # 3 data + methodology ------------------------------------------------------
@@ -455,7 +500,18 @@ def build():
     # 10 conclusions --------------------------------------------------------------
     s = new(dark=True)
     title(s, "Conclusions and limitations", dark=True)
-    text(s, 0.6, 1.45, 7.4, 0.5, "Hypotheses: verdict and evidence", size=18, bold=True, color=AMBER)
+    box(s, 0.6, 1.3, 12.15, 1.85, fill="22335A")
+    text(s, 0.85, 1.4, 11.7, 0.4, "Our question: do carry trades crash when they are crowded?", size=15, bold=True, color=AMBER)
+    text(s, 0.85, 1.75, 11.7, 0.35, "Short answer: partly yes. Crowding makes carry weaker, but it doesn't predict the biggest crashes.",
+         size=14, bold=True, color=WHITE)
+    text(s, 0.85, 2.15, 11.7, 1.0, [
+        ("FX: carry crashes are compensation for risk, and crowding is a modest warning sign, not a reliable crash predictor.",
+         {"bullet": True}),
+        ("Crypto: carry also earns a premium and also crashes, but the crashes come from single coins, mostly being long a coin "
+         "that traders are crowding to short, so crowding tells you where the danger is rather than when it will hit.",
+         {"bullet": True}),
+    ], size=13, color=WHITE, space_after=4)
+    text(s, 0.6, 3.3, 7.4, 0.4, "Hypotheses: verdict and evidence", size=15, bold=True, color=AMBER)
     verdicts = [
         ["Hypothesis", "Verdict", "Evidence"],
         ["A1: G10 carry earns a premium", "Supported",
@@ -474,24 +530,27 @@ def build():
         ["FX and crypto carry diversify", "Supported",
          f"Correlation {corr:.2f}; vol {comb.loc['Combined 50/50', 'Ann. vol (%)']:.1f}% vs about 9%"],
     ]
-    vt = table(s, 0.6, 2.0, 7.6, verdicts, col_w=[2.75, 1.25, 3.6], size=11, row_h=0.5, left=True)
+    vt = table(s, 0.6, 3.7, 7.6, verdicts, col_w=[2.75, 1.25, 3.6], size=10, row_h=0.42, left=True)
     tone = {"Supported": "2E7D4F", "Leaning yes": "B7700C", "Mixed": "B7700C", "Not supported": RED}
     for r in range(1, len(verdicts)):
         run = vt.cell(r, 1).text_frame.paragraphs[0].runs[0]
         run.font.bold = True
         run.font.color.rgb = deck.rgb(tone[verdicts[r][1]])
-    text(s, 8.6, 1.45, 4.2, 0.5, "What is new", size=18, bold=True, color=AMBER)
-    text(s, 8.6, 1.95, 4.2, 2.2, [
+    text(s, 8.6, 3.3, 4.2, 0.4, "What is new", size=15, bold=True, color=AMBER)
+    text(s, 8.6, 3.7, 4.2, 1.5, [
         ("We use CFTC speculator positioning as a crowding filter on G10 carry.", {"bullet": True}),
         ("We treat crypto funding as the crypto interest-rate gap and as a crowding signal, and test it with the coins that died.", {"bullet": True}),
-    ], size=13, color=WHITE, space_after=8)
-    text(s, 8.6, 4.15, 4.2, 0.5, "Limitations", size=18, bold=True, color=AMBER)
-    text(s, 8.6, 4.65, 4.2, 2.6, [
+    ], size=12, color=WHITE, space_after=6)
+    text(s, 8.6, 5.2, 4.2, 0.4, "Limitations", size=15, bold=True, color=AMBER)
+    text(s, 8.6, 5.6, 4.2, 1.7, [
         ("The crypto history is short (2020–2026) and covers only 12 coins.", {"bullet": True}),
         (f"There are only {int(cv.loc['Crowded', 'Months'])} crowded FX months, and the 2008 crash was not flagged.", {"bullet": True}),
         ("Costs are simple estimates, and we ignore funding-rate caps, borrow limits and exchange risk.", {"bullet": True}),
-    ], size=13, color=WHITE, space_after=8)
+    ], size=12, color=WHITE, space_after=6)
     script.append(("Conclusions", *notes(s, "1:00", [
+        "Our short answer is partly yes: crowding makes carry weaker, but it doesn't predict the biggest crashes.",
+        "In FX, carry crashes are compensation for risk, and crowding is a modest warning sign, not a reliable crash predictor.",
+        "In crypto, carry also earns a premium and also crashes, but the crashes come from single coins, mostly being long a coin that traders are crowding to short, so crowding tells you where the danger is rather than when it will hit.",
         "The table sums up our hypotheses: four are supported, crowding in FX leans yes, crypto funding carry is mixed, and our pre-set risk control did not work.",
         "In both markets, carry looks like compensation for crash risk.",
         "In FX, crowding measured from CFTC positions is a cheap and modestly useful warning sign.",
@@ -501,13 +560,19 @@ def build():
         "The main limitations are a short crypto sample, few crowded FX months, and simple cost estimates.",
     ])))
 
+    # page numbers: the title slide is unnumbered, so numbering starts at 1 on the slide after it
+    for n, sl in enumerate(list(prs.slides)[1:], 1):
+        dark = sl.background.fill.type is not None and sl.background.fill.fore_color.rgb == deck.rgb(NAVY)
+        text(sl, W - 1.1, H - 0.5, 0.6, 0.3, str(n), size=11, color="8E9AB5" if dark else SLATE, align=PP_ALIGN.RIGHT)
+
+    prs.part._element.set("firstSlideNum", "0")  # PowerPoint also counts the title slide as 0
     path = SLIDES / "presentation_10min.pptx"
     prs.save(path)
 
     md = ["# Speaker notes: 10-minute presentation", "",
           "Read alongside `slides/presentation_10min.pptx`. The same notes are in each slide's notes pane.", ""]
-    for i, (name, minutes, bullets, extra) in enumerate(script, 1):
-        md += [f"## Slide {i}. {name} (about {minutes})", ""] + ([f"- {b}" for b in bullets + extra] or ["No speaking on this slide."]) + [""]
+    for i, (name, minutes, bullets, extra) in enumerate(script):
+        md += [f"## {f'Slide {i}. ' if i else ''}{name} (about {minutes})", ""] + ([f"- {b}" for b in bullets + extra] or ["No speaking on this slide."]) + [""]
     (SLIDES / "speaker_notes_10min.md").write_text("\n".join(md))
     total = sum(int(t.split(":")[0]) * 60 + int(t.split(":")[1]) for _, t, _, _ in script)
     print(f"Wrote {path} ({len(prs.slides)} slides, about {total // 60}:{total % 60:02d} of speaking time)")
