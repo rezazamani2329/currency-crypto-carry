@@ -52,14 +52,19 @@ def takeaways(slide, x, y, w, h, items, size=14):
     text(slide, x + 0.25, y + 0.65, w - 0.5, h - 0.8, [(t, {"bullet": True}) for t in items], size=size, space_after=8)
 
 
-def perf_box(slide, x, y, w, h, heading, cells):
-    """A tinted box with a heading and one column per metric: big value over a small label."""
+def perf_box(slide, x, y, w, h, heading, metrics, rows):
+    """A tinted box laid out as a small table: one row per portfolio or period, one column per metric."""
     box(slide, x, y, w, h)
-    text(slide, x + 0.25, y + 0.1, w - 0.5, 0.35, heading, size=13, bold=True, color=NAVY)
-    cw = (w - 0.5) / len(cells)
-    for i, (label, value, color) in enumerate(cells):
-        text(slide, x + 0.25 + i * cw, y + 0.42, cw - 0.1, 0.45, value, size=20, font=HEAD, bold=True, color=color)
-        text(slide, x + 0.25 + i * cw, y + 0.88, cw - 0.1, 0.3, label, size=11, color=SLATE)
+    lw = 2.3
+    cw = (w - 0.5 - lw) / len(metrics)
+    text(slide, x + 0.25, y + 0.14, lw, 0.3, heading, size=12, bold=True, color=NAVY)
+    for j, (label, _) in enumerate(metrics):
+        text(slide, x + 0.25 + lw + j * cw, y + 0.14, cw - 0.1, 0.3, label, size=12, color=SLATE)
+    for i, (name, values) in enumerate(rows):
+        yy = y + 0.5 + i * 0.38
+        text(slide, x + 0.25, yy, lw, 0.35, name, size=14, color=NAVY)
+        for j, (v, (_, color)) in enumerate(zip(values, metrics)):
+            text(slide, x + 0.25 + lw + j * cw, yy, cw - 0.1, 0.35, v, size=16, font=HEAD, bold=True, color=color)
 
 
 def share(path, start=None):
@@ -304,12 +309,11 @@ def build():
          "Next-month carry after non-crowded vs crowded months", h=1.45)
     stat(s, 8.75, 4.6, 4.0, f"{lrv['Correlation'].iloc[0]:.2f}",
          "Correlation with the academic LRV carry factor (1999–2021)", h=1.45)
-    ab = lambda c, f: f"{A('Carry (net)', 'Full', c):{f}}% / {A('Crowd-filtered (net)', 'Full', c):{f}}%"
-    perf_box(s, 0.6, 5.85, 7.8, 1.3, "Full sample 1999–2026, net of costs: carry / crowd-filtered", [
-        ("Net return a year", ab("Ann. mean (%)", ".1f"), NAVY),
-        ("Volatility a year", ab("Ann. vol (%)", ".1f"), NAVY),
-        ("Max drawdown", ab("Max drawdown (%)", ".0f"), RED),
-    ])
+    met = [("Net return a year", NAVY), ("Volatility a year", NAVY), ("Max drawdown", RED)]
+    ab = lambda k: [f"{A(k, 'Full', 'Ann. mean (%)'):.1f}%", f"{A(k, 'Full', 'Ann. vol (%)'):.1f}%",
+                    f"{A(k, 'Full', 'Max drawdown (%)'):.0f}%"]
+    perf_box(s, 0.6, 5.85, 7.8, 1.3, "Net, 1999–2026", met,
+             [("Carry", ab("Carry (net)")), ("Crowd-filtered", ab("Crowd-filtered (net)"))])
     script.append(("Strategy A results", *notes(s, "1:20", [
         f"Plain carry earns about {A('Carry (net)', 'Full', 'Ann. mean (%)'):.1f}% a year after costs with {A('Carry (net)', 'Full', 'Ann. vol (%)'):.1f}% volatility, a net Sharpe of {A('Carry (net)', 'Full'):.2f}.",
         f"Our carry has a {lrv['Correlation'].iloc[0]:.2f} correlation with the published Lustig–Roussanov–Verdelhan factor, which validates the code and data.",
@@ -355,12 +359,9 @@ def build():
     stat(s, 10.7, 4.15, 2.05, f"{C('Out-of-sample'):.2f}", "Net Sharpe, 2024–26", h=1.3)
     stat(s, 8.5, 5.6, 4.25, f"{cw['Base'].iloc[0]:.0f}%", "Worst week: LUNA (Terra) collapse, May 2022",
          color=RED, h=1.3)
-    cb_ = lambda c, f: f"{C('Full', c):{f}}% / {C('Out-of-sample', c):{f}}%"
-    perf_box(s, 0.6, 5.95, 7.6, 1.3, "Net of costs: full sample 2020–2026 / since 2024", [
-        ("Net return a year", cb_("Ann. mean (%)", ".1f"), NAVY),
-        ("Volatility a year", cb_("Ann. vol (%)", ".0f"), NAVY),
-        ("Max drawdown", cb_("Max drawdown (%)", ".0f"), RED),
-    ])
+    cb_ = lambda p: [f"{C(p, 'Ann. mean (%)'):.1f}%", f"{C(p, 'Ann. vol (%)'):.0f}%", f"{C(p, 'Max drawdown (%)'):.0f}%"]
+    perf_box(s, 0.6, 5.95, 7.6, 1.3, "Net of costs", met,
+             [("Full sample 2020–26", cb_("Full")), ("Since 2024", cb_("Out-of-sample"))])
     script.append(("Strategy C", *notes(s, "1:20", [
         "Crypto perpetual futures have their own interest rate, the funding rate, paid every 8 hours between longs and shorts.",
         "High funding means many leveraged longs, so it is both a carry signal and a crowding signal.",
