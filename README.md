@@ -501,6 +501,7 @@ output/        result tables (CSV) and diagnostic figures
 slides/        presentations, speaker notes and chart images (slides/img/)
 web/           interactive HTML page
 docs/          study guide (HTML and PDF, English and Persian)
+submission/    the replication package zip submitted on Gradescope
 ai_log.md      documentation of AI-assisted work
 ```
 
