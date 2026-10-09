@@ -501,6 +501,7 @@ slides/        presentations, speaker notes and chart images (slides/img/)
 web/           interactive HTML page
 docs/          study guide (HTML and PDF, English and Persian)
 submission/    the replication package zip submitted on Gradescope
+paper/         journal-style paper (PDF, LaTeX source and figures)
 ```
 
 ## 15. How to reproduce
