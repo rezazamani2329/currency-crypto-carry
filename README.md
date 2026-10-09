@@ -30,7 +30,6 @@ Authors: Reza Zamani and Paraj Goyal · Professor: Amir Kermani
 13. [List of figures and tables](#13-list-of-figures-and-tables)
 14. [Repository structure](#14-repository-structure)
 15. [How to reproduce](#15-how-to-reproduce)
-16. [AI use](#16-ai-use)
 
 ---
 
@@ -502,7 +501,6 @@ slides/        presentations, speaker notes and chart images (slides/img/)
 web/           interactive HTML page
 docs/          study guide (HTML and PDF, English and Persian)
 submission/    the replication package zip submitted on Gradescope
-ai_log.md      documentation of AI-assisted work
 ```
 
 ## 15. How to reproduce
@@ -532,9 +530,3 @@ python run_all.py                      # full pipeline including downloads
   python -m ipykernel install --user --name carry --display-name "Python (carry)"
   jupyter lab notebooks/
   ```
-
-## 16. AI use
-
-AI assistance was used for code, documentation drafts, the web page and the slides, as the course
-allows. What was asked, what was produced, what we decided ourselves and how we checked the output
-is documented in [`ai_log.md`](ai_log.md).
