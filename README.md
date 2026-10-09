@@ -495,7 +495,7 @@ code/          numbered scripts, run in order (see run_all.py)
   07_build_slides.py              long deck and charts -> slides/presentation.pptx, slides/img/
   08_build_slides_10min.py        10-minute deck with speaker notes -> slides/presentation_10min.pptx
 notebooks/     step-by-step Jupyter versions of the scripts (01-05)
-data/raw/      downloaded files (not committed; re-created by the scripts)
+data/raw/      raw downloads as received (FRED, CFTC, Binance, LRV file)
 data/clean/    processed data snapshot used for all results (committed)
 output/        result tables (CSV) and diagnostic figures
 slides/        presentations, speaker notes and chart images (slides/img/)
