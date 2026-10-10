@@ -41,3 +41,21 @@ Points 1–7 change only formatting, not content. Point 8 is normal for a paper 
 - **Separate Discussion section:** Einav et al. go straight to the conclusions. Many AER empirical papers do include a discussion section.
 
 **Status:** items 1–7 were applied on October 10, 2026. The sections are now: (unnumbered introduction), I Hypotheses, II Data, III Methodology, IV Results, V Discussion, VI Conclusion, and Appendix A.
+
+## Section counts in five recent AER papers (checked October 10, 2026)
+
+| Paper | Type | Sections after the unheaded introduction |
+|---|---|---|
+| Einav, Klopack and Mahoney (2025), "Selling Subscriptions," 115(5) | Empirical, short (22 pages) | 4: Data and Sample Construction; Descriptive Evidence; Quantifying the Impact on Revenues; Conclusions |
+| Antolin-Diaz and Surico (2025), "The Long-Run Effects of Government Spending," 115(7) | Empirical | 6: Empirical Framework; Effects of Military Spending; Assessing Inference (robustness); Inspecting the Mechanism; What Drives the Long-Run Effects; Conclusion |
+| Doraszelski, Seim, Sinkinson and Wang (2025), "Ownership Concentration and Strategic Supply Reduction," 115(3) | Empirical with a model | 8: Institutional Setting; Model; Data Sources; Descriptive Evidence; Reservation Values and Simulation; Main Results; Auction Design; Conclusion |
+| Kekre and Lenel (2024), "The Flight to Safety and International Risk Sharing," 114(6) | Quantitative theory | 6 |
+| Gaubert, Kline, Vergara and Yagan (2025), "Place-Based Redistribution," 115(10) | Theory with calibration | 8 or more |
+
+Common features across all five:
+- The introduction has no heading.
+- Related literature sits inside the introduction, sometimes as a run-in "Related Literature" paragraph.
+- A framework or model section, when there is one, comes before the data.
+- Robustness is a subsection or a section near the end.
+
+The number of sections ranges from 4 to 8, and ours has 6, which is typical.
