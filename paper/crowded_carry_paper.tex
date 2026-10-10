@@ -26,7 +26,7 @@
 \begin{center}
 {\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\par}
 \vspace{1.5em}
-{\large Amir Kermani \qquad Reza Zamani \qquad Paraj Goyal\footnote{Haas School of Business, University of California, Berkeley. This paper was written for MFE 230GB (Currency Markets). Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}. Use of AI tools is documented in the repository's \texttt{ai\_log.md}. All errors are our own.}\par}
+{\large Amir Kermani \qquad Reza Zamani \qquad Paraj Goyal\footnote{Haas School of Business, University of California, Berkeley. This paper was written for MFE 230GB (Currency Markets). Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}. All errors are our own.}\par}
 \vspace{1em}
 {\large October 2026\par}
 \end{center}
@@ -122,7 +122,14 @@ Spot rates for JPY, GBP, CHF, CAD, AUD, and NZD begin in 1971 and EUR in 1999. I
 CFTC positions for CAD, CHF, EUR (Deutsche mark before 1999), GBP, and JPY are available from 1986, AUD from 1987, and NZD from 1999, with a gap in the NZD contract between 2000 and 2003. Before August 2000 the CFTC lists currency futures under the exchange name ``International Monetary Market'' rather than the Chicago Mercantile Exchange. Matching both names extends the positioning history back to 1986, which gives enough history for the 36-month z-score at the start of the strategy sample.
 
 \paragraph{Crypto.}
-The crypto universe contains twelve large coins: Bitcoin (BTC), Ethereum (ETH), BNB, XRP, Cardano (ADA), Dogecoin (DOGE), Solana (SOL), Litecoin (LTC), Chainlink (LINK), Avalanche (AVAX), Terra (LUNA), and FTX Token (FTT). LUNA and FTT, which collapsed in 2022, are deliberately kept to avoid survivorship bias. Funding is positive on most days: average annualised funding is 11.8\% for BTC, 13.9\% for ETH, and 14.7\% for XRP, and funding is positive on 81--88\% of days for the main coins. USDC is used only as a sanity check (its average funding is 0.04\% a year) and is not traded.
+The crypto universe contains twelve large coins: Bitcoin (BTC), Ethereum (ETH), BNB, XRP, Cardano (ADA), Dogecoin (DOGE), Solana (SOL), Litecoin (LTC), Chainlink (LINK), Avalanche (AVAX), Terra (LUNA), and FTX Token (FTT). LUNA and FTT, which collapsed in 2022, are deliberately kept to avoid survivorship bias. Funding is positive on most days: average annualised funding is 11.8\% for BTC, 13.9\% for ETH, and 14.7\% for XRP, and funding is positive on 81--88\% of days for the main coins (Figure~\ref{fig:fund}). USDC is used only as a sanity check (its average funding is 0.04\% a year) and is not traded.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.72\linewidth]{figures/c_funding_by_coin.png}
+\caption{Average funding rate by coin}\label{fig:fund}
+\tabnote{The figure shows the average annualised funding rate of each coin's USDT-margined perpetual on Binance and, in parentheses, the share of days with positive funding, January 2020 to August 2026. Positive funding means long positions pay short positions. Terra (LUNA) has the highest average funding, and FTX Token (FTT) is the only coin with clearly negative average funding.}
+\end{figure}
 
 %==========================================================
 \section{Methodology}\label{sec:method}
@@ -148,7 +155,14 @@ and standardise it over a rolling 36-month window (minimum 24 months): $z_{k,t} 
 \end{equation}
 the average z-score of the currencies we buy minus the average z-score of those we sell. A high value means speculators are already long our longs and short our shorts. The crowd-filtered strategy multiplies all weights by 0.5 when $\text{crowd}_t>1$.
 
-In practice the portfolio is long the New Zealand dollar in 94\% of months and the Australian dollar in 75\%, and short the Swiss franc in 99\% of months, often together with the yen (52\%) or the euro (40\%). Thirty-three of the 328 months are classified as crowded.
+Figure~\ref{fig:pos} shows how stable the portfolio is. In practice it is long the New Zealand dollar in 94\% of months and the Australian dollar in 75\%, and short the Swiss franc in 99\% of months, often together with the yen (52\%) or the euro (40\%). The Canadian dollar and the pound move between the legs as their rates change relative to the others. Thirty-three of the 328 months are classified as crowded.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.66\linewidth]{figures/a_positions.png}
+\caption{Strategy A: how often each currency is held}\label{fig:pos}
+\tabnote{The figure shows the share of the 327 holding months, May 1999 to August 2026, in which each currency is in the long leg (two highest interest rates) or the short leg (two lowest interest rates) of Strategy A.}
+\end{figure}
 
 \subsection{Strategy C: crypto funding carry}
 
@@ -265,7 +279,14 @@ Crowding threshold & Exposure when crowded & Sharpe, full sample & Sharpe, out-o
 \tabnote{This table reports net Sharpe ratios of the crowd-filtered strategy for different crowding thresholds and exposure levels. The pre-specified setting is in bold. The grid is reported for robustness and was not used to choose the headline parameters.}
 \end{table}
 
-The filter does not, however, avoid the largest crash. The maximum drawdown is $-37$\% with or without it, because the 2008 unwind began from a non-crowded reading. We therefore classify H-A2 as ``leaning yes'': crowding predicts weaker carry on average, but it is not a reliable crash predictor.
+The filter does not, however, avoid the largest crash. The maximum drawdown is $-37$\% with or without it, because the 2008 unwind began from a non-crowded reading. Figure~\ref{fig:crowd} shows why. Crowded readings cluster in 2006--2007 and 2024--2026, with a few isolated months in between. Throughout 2008 the measure was negative (between $-0.8$ and $-2.8$): speculators were positioned \emph{against} the carry trade when it crashed, so the filter never cut exposure and the two drawdown paths are identical in 2008. The figure also shows a data gap: because the CFTC series for the New Zealand dollar is missing in 2000--2003 and the z-score needs 24 months of history, the crowding measure is unavailable from June 1999 to July 2006 (81 months). In that period the filter is inactive and the crowd-filtered strategy equals plain carry, so all 33 crowded months fall after mid-2006. We therefore classify H-A2 as ``leaning yes'': crowding predicts weaker carry on average, but it is not a reliable crash predictor.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/a_crowding_drawdown.png}
+\caption{Strategy A: the crowding measure and drawdowns}\label{fig:crowd}
+\tabnote{The top panel plots the portfolio crowding measure $\text{crowd}_t$; shaded months are crowded ($\text{crowd}_t>1$), when the filter halves all positions. The measure is missing from June 1999 to July 2006. The bottom panel plots the drawdown of plain carry and crowd-filtered carry, net of costs, May 1999 to August 2026.}
+\end{figure}
 
 \subsection{When does FX carry lose money? (H-A3)}
 
@@ -310,7 +331,7 @@ Table~\ref{tab:C} reports the performance of Strategy~C. Before costs it earns 6
 \begin{table}[!htbp]
 \centering
 \caption{Strategy C: Crypto Funding Carry}\label{tab:C}
-\small\setlength{\tabcolsep}{4pt}
+\small\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{llcccccc}
 \toprule
  & Period & Mean (\%) & Vol (\%) & Sharpe & Max DD (\%) & Worst week (\%) & Turnover \\
@@ -379,7 +400,14 @@ Funding lookback & Rebalancing & Sharpe, full sample & Sharpe, out-of-sample \\
 
 \subsection{What drives crypto carry losses? (H-C2)}
 
-Crypto carry has no market exposure. A daily regression on Bitcoin returns gives a beta of $-0.02$ (Newey--West $t=-0.75$) and an $R^2$ of 0.001. Its losses are instead coin-specific. The worst week, ending May 15, 2022, cost 27.3\%. In that week the strategy was \emph{long} Terra: traders were shorting LUNA so heavily that its seven-day funding had turned negative, about $-20$\% a year, and the rule placed it in the long leg just before it collapsed. The other worst weeks ended September 12, 2021 ($-12.3$\%), November 13, 2022 ($-11.6$\%, the FTX collapse), November 29, 2020 ($-11.0$\%), and August 15, 2021 ($-10.0$\%).
+Figure~\ref{fig:cdd} plots the drawdown of Strategy~C. The drawdown builds up in 2021 and 2022, during the Dogecoin and XRP rally and the Terra and FTX collapses, and reaches $-67$\% on November 9, 2022. The strategy has not regained its 2021 peak: despite the gains since 2024, it ends August 2026 about 55\% below it. Crypto carry has no market exposure. A daily regression on Bitcoin returns gives a beta of $-0.02$ (Newey--West $t=-0.75$) and an $R^2$ of 0.001. Its losses are instead coin-specific. The worst week, ending May 15, 2022, cost 27.3\%. In that week the strategy was \emph{long} Terra: traders were shorting LUNA so heavily that its seven-day funding had turned negative, about $-20$\% a year, and the rule placed it in the long leg just before it collapsed. The other worst weeks ended September 12, 2021 ($-12.3$\%), November 13, 2022 ($-11.6$\%, the FTX collapse), November 29, 2020 ($-11.0$\%), and August 15, 2021 ($-10.0$\%).
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/c_drawdown.png}
+\caption{Strategy C: drawdown from the previous peak}\label{fig:cdd}
+\tabnote{The figure plots the percentage decline of Strategy C (net of costs) from its previous peak, February 2020 to August 2026. Dotted red lines mark the Dogecoin and XRP rally (April 2021), the Terra collapse (May 2022), and the FTX collapse (November 2022). The grey line marks the start of the out-of-sample period in January 2024.}
+\end{figure}
 
 Figure~\ref{fig:contrib} shows the total contribution of each coin to the strategy's profit and loss. Four coins account for most of the losses: Terra ($-87$ percentage points), XRP ($-58$), Dogecoin ($-44$), and FTX Token ($-13$). The winners are Solana ($+102$), BNB ($+51$), Avalanche ($+36$), Cardano ($+32$), and Chainlink ($+27$). In every case the price component dominates the funding component.
 
@@ -396,7 +424,7 @@ This pattern is the mirror image of FX carry. In FX, carry crashes when a crowde
 \section{Diversification: Combining FX and Crypto Carry}\label{sec:comb}
 %==========================================================
 
-Table~\ref{tab:comb} reports the two strategies scaled to 10\% volatility and their 50/50 combination over February 2021 to August 2026, the period in which both scaled series are available. The correlation between the scaled strategies is 0.11 (0.12 for unscaled monthly net returns over 78 months). The combined portfolio has volatility of 7.0\%, below the 9.3--9.4\% of either part, and a maximum drawdown of $-10.6$\%, smaller than that of either strategy. Because crypto carry was weak over this period, the combination does not beat FX carry alone on Sharpe ratio (0.51 against 0.71). Figure~\ref{fig:comb} plots the three series. The evidence supports H-D.
+Table~\ref{tab:comb} reports the two strategies scaled to 10\% volatility and their 50/50 combination over February 2021 to August 2026, the period in which both scaled series are available. The correlation between the scaled strategies is 0.11 (0.12 for unscaled monthly net returns over 78 months). The combined portfolio has volatility of 7.0\%, below the 9.3--9.4\% of either part, and a maximum drawdown of $-10.6$\%, smaller than that of either strategy. Because crypto carry was weak over this period, the combination does not beat FX carry alone on Sharpe ratio (0.51 against 0.71). Figure~\ref{fig:comb} plots the three series. The low correlation is not an average of offsetting regimes: Figure~\ref{fig:rollcorr} shows that the 24-month rolling correlation stays between $-0.24$ and $+0.20$ throughout the sample. The evidence supports H-D.
 
 \begin{table}[!htbp]
 \centering
@@ -419,6 +447,13 @@ Combined 50/50 & 3.57 & 6.96 & 0.51 & $-10.6$ & $-5.9$ \\
 \includegraphics[width=0.85\linewidth]{figures/comb.png}
 \caption{FX carry, crypto carry, and the 50/50 combination}\label{fig:comb}
 \tabnote{The figure plots the cumulative value of \$1 invested in Strategy A and Strategy C, each scaled to 10\% volatility, and in their 50/50 combination, February 2021 to August 2026.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/ac_rolling_corr.png}
+\caption{Rolling correlation between FX carry and crypto carry}\label{fig:rollcorr}
+\tabnote{The figure plots the 24-month rolling correlation between monthly net returns of Strategy A and Strategy C. The dashed line is the full-sample correlation of 0.12 over 78 months, March 2020 to August 2026.}
 \end{figure}
 
 %==========================================================
@@ -454,7 +489,7 @@ In crypto, the funding rate is a direct and fast measure of crowded leveraged de
 For FX investors, positioning data provide a cheap overlay that modestly improves carry but does not replace hedging against volatility shocks. For crypto, sorting on funding alone exposes a portfolio to single-coin collapses. A better design would react faster (the robustness grid points towards shorter lookbacks and daily rebalancing), treat extremely negative funding as a warning of crowded shorts rather than an opportunity, and size positions by coin-level risk.
 
 \paragraph{Limitations.}
-Our results have several limitations. The crypto sample covers about six and a half years and twelve coins, each leg usually holds three coins, and single-coin events dominate. Strategy~C reverses between the in-sample period (Sharpe $-0.07$) and the out-of-sample period (0.81), and the out-of-sample gains came mostly from price moves, so they are not evidence of a stable premium. In FX, only 33 months were crowded, which limits statistical power. Data availability limits the FX sample to start in 1999 and the factor regressions to end in 2021. Finally, transaction costs are proportional estimates; we do not model funding caps, borrowing limits, slippage under stress, or exchange counterparty risk, which was material in the FTX collapse.
+Our results have several limitations. The crypto sample covers about six and a half years and twelve coins, each leg usually holds three coins, and single-coin events dominate. Strategy~C reverses between the in-sample period (Sharpe $-0.07$) and the out-of-sample period (0.81), and the out-of-sample gains came mostly from price moves, so they are not evidence of a stable premium. In FX, only 33 months were crowded, which limits statistical power, and the crowding measure is missing from mid-1999 to mid-2006, so the filter is tested only on the last twenty years. Data availability limits the FX sample to start in 1999 and the factor regressions to end in 2021. Finally, transaction costs are proportional estimates; we do not model funding caps, borrowing limits, slippage under stress, or exchange counterparty risk, which was material in the FTX collapse.
 
 %==========================================================
 \section{Conclusion}\label{sec:concl}
@@ -548,19 +583,22 @@ All code and data needed to reproduce the results are in the replication package
 \toprule
 Table or figure & Source file \\
 \midrule
-Table II, Figure 1 & \texttt{output/strategyA/performance\_table.csv}, \texttt{monthly\_returns.csv} \\
-Table III & \texttt{output/strategyA/crowded\_vs\_not.csv} \\
-Table IV & \texttt{output/strategyA/robustness\_grid.csv} \\
-Table V & \texttt{output/risk/A\_factor\_regressions.csv} \\
-Figure 2 & \texttt{output/risk/A\_vs\_LRV\_HML.csv} \\
-Figure 3 & \texttt{output/risk/A\_worst\_months.csv} \\
-Table VI, Figure 4 & \texttt{output/strategyC/performance\_table.csv}, \texttt{daily\_returns.csv} \\
-Table VII, Figure 5 & \texttt{output/strategyC/return\_decomposition.csv} \\
-Table VIII & \texttt{output/strategyC/robustness\_grid.csv} \\
-Figure 6 & \texttt{output/risk/C\_contribution\_by\_coin.csv} \\
-Table IX, Figure 7 & \texttt{output/risk/combined\_portfolio.csv} \\
+Table~\ref{tab:A}, Figures~\ref{fig:acum}, \ref{fig:crowd} & \texttt{output/strategyA/performance\_table.csv}, \texttt{monthly\_returns.csv} \\
+Table~\ref{tab:crowd} & \texttt{output/strategyA/crowded\_vs\_not.csv} \\
+Table~\ref{tab:Arob} & \texttt{output/strategyA/robustness\_grid.csv} \\
+Table~\ref{tab:Areg} & \texttt{output/risk/A\_factor\_regressions.csv} \\
+Figure~\ref{fig:lrv} & \texttt{output/risk/A\_vs\_LRV\_HML.csv} \\
+Figure~\ref{fig:a2008} & \texttt{output/risk/A\_worst\_months.csv} \\
+Table~\ref{tab:C}, Figures~\ref{fig:ccum}, \ref{fig:cdd} & \texttt{output/strategyC/performance\_table.csv}, \texttt{daily\_returns.csv} \\
+Table~\ref{tab:Cdec}, Figure~\ref{fig:cdec} & \texttt{output/strategyC/return\_decomposition.csv} \\
+Table~\ref{tab:Crob} & \texttt{output/strategyC/robustness\_grid.csv} \\
+Figure~\ref{fig:contrib} & \texttt{output/risk/C\_contribution\_by\_coin.csv} \\
+Table~\ref{tab:comb}, Figures~\ref{fig:comb}, \ref{fig:rollcorr} & \texttt{output/risk/combined\_portfolio.csv} \\
+Figure~\ref{fig:pos} & \texttt{output/strategyA/weights\_carry.csv} \\
+Figure~\ref{fig:fund} & \texttt{output/strategyC/coin\_summary.csv} \\
 \bottomrule
 \end{tabular}
+\tabnote{Figures~\ref{fig:fund}, \ref{fig:pos}, \ref{fig:crowd}, \ref{fig:cdd}, and \ref{fig:rollcorr} are drawn from these files by \texttt{paper/make\_paper\_figures.py}.}
 \end{table}
 
 \end{document}
