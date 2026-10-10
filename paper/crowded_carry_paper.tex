@@ -34,7 +34,7 @@
 
 \begin{titlepage}
 \begin{center}
-{\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote[1]{\normalfont\small Kermani: Professor, Haas School of Business, University of California, Berkeley (email: \href{mailto:kermani@berkeley.edu}{kermani@berkeley.edu}); Zamani: Master of Financial Engineering Program, Haas School of Business, University of California, Berkeley (email: \href{mailto:rezazamani@berkeley.edu}{rezazamani@berkeley.edu}); Yu: Ph.D.\ student, University of California, Berkeley (email: \href{mailto:hanna_yu@berkeley.edu}{hanna\_yu@berkeley.edu}); Goyal: Master of Financial Engineering Program, Haas School of Business, University of California, Berkeley (email: \href{mailto:paraj_goyal@berkeley.edu}{paraj\_goyal@berkeley.edu}). Kermani is the corresponding author. Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The authors declare that they have no relevant or material financial interests that relate to the research described in this paper. All errors are our own.}\par}
+{\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote[1]{\normalfont\small Kermani: Professor, Haas School of Business, University of California, Berkeley (email: \href{mailto:kermani@berkeley.edu}{kermani@berkeley.edu}); Zamani: Master of Financial Engineering Program, Haas School of Business, University of California, Berkeley (email: \href{mailto:rezazamani@berkeley.edu}{rezazamani@berkeley.edu}); Yu: Ph.D.\ student, University of California, Berkeley (email: \href{mailto:hanna_yu@berkeley.edu}{hanna\_yu@berkeley.edu}); Goyal: Master of Financial Engineering Program, Haas School of Business, University of California, Berkeley (email: \href{mailto:paraj_goyal@berkeley.edu}{paraj\_goyal@berkeley.edu}). Kermani is the corresponding author. Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}; Appendix~\ref{app:rep} gives the data availability statement. The authors declare that they have no relevant or material financial interests that relate to the research described in this paper. All errors are our own.}\par}
 \vspace{1.5em}
 {\large Amir Kermani \qquad Reza Zamani \qquad Hanna Yu \qquad Paraj Goyal\par}
 \vspace{1em}
@@ -686,7 +686,6 @@ We ask whether carry trades crash when they are crowded, using G10 currencies an
 
 Our results point to three directions for future work. First, the crowding that drives FX carry crashes may be better captured by faster measures than weekly futures positions, such as option-implied crash risk \citep{Kutuk2025}, institutional flows \citep{CheemaFox2025}, or co-movement among carry currencies \citep{Sokolovski2016}, possibly combined with volatility. Second, in crypto, open interest, liquidation data, and funding across exchanges could sharpen the funding signal, and the delta-neutral basis trade \citep{Christin2023, Gornall2025} offers funding income without coin-specific price risk. Third, coin-level risk limits and estimated weights in the combined portfolio would bring both strategies closer to what an investor could trade.
 
-\paragraph{Data availability.} All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. The raw downloads, cleaned data, code, and the replication package are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}; Appendix~\ref{app:rep} describes how to reproduce every table and figure.
 
 \clearpage
 \setstretch{1.0}
@@ -790,9 +789,9 @@ Stein, J.~C., 2009, Presidential address: Sophisticated investors and market eff
 \clearpage
 \setstretch{1.25}
 \appendix
-\section{Replication}\label{app:rep}
+\section{Data Availability and Replication}\label{app:rep}
 
-All code and data needed to reproduce the results are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
+All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. The raw downloads, cleaned data, and code are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
 
 \begin{table}[!htbp]
 \centering
