@@ -69,7 +69,7 @@ Do carry trades crash when they are crowded? We study G10 currency carry (1999--
 
 Uncovered interest parity (UIP) says that a currency with a high interest rate should depreciate by exactly the interest differential, so that borrowing in a low-rate currency and lending in a high-rate one earns nothing on average. Since \citet{HansenHodrick1980} and \citet{Fama1984}, a large literature has shown the opposite: high-yield currencies tend to appreciate, or depreciate by less than the rate gap, and the carry trade earns a sizeable premium. The leading explanation is that this premium compensates for crash risk. Carry trades go ``up the stairs and down the elevator'': they earn small steady gains most of the time and lose a large amount in a few weeks when global risk appetite falls \citep{BrunnermeierNagelPedersen2008, Menkhoff2012, Farhi2016}.
 
-\citet{BrunnermeierNagelPedersen2008} add a second ingredient. Crashes are worse when speculators hold large positions in the trade, because a funding shock forces them to unwind together. Crowding is therefore a natural candidate for predicting \emph{when} carry will crash. This paper asks a simple question: \textbf{do carry trades crash when they are crowded?}
+\citet{BrunnermeierNagelPedersen2008} add a second ingredient. Crashes are worse when speculators hold large positions in the trade, because a funding shock forces them to unwind together. Crowding is therefore a natural candidate for predicting \emph{when} carry will crash. This paper asks a simple question: \emph{do carry trades crash when they are crowded?}
 
 We study the question in two markets that share the economics of carry but differ in who trades. The first is the classic G10 currency market, where carry is the gap between short-term interest rates and crowding can be measured from the Commodity Futures Trading Commission (CFTC) report on speculators' futures positions. The second is the market for crypto perpetual futures. A perpetual future has no expiry; instead, longs and shorts exchange a \emph{funding rate} every eight hours that keeps the futures price close to spot. When leveraged traders crowd into long positions, longs pay shorts. The funding rate is therefore both the crypto analogue of an interest-rate differential and a direct measure of crowded leveraged demand.
 
@@ -310,7 +310,7 @@ Carry & Out-of-sample 2011--2026 & 2.01 & 7.46 & 0.27 & $-15.5$ & $-0.10$ & 0.9 
 \addlinespace
 Crowd-filtered & Full & 3.23 & 8.55 & 0.38 & $-37.0$ & $-0.45$ & 2.0 \\
 Crowd-filtered & In-sample & 4.47 & 10.12 & 0.44 & $-37.0$ & $-0.69$ & 1.8 \\
-Crowd-filtered & Out-of-sample & 2.31 & 7.16 & \textbf{0.32} & $-14.4$ & $-0.02$ & 2.1 \\
+Crowd-filtered & Out-of-sample & 2.31 & 7.16 & 0.32 & $-14.4$ & $-0.02$ & 2.1 \\
 \bottomrule
 \end{tabular}
 \tabnote{This table reports annualized net-of-cost performance of Strategy A. Carry buys the two G10 currencies with the highest three-month interest rate and sells the two with the lowest, with 50\% of capital in each leg. The crowd-filtered strategy halves all positions when the CFTC crowding measure exceeds one. Costs are 3 basis points per unit of turnover. Turnover is annual, in multiples of capital.}
@@ -356,7 +356,7 @@ Table~\ref{tab:crowd} compares carry in the month after crowded and non-crowded 
 Not crowded & 294 & 0.30 & 2.56 & $-0.46$ \\
 \quad Crowding measure available & 212 & 0.22 & 2.65 & $-0.41$ \\
 \quad Crowding measure missing (1999--2006) & 82 & 0.51 & 2.33 & $-0.60$ \\
-Crowded & 33 & \textbf{0.02} & 2.67 & $-0.71$ \\
+Crowded & 33 & 0.02 & 2.67 & $-0.71$ \\
 \midrule
 \multicolumn{5}{l}{Difference, crowded minus not crowded: $-0.28$ ($t=-0.57$)} \\
 \bottomrule
@@ -377,14 +377,14 @@ Crowding threshold & Exposure when crowded & Sharpe, full sample & Sharpe, out-o
 0.5 & 0\% & 0.37 & 0.31 \\
 0.5 & 50\% & 0.38 & 0.30 \\
 1.0 & 0\% & 0.38 & 0.37 \\
-\textbf{1.0} & \textbf{50\% (pre-specified)} & \textbf{0.38} & \textbf{0.32} \\
+1.0 & 50\% (pre-specified) & 0.38 & 0.32 \\
 1.5 & 0\% & 0.35 & 0.39 \\
 1.5 & 50\% & 0.36 & 0.33 \\
 \midrule
 \multicolumn{2}{l}{Plain carry (no filter)} & 0.37 & 0.27 \\
 \bottomrule
 \end{tabular}
-\tabnote{This table reports net Sharpe ratios of the crowd-filtered strategy for different crowding thresholds and exposure levels. The pre-specified setting is in bold. The grid is reported for robustness and was not used to choose the headline parameters.}
+\tabnote{This table reports net Sharpe ratios of the crowd-filtered strategy for different crowding thresholds and exposure levels. The row marked ``pre-specified'' is the setting used in the paper. The grid is reported for robustness and was not used to choose the headline parameters.}
 \end{table}
 
 The filter does not, however, avoid the largest crash. The maximum drawdown is $-37$\% with or without it, because the 2008 unwind began from a non-crowded reading. Figure~\ref{fig:crowd} shows why. Crowded readings cluster in 2006--2007 and 2024--2026, with a few isolated months in between. Throughout 2008 the measure was negative (between $-0.8$ and $-2.8$): speculators were positioned \emph{against} the carry trade when it crashed, so the filter never cut exposure and the two drawdown paths are identical in 2008. The figure also shows a data gap: because the CFTC series for the New Zealand dollar is missing in 2000--2003 and the z-score needs 24 months of history, the crowding measure is unavailable from June 1999 to July 2006 (81 months). In that period the filter is inactive and the crowd-filtered strategy equals plain carry, so all 33 crowded months fall after mid-2006. Because a binary split with only 33 crowded months has little power, Table~\ref{tab:crowdtests} reports more powerful tests that use all of the information in the crowding measure. Panel A regresses each currency's next-month excess return on its own crowding z-score, using all 2,149 currency-months with data. The coefficient is small and insignificant whether we pool, add currency fixed effects, or add month fixed effects that compare currencies within the same month. When crowding is signed in the direction of carry, so that a positive value means speculators are long a high-rate currency or short a low-rate one, the coefficient is again insignificant ($t=0.54$). Panel B uses the continuous portfolio crowding measure. It does not predict carry returns over one, three, six, or twelve months, and it does not predict the probability of a crash month (the worst 10\% of months) or the 10th percentile of the return distribution. If anything, the signs point the other way: crowding into high-rate currencies is followed by slightly \emph{higher} returns, as in a momentum effect. We therefore classify H-A2 as ``not supported'': CFTC crowding does not predict weaker carry or carry crashes in our sample.
@@ -471,9 +471,9 @@ Table~\ref{tab:C} reports the performance of Strategy~B. Before costs it earns 6
  & Period & Mean (\%) & Vol (\%) & Sharpe & Max DD (\%) & Worst week (\%) & Turnover \\
 \midrule
 Gross & Full 2020:02--2026:08 & 6.38 & 29.87 & 0.21 & $-66.0$ & $-27.2$ & 45 \\
-Net & Full & 4.13 & 29.87 & \textbf{0.14} & $-67.3$ & $-27.3$ & 45 \\
+Net & Full & 4.13 & 29.87 & 0.14 & $-67.3$ & $-27.3$ & 45 \\
 Net & In-sample 2020--2023 & $-2.52$ & 36.05 & $-0.07$ & $-67.3$ & $-27.3$ & 45 \\
-Net & Out-of-sample 2024--2026 & 13.87 & 17.21 & \textbf{0.81} & $-13.3$ & $-9.2$ & 44 \\
+Net & Out-of-sample 2024--2026 & 13.87 & 17.21 & 0.81 & $-13.3$ & $-9.2$ & 44 \\
 \bottomrule
 \end{tabular}
 \tabnote{This table reports annualized performance of Strategy B, which every Sunday shorts the third of coins with the highest seven-day average funding rate and buys the third with the lowest, with 50\% of capital in each leg, and holds for seven days. Net returns deduct 5 basis points per unit of turnover. Statistics use daily returns annualized with 365 days. Turnover is annual, in multiples of capital.}
@@ -531,12 +531,12 @@ Funding lookback & Rebalancing & Sharpe, full sample & Sharpe, out-of-sample \\
 3 days & Daily & 0.68 & 0.41 \\
 3 days & Weekly & 0.49 & 1.29 \\
 7 days & Daily & 0.56 & 0.92 \\
-\textbf{7 days} & \textbf{Weekly (pre-specified)} & \textbf{0.14} & \textbf{0.81} \\
+7 days & Weekly (pre-specified) & 0.14 & 0.81 \\
 30 days & Daily & 0.28 & 0.83 \\
 30 days & Weekly & 0.07 & 0.42 \\
 \bottomrule
 \end{tabular}
-\tabnote{This table reports net Sharpe ratios of Strategy B for different funding lookback windows and rebalancing frequencies. The pre-specified setting is in bold. The grid was not used to choose the headline parameters.}
+\tabnote{This table reports net Sharpe ratios of Strategy B for different funding lookback windows and rebalancing frequencies. The row marked ``pre-specified'' is the setting used in the paper. The grid was not used to choose the headline parameters.}
 \end{table}
 
 \subsubsection{What Drives Crypto Carry Losses? (H-B2)}
@@ -631,7 +631,7 @@ We test whether the main results depend on parameter choices made before the bac
 \centering
 \includegraphics[width=\linewidth]{figures/robustness.png}
 \caption{Robustness of Both Strategies to Parameter Choices}\label{fig:rob}
-\tabnote{Panel A reports net Sharpe ratios of crowd-filtered FX carry for each crowding threshold and exposure when crowded; the dotted lines mark plain carry (0.37 full sample, 0.27 out-of-sample from 2011). Panel B reports net Sharpe ratios of crypto funding carry for each funding lookback and rebalancing frequency (out-of-sample from 2024). The pre-specified settings are in bold.}
+\tabnote{Panel A reports net Sharpe ratios of crowd-filtered FX carry for each crowding threshold and exposure when crowded; the dotted lines mark plain carry (0.37 full sample, 0.27 out-of-sample from 2011). Panel B reports net Sharpe ratios of crypto funding carry for each funding lookback and rebalancing frequency (out-of-sample from 2024). The pre-specified settings are marked with an asterisk.}
 \end{figure}
 
 We also test one pre-specified risk control for Strategy~B, motivated by the coin-specific crashes of Section~\ref{sec:crypto}. It has two rules: no coin may exceed one sixth of its leg, with the excess held in cash, and a coin is not eligible for the long leg if its seven-day funding is below $-50$\% a year, a sign of crowded shorts in distress. Table~\ref{tab:Crisk} shows that this control does not help. It halves volatility and reduces the maximum drawdown from $-67$\% to $-43$\%, but the net return turns negative ($-2.2$\% a year, Sharpe $-0.16$), because the cap halves exposure and the distress rule kept BNB and Solana, the two largest winners, out of the long leg. It also failed in the episode it was designed for: Terra's funding crossed $-50$\% only on May 10, 2022, in the middle of the week in which it collapsed and after the portfolio had been formed.

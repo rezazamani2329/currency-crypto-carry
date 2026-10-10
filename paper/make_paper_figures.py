@@ -151,7 +151,7 @@ x = np.arange(len(ga)); h = 0.38
 ax1.bar(x - h / 2, ga["Sharpe full"], h, color=NAVY, label="Full sample")
 ax1.bar(x + h / 2, ga["Sharpe OOS"], h, color=AMBER, label="Out-of-sample")
 ax1.axhline(0.37, color=NAVY, ls=":", lw=1); ax1.axhline(0.27, color=AMBER, ls=":", lw=1)
-ax1.set_xticks(x); ax1.set_xticklabels(la, fontsize=8.5)
+ax1.set_xticks(x); ax1.set_xticklabels([t + "*" if i == 3 else t for i, t in enumerate(la)], fontsize=8.5)
 ax1.set_xlabel("Threshold / exposure when crowded", color=SLATE)
 ax1.set_ylabel("Net Sharpe ratio", color=SLATE); ax1.set_title("A. Crowding filter (FX)", color=NAVY, fontsize=11)
 ax1.set_ylim(0, 0.5); ax1.legend(frameon=False, fontsize=8.5, loc="upper left")
@@ -160,12 +160,10 @@ lc = [f"{d}d\n{r}" for d, r in zip(gc["lookback_days"], gc["rebalance"])]
 x = np.arange(len(gc))
 ax2.bar(x - h / 2, gc["Sharpe net"], h, color=NAVY, label="Full sample")
 ax2.bar(x + h / 2, gc["Sharpe OOS net"], h, color=AMBER, label="Out-of-sample")
-ax2.set_xticks(x); ax2.set_xticklabels(lc, fontsize=8.5)
+ax2.set_xticks(x); ax2.set_xticklabels([t + "*" if i == 3 else t for i, t in enumerate(lc)], fontsize=8.5)
 ax2.set_xlabel("Funding lookback / rebalancing", color=SLATE)
 ax2.set_title("B. Crypto funding carry", color=NAVY, fontsize=11)
 ax2.set_ylim(0, 1.4); style(ax2)
-for ax, i in ((ax1, 3), (ax2, 3)):
-    ax.get_xticklabels()[i].set_fontweight("bold")
 save(fig, "robustness")
 
 # 8. combined portfolio (A and B at 10% vol) and Strategy B performance panel (paper labels: crypto = Strategy B)
