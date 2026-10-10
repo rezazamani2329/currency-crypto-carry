@@ -497,6 +497,7 @@ notebooks/     step-by-step Jupyter versions of the scripts (01-05)
 data/raw/      raw downloads as received (FRED, CFTC, Binance, LRV file)
 data/clean/    processed data snapshot used for all results (committed)
 output/        result tables (CSV) and diagnostic figures
+output/paper_figures/  all 15 paper figures, numbered as in the paper (index in its README.md)
 slides/        presentations, speaker notes and chart images (slides/img/)
 web/           interactive HTML page
 docs/          study guide (HTML and PDF, English and Persian)
