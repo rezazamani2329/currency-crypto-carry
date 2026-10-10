@@ -18,6 +18,15 @@
 \setstretch{1.25}
 \setlength{\parskip}{0.35em}
 \renewcommand{\thetable}{\Roman{table}}
+% AER-style numbering: sections I, II, ...; subsections A, B, ...; references read "Section IVA"
+\renewcommand{\thesection}{\Roman{section}}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\arabic{subsubsection}}
+\makeatletter
+\renewcommand{\p@subsection}{\thesection}
+\renewcommand{\p@subsubsection}{\thesection\thesubsection}
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
 
 \newcommand{\tabnote}[1]{\par\vspace{0.3em}\begin{minipage}{\linewidth}\footnotesize\setstretch{1.0}#1\end{minipage}}
 
@@ -125,7 +134,7 @@ This paper & G10 FX 1999--2026 with CFTC data; 12 coins on Binance 2020--2026 & 
 \item \emph{A side-by-side comparison of FX and crypto carry under one design.} Using the same pre-specified framework in both markets, we show two different channels of crowding risk. In FX, crashes are driven by global volatility shocks that hit carry regardless of positioning. In crypto, the funding rate is both the carry signal and the crowding signal, and crowding determines \emph{where} losses occur. Because the two strategies are nearly uncorrelated (0.11), combining them lowers volatility and drawdowns. All code, data, and results are public, so every table and figure can be reproduced.
 \end{enumerate}
 
-The rest of the paper is organised as follows. Section~\ref{sec:hyp} states the hypotheses. Section~\ref{sec:data} describes the data, and Section~\ref{sec:method} the strategies and methodology. Section~\ref{sec:fx} presents the FX results and Section~\ref{sec:crypto} the crypto results. Section~\ref{sec:comb} studies the combined portfolio, Section~\ref{sec:rob} reports robustness checks, Section~\ref{sec:disc} discusses the results and their limitations, and Section~\ref{sec:concl} concludes.
+The rest of the paper is organised as follows. Section~\ref{sec:hyp} states the hypotheses. Section~\ref{sec:data} describes the data, and Section~\ref{sec:method} the strategies and methodology. Section~\ref{sec:results} presents the results: the FX carry tests (Section~\ref{sec:fx}), the crypto carry tests (Section~\ref{sec:crypto}), the combined portfolio (Section~\ref{sec:comb}), and robustness checks (Section~\ref{sec:rob}). Section~\ref{sec:disc} discusses the results and their limitations, and Section~\ref{sec:concl} concludes.
 
 %==========================================================
 \section{Hypotheses}\label{sec:hyp}
@@ -265,10 +274,15 @@ To compare the strategies on equal terms, we scale each to 10\% annual volatilit
 Several features of the design limit data mining. All parameters (number of currencies per leg, z-score window, crowding threshold, exposure cut, funding lookback, rebalancing frequency, and costs) were fixed before the backtests and were not changed afterwards. Results are split into an in-sample period (1999--2010 for A, 2020--2023 for B) and an out-of-sample period (2011--2026 for A, 2024--2026 for B). Weights set at the end of period $t$ earn the return of $t+1$; CFTC data are used only after their release; and crypto signals use funding up to the previous day. Robustness grids are reported in full but were not used to choose the headline parameters.
 
 %==========================================================
-\section{Results: Foreign Exchange Carry}\label{sec:fx}
+\section{Results}\label{sec:results}
 %==========================================================
 
-\subsection{Carry earns a premium and replicates the carry factor (H-A1)}
+This section reports the results in four parts. Section~\ref{sec:fx} tests the FX carry hypotheses, Section~\ref{sec:crypto} the crypto carry hypotheses, Section~\ref{sec:comb} combines the two strategies, and Section~\ref{sec:rob} reports robustness checks.
+
+\subsection{Foreign Exchange Carry}\label{sec:fx}
+%==========================================================
+
+\subsubsection{Carry earns a premium and replicates the carry factor (H-A1)}
 
 Table~\ref{tab:A} reports the performance of Strategy~A. Over the full sample, plain carry earns 3.27\% a year net of costs with 8.91\% volatility, a Sharpe ratio of 0.37, negative skewness of $-0.49$, and a maximum drawdown of $-37$\%. Returns are positive in 60\% of months. The mean return is marginally significant ($t=1.92$ over 327 months), a reminder that even a Sharpe ratio of 0.37 is hard to distinguish from zero in 27 years of data. Performance is stronger in the in-sample period (Sharpe 0.47) than out of sample (0.27), consistent with the broad decline in G10 carry returns after the financial crisis. Figure~\ref{fig:acum} shows the growth of one dollar.
 
@@ -317,7 +331,7 @@ Figure~\ref{fig:acontrib} shows where the carry return comes from, currency by c
 \tabnote{The figure splits the gross profit and loss of Strategy A by currency into the interest-rate differential earned or paid (interest carry) and the spot-rate change (spot moves), summed over monthly returns from May 1999 to August 2026, in percentage points. Dots show the total for each currency.}
 \end{figure}
 
-\subsection{Does crowding predict weak carry? (H-A2)}
+\subsubsection{Does crowding predict weak carry? (H-A2)}
 
 Table~\ref{tab:crowd} compares carry in the month after crowded and non-crowded readings. After the 294 non-crowded months, carry earns 0.30\% in the next month on average. After the 33 crowded months it earns only 0.02\%, with similar volatility and more negative skewness ($-0.71$ against $-0.46$). The difference is economically meaningful but not statistically significant: a Welch test of equal means gives $t=-0.57$ ($p=0.58$). Part of the gap also reflects timing. The 294 non-crowded months include 82 months before mid-2006 in which the crowding measure is unavailable and carry did well (0.51\% a month). Comparing only months in which the measure is available, carry earns 0.22\% after non-crowded readings against 0.02\% after crowded ones ($t=-0.39$).
 
@@ -398,7 +412,7 @@ Probability of a crash month (worst 10\%), linear & $-0.025$ & $-0.85$ & 245 \\
 \tabnote{The top panel plots the portfolio crowding measure $\text{crowd}_t$; shaded months are crowded ($\text{crowd}_t>1$), when the filter halves all positions. The measure is missing from June 1999 to July 2006. The bottom panel plots the drawdown of plain carry and crowd-filtered carry, net of costs, May 1999 to August 2026.}
 \end{figure}
 
-\subsection{When does FX carry lose money? (H-A3)}
+\subsubsection{When does FX carry lose money? (H-A3)}
 
 Table~\ref{tab:Areg} regresses monthly net carry returns on the dollar factor and on equity-volatility innovations. Carry loads positively on the dollar factor (0.35, $t=4.1$) and negatively on volatility shocks ($-1.55$, $t=-3.7$). Together the two factors explain 18\% of the variation in carry returns, and the monthly alpha of 0.25\% is not statistically significant ($t=1.7$). The evidence supports H-A3 and the view of \citet{Menkhoff2012} that carry is compensation for exposure to global volatility risk rather than a free lunch.
 
@@ -431,10 +445,10 @@ Figure~\ref{fig:a2008} shows the 2008 episode. From July 2008 to March 2009 the 
 \end{figure}
 
 %==========================================================
-\section{Results: Crypto Funding Carry}\label{sec:crypto}
+\subsection{Crypto Funding Carry}\label{sec:crypto}
 %==========================================================
 
-\subsection{Performance and the source of returns (H-B1)}
+\subsubsection{Performance and the source of returns (H-B1)}
 
 Table~\ref{tab:C} reports the performance of Strategy~B. Before costs it earns 6.38\% a year with 29.9\% volatility (Sharpe 0.21). Turnover is high, about 45 times capital a year, so costs of 5 basis points take 2.25 percentage points a year, leaving 4.13\% net and a Sharpe ratio of 0.14. The maximum drawdown is $-67$\%. The mean return is not statistically different from zero ($t=0.35$ over 2,402 days, and $t=1.32$ out of sample). Performance differs sharply between subperiods: the strategy loses money in 2020--2023 (Sharpe $-0.07$) and earns 13.9\% a year with a Sharpe ratio of 0.81 in 2024--2026. Figure~\ref{fig:ccum} plots the growth of one dollar with the main events.
 
@@ -515,7 +529,7 @@ Funding lookback & Rebalancing & Sharpe, full sample & Sharpe, out-of-sample \\
 \tabnote{This table reports net Sharpe ratios of Strategy B for different funding lookback windows and rebalancing frequencies. The pre-specified setting is in bold. The grid was not used to choose the headline parameters.}
 \end{table}
 
-\subsection{What drives crypto carry losses? (H-B2)}
+\subsubsection{What drives crypto carry losses? (H-B2)}
 
 Figure~\ref{fig:cdd} plots the drawdown of Strategy~B. The drawdown builds up in 2021 and 2022, during the Dogecoin and XRP rally and the Terra and FTX collapses, and reaches $-67$\% on November 9, 2022. The strategy has not regained its 2021 peak: despite the gains since 2024, it ends August 2026 about 55\% below it. Crypto carry has no directional market exposure. A daily regression on Bitcoin returns gives a beta of $-0.02$ (Newey--West $t=-0.75$) and an $R^2$ of 0.001. Because the claim here is that the beta is zero, the relevant statistic is the width of its confidence interval rather than the $t$-statistic. The 95\% interval is $[-0.06, 0.03]$, which rules out even a small exposure. Table~\ref{tab:cbeta} shows that the result holds at weekly and monthly horizons, when lagged Bitcoin returns are added to allow for slow price adjustment, and on days when Bitcoin falls. In the 5\% of days on which Bitcoin fell most (by 7.2\% on average), the strategy earned $+0.15$\%, and in Bitcoin's worst 10\% of weeks it lost an insignificant 0.6\%. Exposure is not constant, however: the rolling one-year beta ranges from $-0.21$ to $+0.19$, and the size of daily strategy returns is correlated with the size of Bitcoin's moves (0.20), so the strategy is more volatile in turbulent markets even though it has no directional exposure. Its losses are instead coin-specific. The worst week, ending May 15, 2022, cost 27.3\%. In that week the strategy was \emph{long} Terra: traders were shorting LUNA so heavily that its seven-day funding had turned negative, about $-20$\% a year, and the rule placed it in the long leg just before it collapsed. The other worst weeks ended September 12, 2021 ($-12.3$\%), November 13, 2022 ($-11.6$\%, the FTX collapse), November 29, 2020 ($-11.0$\%), and August 15, 2021 ($-10.0$\%).
 
@@ -562,7 +576,7 @@ Figure~\ref{fig:contrib} shows the total contribution of each coin to the strate
 This pattern is the mirror image of FX carry. In FX, carry crashes when a crowded long position in high-yield currencies unwinds. In crypto, the dangerous positions are those in which the strategy takes the other side of a crowd: it is short coins that leveraged traders are crowding to buy (Dogecoin and XRP in 2021), and long coins they are crowding to sell (Terra and FTX Token in 2022). The evidence supports H-B2: crypto carry is market-neutral, but its crashes come from single coins with extreme funding.
 
 %==========================================================
-\section{Diversification: Combining FX and Crypto Carry}\label{sec:comb}
+\subsection{Diversification: Combining FX and Crypto Carry}\label{sec:comb}
 %==========================================================
 
 Table~\ref{tab:comb} reports the two strategies scaled to 10\% volatility and their 50/50 combination over February 2021 to August 2026, the period in which both scaled series are available. The correlation between the scaled strategies is 0.11 (0.12 for unscaled monthly net returns over 78 months). The combined portfolio has volatility of 7.0\%, below the 9.3--9.4\% of either part, and a maximum drawdown of $-10.6$\%, smaller than that of either strategy. Because crypto carry was weak over this period, the combination does not beat FX carry alone on Sharpe ratio (0.51 against 0.71). Figure~\ref{fig:comb} plots the three series. The low correlation is not an average of offsetting regimes: Figure~\ref{fig:rollcorr} shows that the 24-month rolling correlation stays between $-0.24$ and $+0.20$ throughout the sample. The evidence supports H-D.
@@ -598,7 +612,7 @@ Combined 50/50 & 3.57 & 6.96 & 0.51 & $-10.6$ & $-5.9$ \\
 \end{figure}
 
 %==========================================================
-\section{Robustness}\label{sec:rob}
+\subsection{Robustness}\label{sec:rob}
 %==========================================================
 
 We test whether the main results depend on parameter choices made before the backtests were run. Figure~\ref{fig:rob} collects the two parameter grids of Tables~\ref{tab:Arob} and~\ref{tab:Crob}. For FX carry (Panel A), all six combinations of crowding threshold and exposure cut have a full-sample Sharpe ratio between 0.35 and 0.38, close to the 0.37 of plain carry, and every one of them beats plain carry out of sample (0.30 to 0.39 against 0.27). The benefit of the filter is small but does not depend on the exact setting. For crypto carry (Panel B), every setting earns a positive Sharpe ratio both over the full sample and out of sample. The ranking across settings, however, is unstable: the 3-day daily strategy is best over the full sample (0.68) but worst out of sample (0.41), while the 3-day weekly strategy is the reverse. The pre-specified 7-day weekly setting is among the weakest over the full sample, so our headline crypto results are, if anything, conservative.
