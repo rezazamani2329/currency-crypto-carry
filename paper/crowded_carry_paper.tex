@@ -23,7 +23,7 @@
 \setstretch{1.25}
 \setlength{\parskip}{0.35em}
 % AER-style numbering and headings: sections I, II, ... (centered small capitals); subsections A, B, ... (italic);
-% sub-subsections 1, 2, ... (run-in italic); references read "Section IVA"
+% sub-subsections unnumbered (run-in italic); references read "Section IVA"
 \renewcommand{\thesection}{\Roman{section}}
 \renewcommand{\thesubsection}{\Alph{subsection}}
 \renewcommand{\thesubsubsection}{\arabic{subsubsection}}
@@ -34,39 +34,32 @@
 \usepackage{titlesec}
 \titleformat{\section}{\centering\normalfont\large\scshape}{\thesection.}{0.5em}{}
 \titleformat{\subsection}{\normalfont\itshape}{\thesubsection.}{0.5em}{}
-\titleformat{\subsubsection}[runin]{\normalfont\itshape}{\thesubsubsection.}{0.5em}{}[.---]
+\titleformat{\subsubsection}[runin]{\normalfont\itshape}{}{0pt}{}[.---]
+\setcounter{secnumdepth}{2}
 \titleformat{\paragraph}[runin]{\normalfont\itshape}{}{0pt}{}
 
-\newcommand{\tabnote}[1]{\par\vspace{0.3em}\begin{minipage}{\linewidth}\footnotesize\setstretch{1.0}#1\end{minipage}}
+\newcommand{\tabnote}[1]{\par\vspace{0.3em}\begin{minipage}{\linewidth}\footnotesize\setstretch{1.0}\textit{Notes:} #1\end{minipage}}
 
 \begin{document}
 
 \begin{titlepage}
 \begin{center}
-{\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\par}
+{\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\textsuperscript{\normalfont\dag}\par}
 \vspace{1.5em}
-{\large \textsc{Amir Kermani, Reza Zamani, Hanna Yu, and Paraj Goyal}\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote[1]{\normalfont\small\upshape Kermani: Haas School of Business, University of California, Berkeley (email: \href{mailto:kermani@berkeley.edu}{kermani@berkeley.edu}); Zamani: Haas School of Business, University of California, Berkeley (email: \href{mailto:rezazamani@berkeley.edu}{rezazamani@berkeley.edu}); Yu: University of California, Berkeley (email: \href{mailto:hanna_yu@berkeley.edu}{hanna\_yu@berkeley.edu}); Goyal: Haas School of Business, University of California, Berkeley (email: \href{mailto:paraj_goyal@berkeley.edu}{paraj\_goyal@berkeley.edu}). Kermani is the corresponding author. Go to \url{https://github.com/rezazamani2329/currency-crypto-carry} for the data, code, and replication package; Appendix~\ref{app:rep} gives the data availability statement. The authors declare that they have no relevant or material financial interests that relate to the research described in this paper.}\par}
+{\large \textsc{Amir Kermani, Reza Zamani, Hanna Yu, and Paraj Goyal}\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnote[1]{\normalfont\small\upshape Kermani: Haas School of Business, University of California, Berkeley (email: \href{mailto:kermani@berkeley.edu}{kermani@berkeley.edu}); Zamani: Haas School of Business, University of California, Berkeley (email: \href{mailto:rezazamani@berkeley.edu}{rezazamani@berkeley.edu}); Yu: University of California, Berkeley (email: \href{mailto:hanna_yu@berkeley.edu}{hanna\_yu@berkeley.edu}); Goyal: Haas School of Business, University of California, Berkeley (email: \href{mailto:paraj_goyal@berkeley.edu}{paraj\_goyal@berkeley.edu}). Kermani is the corresponding author. The authors declare that they have no relevant or material financial interests that relate to the research described in this paper.}\footnotetext[2]{\normalfont\small\upshape Go to \url{https://github.com/rezazamani2329/currency-crypto-carry} for the data, code, and replication package; Appendix~\ref{app:rep} gives the data availability statement.}\par}
 \vspace{1em}
 {\large October 2026\par}
 \end{center}
 
 \vspace{2em}
-\begin{abstract}
+\begin{quote}
 \noindent
-Do carry trades crash when they are crowded? We study G10 currency carry (1999--2026) and crypto funding-rate carry on Binance perpetual futures (2020--2026). FX carry earns a net Sharpe ratio of 0.37 and loses when volatility rises. Crowding measured from CFTC speculator positions does not predict FX carry returns or crashes in portfolio, panel, or tail tests. Crypto carry collects funding income, has no directional exposure to Bitcoin, and crashes when single coins with extreme funding collapse. The two strategies are nearly uncorrelated. Crowding tells investors where carry risk sits, not when it will materialize.
-\end{abstract}
+Do carry trades crash when they are crowded? We study G10 currency carry (1999--2026) and crypto funding-rate carry on Binance perpetual futures (2020--2026). FX carry earns a net Sharpe ratio of 0.37 and loses when volatility rises. Crowding measured from CFTC speculator positions does not predict FX carry returns or crashes in portfolio, panel, or tail tests. Crypto carry collects funding income, has no directional exposure to Bitcoin, and crashes when single coins with extreme funding collapse. The two strategies are nearly uncorrelated. Crowding tells investors where carry risk sits, not when it will materialize. (JEL F31, G12, G15, G23)
+\end{quote}
 
-\vspace{1em}
-\noindent\textit{JEL classification:} F31, G12, G15, G23
-
-\noindent\textit{Keywords:} carry trade, crash risk, crowding, cryptocurrency, perpetual futures
 \end{titlepage}
 
 \setcounter{page}{1}
-
-%==========================================================
-\section{Introduction}\label{sec:intro}
-%==========================================================
 
 Uncovered interest parity (UIP) says that a currency with a high interest rate should depreciate by exactly the interest differential, so that borrowing in a low-rate currency and lending in a high-rate one earns nothing on average. Since \citet{HansenHodrick1980} and \citet{Fama1984}, a large literature has shown the opposite: high-yield currencies tend to appreciate, or depreciate by less than the rate gap, and the carry trade earns a sizeable premium. The leading explanation is that this premium compensates for crash risk. Carry trades go ``up the stairs and down the elevator'': they earn small steady gains most of the time and lose a large amount in a few weeks when global risk appetite falls \citep{BrunnermeierNagelPedersen2008, Menkhoff2012, Farhi2016}.
 
@@ -658,7 +651,7 @@ Risk-controlled & OOS 2024--2026 & 6.36 & 8.57 & 0.74 & $-6.9$ & $-4.6$ \\
 \section{Discussion}\label{sec:disc}
 %==========================================================
 
-This section steps back from the individual tests. We first summarize the evidence on each hypothesis, then interpret the results in light of the literature reviewed in Section~\ref{sec:intro}, draw out their implications for investors who trade carry in either market, and close with the limitations of our analysis. Table~\ref{tab:verdict} summarizes the evidence on each hypothesis.
+This section steps back from the individual tests. We first summarize the evidence on each hypothesis, then interpret the results in light of the literature reviewed in the introduction, draw out their implications for investors who trade carry in either market, and close with the limitations of our analysis. Table~\ref{tab:verdict} summarizes the evidence on each hypothesis.
 
 \begin{table}[!htbp]
 \centering
