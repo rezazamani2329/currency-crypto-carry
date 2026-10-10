@@ -113,3 +113,57 @@ style(ax)
 save(fig, "ac_rolling_corr")
 # print(len(both), both.corr().iloc[0, 1], rc.min(), rc.max())
 # print(longs.round(0).to_dict(), shorts.round(0).to_dict(), len(w))
+
+# 6. Strategy A P&L by currency, split into interest carry and spot moves
+import importlib.util
+spec = importlib.util.spec_from_file_location("sa", REPO / "code/02_backtest_strategyA.py")
+sa = importlib.util.module_from_spec(spec); spec.loader.exec_module(sa)
+spot, rates, _ = sa.load()
+rx = sa.excess_returns(spot, rates)
+ir = (rates[sa.CCYS].shift(1).sub(rates["USD"].shift(1), axis=0)) / 1200
+wa = pd.read_csv(REPO / "output/strategyA/weights_carry.csv", index_col=0, parse_dates=True)[sa.CCYS]
+wl = wa.shift(1).reindex(rx.index)
+per = slice("1999-05", "2026-08")
+tot = (wl * rx).loc[per].sum() * 100
+intr = (wl * ir).loc[per].sum() * 100
+fxm = tot - intr
+order = tot.sort_values().index
+fig, ax = plt.subplots(figsize=(7.0, 3.8))
+y = np.arange(len(order)); h = 0.38
+ax.barh(y + h / 2, intr[order], h, color=NAVY, label="Interest carry")
+ax.barh(y - h / 2, fxm[order], h, color=AMBER, label="Spot moves")
+ax.scatter(tot[order], y, color=RED, zorder=3, s=22, label="Total")
+ax.set_yticks(y); ax.set_yticklabels(order)
+ax.axvline(0, color="#B8BEC9", lw=0.8)
+ax.set_xlabel("Total P&L contribution, gross (% pts)", color=SLATE)
+ax.legend(frameon=False, fontsize=9, loc="lower right")
+style(ax); ax.grid(axis="y", visible=False); ax.grid(axis="x", color="#E4E7EC", lw=0.8)
+save(fig, "a_contrib")
+# print(pd.DataFrame({"interest": intr, "spot": fxm, "total": tot}).round(1).sort_values("total"))
+# print("sum", tot.sum().round(1), (a["Carry (gross)"].loc[per].sum() * 100).round(1))
+
+# 7. robustness grids for A and C
+ga = pd.read_csv(REPO / "output/strategyA/robustness_grid.csv")
+gc = pd.read_csv(REPO / "output/strategyC/robustness_grid.csv")
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9.6, 3.9))
+la = [f"{t:g}\n{s:.0%}" for t, s in zip(ga["threshold"], ga["crowded_scale"])]
+x = np.arange(len(ga)); h = 0.38
+ax1.bar(x - h / 2, ga["Sharpe full"], h, color=NAVY, label="Full sample")
+ax1.bar(x + h / 2, ga["Sharpe OOS"], h, color=AMBER, label="Out-of-sample")
+ax1.axhline(0.37, color=NAVY, ls=":", lw=1); ax1.axhline(0.27, color=AMBER, ls=":", lw=1)
+ax1.set_xticks(x); ax1.set_xticklabels(la, fontsize=8.5)
+ax1.set_xlabel("Threshold / exposure when crowded", color=SLATE)
+ax1.set_ylabel("Net Sharpe ratio", color=SLATE); ax1.set_title("A. Crowding filter (FX)", color=NAVY, fontsize=11)
+ax1.set_ylim(0, 0.5); ax1.legend(frameon=False, fontsize=8.5, loc="upper left")
+style(ax1)
+lc = [f"{d}d\n{r}" for d, r in zip(gc["lookback_days"], gc["rebalance"])]
+x = np.arange(len(gc))
+ax2.bar(x - h / 2, gc["Sharpe net"], h, color=NAVY, label="Full sample")
+ax2.bar(x + h / 2, gc["Sharpe OOS net"], h, color=AMBER, label="Out-of-sample")
+ax2.set_xticks(x); ax2.set_xticklabels(lc, fontsize=8.5)
+ax2.set_xlabel("Funding lookback / rebalancing", color=SLATE)
+ax2.set_title("B. Crypto funding carry", color=NAVY, fontsize=11)
+ax2.set_ylim(0, 1.4); style(ax2)
+for ax, i in ((ax1, 3), (ax2, 3)):
+    ax.get_xticklabels()[i].set_fontweight("bold")
+save(fig, "robustness")

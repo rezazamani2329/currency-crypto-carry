@@ -26,7 +26,7 @@
 \begin{center}
 {\LARGE\bfseries Crowded Carry: Crash Risk in\\[0.25em] Foreign Exchange and Crypto Carry Trades\par}
 \vspace{1.5em}
-{\large Amir Kermani \qquad Reza Zamani \qquad Paraj Goyal\footnote{Haas School of Business, University of California, Berkeley. This paper was written for MFE 230GB (Currency Markets). Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}. All errors are our own.}\par}
+{\large Amir Kermani \qquad Reza Zamani \qquad Paraj Goyal\footnote{Haas School of Business, University of California, Berkeley. This paper was written for MFE 230GB (Currency Markets). Data, code, and all results are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The authors have nothing to disclose. All errors are our own.}\par}
 \vspace{1em}
 {\large October 2026\par}
 \end{center}
@@ -34,7 +34,7 @@
 \vspace{2em}
 \begin{abstract}
 \noindent
-Do carry trades crash when they are crowded? We study the question in two markets with the same economics but very different investors: G10 currencies (1999--2026) and crypto perpetual futures on Binance (2020--2026). In foreign exchange, a dollar-neutral carry strategy earns a net Sharpe ratio of 0.37, has a correlation of 0.82 with the Lustig--Roussanov--Verdelhan carry factor, and loses when equity volatility rises (volatility beta of $-1.55$, $t=-3.7$); its alpha is insignificant once dollar and volatility risk are controlled for. Crowding measured from CFTC speculator positions is a modest warning sign: carry earns 0.02\% in the month after a crowded reading against 0.30\% otherwise, and halving exposure when crowded raises the out-of-sample Sharpe ratio from 0.27 to 0.32. The filter does not avoid the largest crash, however, because 2008 began from a non-crowded reading. In crypto, shorting coins with the highest funding rates and buying those with the lowest collects about 8.5\% a year in funding but earns only 4.1\% net with 30\% volatility (Sharpe 0.14). The strategy has no Bitcoin exposure, and its crashes are coin-specific: the worst week ($-27$\%) came from being long Terra (LUNA), which traders were crowding to short. FX and crypto carry are nearly uncorrelated (0.11). Our answer is ``partly yes'': crowding makes carry weaker, but it does not predict the biggest crashes.
+Do carry trades crash when they are crowded? We study G10 currency carry (1999--2026) and crypto funding-rate carry on Binance perpetual futures (2020--2026). FX carry earns a net Sharpe ratio of 0.37 and loses when volatility rises. Crowding measured from CFTC positions is followed by weaker returns, and a filter based on it modestly improves out-of-sample performance, but it missed the 2008 crash. Crypto carry collects funding income, yet price moves dominate and its crashes are coin-specific. The two strategies are nearly uncorrelated. Crowding tells investors where carry risk sits rather than when it will materialise.
 \end{abstract}
 
 \vspace{1em}
@@ -74,7 +74,7 @@ The second strand studies crowding and forced unwinding. \citet{BrunnermeierPede
 
 The third strand studies cryptocurrency returns. \citet{LiuTsyvinski2021} and \citet{LiuTsyvinskiWu2022} document the risk factors that explain crypto returns, \citet{He2022} describe the pricing of perpetual futures, and \citet{Schmeling2023} show that crypto carry, the futures--spot basis, reflects leveraged demand from retail investors and predicts crash risk. Our contribution is to treat the funding rate as both the carry signal and the crowding signal, to test it on a universe that keeps the coins that collapsed (Terra and FTX Token), and to compare it side by side with FX carry under the same design.
 
-The rest of the paper is organised as follows. Section~\ref{sec:hyp} states the hypotheses. Section~\ref{sec:data} describes the data, and Section~\ref{sec:method} the strategies and methodology. Section~\ref{sec:fx} presents the FX results and Section~\ref{sec:crypto} the crypto results. Section~\ref{sec:comb} studies the combined portfolio, Section~\ref{sec:disc} discusses the results and their limitations, and Section~\ref{sec:concl} concludes.
+The rest of the paper is organised as follows. Section~\ref{sec:hyp} states the hypotheses. Section~\ref{sec:data} describes the data, and Section~\ref{sec:method} the strategies and methodology. Section~\ref{sec:fx} presents the FX results and Section~\ref{sec:crypto} the crypto results. Section~\ref{sec:comb} studies the combined portfolio, Section~\ref{sec:rob} reports robustness checks, Section~\ref{sec:disc} discusses the results and their limitations, and Section~\ref{sec:concl} concludes.
 
 %==========================================================
 \section{Hypotheses}\label{sec:hyp}
@@ -116,7 +116,27 @@ Carry factor portfolios & \citet{LRV2011}, \textit{CurrencyPortfolios.xls} & Dev
 \end{table}
 
 \paragraph{Foreign exchange.}
-Spot rates for JPY, GBP, CHF, CAD, AUD, and NZD begin in 1971 and EUR in 1999. Interest-rate histories are long for USD, EUR (Deutsche mark before 1999), GBP, CAD, AUD, and NZD, but begin only in 2002 for JPY and 1999 for CHF. Strategy~A therefore starts in May 1999 and runs to August 2026 (328 months).
+Spot rates for JPY, GBP, CHF, CAD, AUD, and NZD begin in 1971 and EUR in 1999. Interest-rate histories are long for USD, EUR (Deutsche mark before 1999), GBP, CAD, AUD, and NZD, but begin only in 2002 for JPY and 1999 for CHF. Strategy~A therefore starts in May 1999 and runs to August 2026 (328 months). Table~\ref{tab:sum} reports summary statistics. The Australian and New Zealand dollars have the highest average interest rates relative to the US dollar and the yen and Swiss franc the lowest, which is why these four currencies dominate the carry portfolio. Uncovered interest parity fails in the direction carry exploits: the high-rate currencies did not depreciate on average, and the Swiss franc appreciated by 2.3\% a year, more than offsetting its low rate.
+
+\begin{table}[!htbp]
+\centering
+\caption{Summary Statistics for G10 Currencies}\label{tab:sum}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Currency & Months & Rate differential (\%) & Spot change (\%) & Excess return (\%) & Volatility (\%) \\
+\midrule
+AUD & 327 & 1.47 & 0.29 & 2.38 & 11.72 \\
+NZD & 327 & 1.79 & 0.20 & 2.75 & 12.60 \\
+GBP & 321 & 0.45 & $-0.63$ & 0.23 & 8.54 \\
+CAD & 327 & $-0.16$ & 0.18 & 0.34 & 8.26 \\
+EUR & 327 & $-0.64$ & 0.35 & 0.07 & 9.17 \\
+JPY & 291 & $-1.74$ & $-1.06$ & $-2.17$ & 9.28 \\
+CHF & 324 & $-1.85$ & 2.32 & 0.87 & 9.71 \\
+\bottomrule
+\end{tabular}
+\tabnote{This table reports, for each currency against the US dollar, the average three-month interest-rate differential, the average log change in the spot rate (positive values mean the currency appreciated), and the mean and volatility of the monthly excess return $rx_{k,t}$ of a long position, all annualised in percent, May 1999 to August 2026. Months is the number of monthly observations with both a spot rate and an interest rate.}
+\end{table}
 
 \paragraph{CFTC positions.}
 CFTC positions for CAD, CHF, EUR (Deutsche mark before 1999), GBP, and JPY are available from 1986, AUD from 1987, and NZD from 1999, with a gap in the NZD contract between 2000 and 2003. Before August 2000 the CFTC lists currency futures under the exchange name ``International Monetary Market'' rather than the Chicago Mercantile Exchange. Matching both names extends the positioning history back to 1986, which gives enough history for the 36-month z-score at the start of the strategy sample.
@@ -199,7 +219,7 @@ Several features of the design limit data mining. All parameters (number of curr
 
 \subsection{Carry earns a premium and replicates the carry factor (H-A1)}
 
-Table~\ref{tab:A} reports the performance of Strategy~A. Over the full sample, plain carry earns 3.27\% a year net of costs with 8.91\% volatility, a Sharpe ratio of 0.37, negative skewness of $-0.49$, and a maximum drawdown of $-37$\%. Returns are positive in 60\% of months. Performance is stronger in the in-sample period (Sharpe 0.47) than out of sample (0.27), consistent with the broad decline in G10 carry returns after the financial crisis. Figure~\ref{fig:acum} shows the growth of one dollar.
+Table~\ref{tab:A} reports the performance of Strategy~A. Over the full sample, plain carry earns 3.27\% a year net of costs with 8.91\% volatility, a Sharpe ratio of 0.37, negative skewness of $-0.49$, and a maximum drawdown of $-37$\%. Returns are positive in 60\% of months. The mean return is marginally significant ($t=1.92$ over 327 months), a reminder that even a Sharpe ratio of 0.37 is hard to distinguish from zero in 27 years of data. Performance is stronger in the in-sample period (Sharpe 0.47) than out of sample (0.27), consistent with the broad decline in G10 carry returns after the financial crisis. Figure~\ref{fig:acum} shows the growth of one dollar.
 
 \begin{table}[!htbp]
 \centering
@@ -237,9 +257,18 @@ Strategy~A closely reproduces the academic carry factor. Over May 1999 to May 20
 \tabnote{The figure compares the cumulative return of Strategy A (net) with the developed-country high-minus-low carry factor of \citet{LRV2011}, May 1999 to May 2021. The monthly correlation is 0.82.}
 \end{figure}
 
+Figure~\ref{fig:acontrib} shows where the carry return comes from, currency by currency. Summed over the sample, the gross return is 90 percentage points: interest-rate differentials contribute 96 points and spot moves $-6$. The two commodity currencies earn on both counts, with AUD contributing 45 points and NZD 40. The funding side is different. Shorting the Swiss franc collects 25 points of interest but loses 41 points as the franc appreciates, a net loss of 16 points, and the yen's 18 points of interest are mostly offset by its appreciation. This is the classic carry pattern: the premium is the interest differential, and the risk sits in sudden rallies of the low-yield funding currencies.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.7\linewidth]{figures/a_contrib.png}
+\caption{Strategy A: profit and loss by currency}\label{fig:acontrib}
+\tabnote{The figure splits the gross profit and loss of Strategy A by currency into the interest-rate differential earned or paid (interest carry) and the spot-rate change (spot moves), summed over monthly returns from May 1999 to August 2026, in percentage points. Dots show the total for each currency.}
+\end{figure}
+
 \subsection{Does crowding predict weak carry? (H-A2)}
 
-Table~\ref{tab:crowd} compares carry in the month after crowded and non-crowded readings. After the 295 non-crowded months, carry earns 0.30\% in the next month on average. After the 33 crowded months it earns only 0.02\%, with similar volatility and more negative skewness ($-0.71$ against $-0.46$). The difference is economically meaningful but, with only 33 crowded months, not statistically precise.
+Table~\ref{tab:crowd} compares carry in the month after crowded and non-crowded readings. After the 294 non-crowded months, carry earns 0.30\% in the next month on average. After the 33 crowded months it earns only 0.02\%, with similar volatility and more negative skewness ($-0.71$ against $-0.46$). The difference is economically meaningful but not statistically significant: a Welch test of equal means gives $t=-0.57$ ($p=0.58$). Part of the gap also reflects timing. The 294 non-crowded months include 82 months before mid-2006 in which the crowding measure is unavailable and carry did well (0.51\% a month). Comparing only months in which the measure is available, carry earns 0.22\% after non-crowded readings against 0.02\% after crowded ones ($t=-0.39$).
 
 \begin{table}[!htbp]
 \centering
@@ -249,14 +278,18 @@ Table~\ref{tab:crowd} compares carry in the month after crowded and non-crowded 
 \toprule
  & Months & Mean (\%) & Volatility (\%) & Skewness \\
 \midrule
-Not crowded & 295 & 0.30 & 2.56 & $-0.46$ \\
+Not crowded & 294 & 0.30 & 2.56 & $-0.46$ \\
+\quad Crowding measure available & 212 & 0.22 & 2.65 & $-0.41$ \\
+\quad Crowding measure missing (1999--2006) & 82 & 0.51 & 2.33 & $-0.60$ \\
 Crowded & 33 & \textbf{0.02} & 2.67 & $-0.71$ \\
+\midrule
+\multicolumn{5}{l}{Difference, crowded minus not crowded: $-0.28$ ($t=-0.57$)} \\
 \bottomrule
 \end{tabular}
-\tabnote{This table reports the monthly mean, volatility, and skewness of plain carry returns in month $t+1$, conditional on whether the crowding measure $\text{crowd}_t$ exceeded one at the end of month $t$. Returns are net of costs, May 1999 to August 2026.}
+\tabnote{This table reports the monthly mean, volatility, and skewness of plain carry returns in month $t+1$, conditional on whether the crowding measure $\text{crowd}_t$ exceeded one at the end of month $t$. Months in which the crowding measure is missing are counted as not crowded. The $t$-statistic is from a Welch test of equal means. Returns are net of costs, May 1999 to August 2026.}
 \end{table}
 
-As a trading rule, the crowding filter helps modestly. It leaves the full-sample Sharpe ratio almost unchanged (0.37 to 0.38) but raises the out-of-sample Sharpe ratio from 0.27 to 0.32 and slightly reduces volatility and negative skewness (Table~\ref{tab:A}). Table~\ref{tab:Arob} shows that this improvement is not an artefact of the chosen parameters: every combination of threshold (0.5, 1.0, 1.5) and exposure cut (to 0\% or 50\%) beats plain carry out of sample, with Sharpe ratios between 0.30 and 0.39.
+As a trading rule, the crowding filter helps modestly. It leaves the full-sample Sharpe ratio almost unchanged (0.37 to 0.38) but raises the out-of-sample Sharpe ratio from 0.27 to 0.32 and slightly reduces volatility and negative skewness (Table~\ref{tab:A}). The gain is not statistically significant: the monthly return difference between the two strategies out of sample averages 0.30\% a year with $t=1.00$. Table~\ref{tab:Arob} shows that this improvement is not an artefact of the chosen parameters: every combination of threshold (0.5, 1.0, 1.5) and exposure cut (to 0\% or 50\%) beats plain carry out of sample, with Sharpe ratios between 0.30 and 0.39.
 
 \begin{table}[!htbp]
 \centering
@@ -326,7 +359,7 @@ Figure~\ref{fig:a2008} shows the 2008 episode. From July 2008 to March 2009 the 
 
 \subsection{Performance and the source of returns (H-C1)}
 
-Table~\ref{tab:C} reports the performance of Strategy~C. Before costs it earns 6.38\% a year with 29.9\% volatility (Sharpe 0.21). Turnover is high, about 45 times capital a year, so costs of 5 basis points take 2.25 percentage points a year, leaving 4.13\% net and a Sharpe ratio of 0.14. The maximum drawdown is $-67$\%. Performance differs sharply between subperiods: the strategy loses money in 2020--2023 (Sharpe $-0.07$) and earns 13.9\% a year with a Sharpe ratio of 0.81 in 2024--2026. Figure~\ref{fig:ccum} plots the growth of one dollar with the main events.
+Table~\ref{tab:C} reports the performance of Strategy~C. Before costs it earns 6.38\% a year with 29.9\% volatility (Sharpe 0.21). Turnover is high, about 45 times capital a year, so costs of 5 basis points take 2.25 percentage points a year, leaving 4.13\% net and a Sharpe ratio of 0.14. The maximum drawdown is $-67$\%. The mean return is not statistically different from zero ($t=0.35$ over 2,402 days, and $t=1.32$ out of sample). Performance differs sharply between subperiods: the strategy loses money in 2020--2023 (Sharpe $-0.07$) and earns 13.9\% a year with a Sharpe ratio of 0.81 in 2024--2026. Figure~\ref{fig:ccum} plots the growth of one dollar with the main events.
 
 \begin{table}[!htbp]
 \centering
@@ -352,7 +385,7 @@ Net & Out-of-sample 2024--2026 & 13.87 & 17.21 & \textbf{0.81} & $-13.3$ & $-9.2
 \tabnote{The figure plots the cumulative value of \$1 invested in Strategy C, net of 5 basis point costs, February 2020 to August 2026. The shaded band marks the Dogecoin and XRP rally of April--May 2021, when the strategy was short both coins. The main collapses (Terra in May 2022 and FTX in November 2022) are marked.}
 \end{figure}
 
-Table~\ref{tab:Cdec} decomposes the return. Over the full sample, the strategy collects 8.55\% a year in funding, as H-C1 predicts, but loses 2.17\% a year on price moves and 2.25\% on costs. In 2020--2023 the funding income (12.3\%) was entirely offset by price losses ($-12.5$\%), as the coins the strategy shorted for their high funding, such as Dogecoin and XRP, kept rallying. Since 2024 funding has been lower (3.1\%) and most of the gain came from prices (13.0\%). Figure~\ref{fig:cdec} shows the two components over time. We classify H-C1 as ``mixed'': the strategy collects real funding, but price moves decide the result.
+Table~\ref{tab:Cdec} decomposes the return. Over the full sample, the strategy collects 8.55\% a year in funding, as H-C1 predicts, but loses 2.17\% a year on price moves and 2.25\% on costs. In 2020--2023 the funding income (12.3\%) was entirely offset by price losses ($-12.5$\%), as the coins the strategy shorted for their high funding, such as Dogecoin and XRP, kept rallying. Since 2024 funding has been lower (3.1\%) and most of the gain came from prices (13.0\%). Figure~\ref{fig:cdec} shows the two components over time. Figure~\ref{fig:cperf} brings these results together: the gap between gross and net value is the cost of weekly rebalancing, the funding component rises steadily (with a jump at the FTX collapse), and the price component drives both the drawdown and the recovery. We classify H-C1 as ``mixed'': the strategy collects real funding, but price moves decide the result.
 
 \begin{table}[!htbp]
 \centering
@@ -375,6 +408,13 @@ Out-of-sample 2024--2026 & 3.10 & 12.99 & $-2.22$ & 13.87 \\
 \includegraphics[width=0.72\linewidth]{figures/c_decomp_annotated.png}
 \caption{Strategy C: cumulative funding received and price returns}\label{fig:cdec}
 \tabnote{The figure plots the cumulative funding and price components of Strategy C. The dotted line marks the FTX collapse in November 2022, when the strategy was long FTX Token and collected extreme funding.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/c_performance.png}
+\caption{Strategy C: gross and net value, drawdown, and return components}\label{fig:cperf}
+\tabnote{The top panel plots the growth of \$1 in Strategy C before and after 5 basis point costs (log scale); the dashed line marks the start of the out-of-sample period in January 2024. The middle panel plots the net drawdown from the previous peak. The bottom panel plots the cumulative sum of the daily funding and price components, in percent. February 2020 to August 2026.}
 \end{figure}
 
 Table~\ref{tab:Crob} shows the robustness of Strategy~C to the funding lookback and rebalancing frequency. All six settings have a positive out-of-sample Sharpe ratio (0.41 to 1.29), and the pre-specified seven-day weekly setting lies in the bottom half of the full-sample results. Shorter lookbacks and daily rebalancing perform better even after costs, which suggests that the funding signal decays quickly.
@@ -457,6 +497,38 @@ Combined 50/50 & 3.57 & 6.96 & 0.51 & $-10.6$ & $-5.9$ \\
 \end{figure}
 
 %==========================================================
+\section{Robustness}\label{sec:rob}
+%==========================================================
+
+We test whether the main results depend on parameter choices made before the backtests were run. Figure~\ref{fig:rob} collects the two parameter grids of Tables~\ref{tab:Arob} and~\ref{tab:Crob}. For FX carry (Panel A), all six combinations of crowding threshold and exposure cut have a full-sample Sharpe ratio between 0.35 and 0.38, close to the 0.37 of plain carry, and every one of them beats plain carry out of sample (0.30 to 0.39 against 0.27). The benefit of the filter is small but does not depend on the exact setting. For crypto carry (Panel B), every setting earns a positive Sharpe ratio both over the full sample and out of sample. The ranking across settings, however, is unstable: the 3-day daily strategy is best over the full sample (0.68) but worst out of sample (0.41), while the 3-day weekly strategy is the reverse. The pre-specified 7-day weekly setting is among the weakest over the full sample, so our headline crypto results are, if anything, conservative.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\linewidth]{figures/robustness.png}
+\caption{Robustness of both strategies to parameter choices}\label{fig:rob}
+\tabnote{Panel A reports net Sharpe ratios of crowd-filtered FX carry for each crowding threshold and exposure when crowded; the dotted lines mark plain carry (0.37 full sample, 0.27 out-of-sample from 2011). Panel B reports net Sharpe ratios of crypto funding carry for each funding lookback and rebalancing frequency (out-of-sample from 2024). The pre-specified settings are in bold.}
+\end{figure}
+
+We also test one pre-specified risk control for Strategy~C, motivated by the coin-specific crashes of Section~\ref{sec:crypto}. It has two rules: no coin may exceed one sixth of its leg, with the excess held in cash, and a coin is not eligible for the long leg if its seven-day funding is below $-50$\% a year, a sign of crowded shorts in distress. Table~\ref{tab:Crisk} shows that this control does not help. It halves volatility and reduces the maximum drawdown from $-67$\% to $-43$\%, but the net return turns negative ($-2.2$\% a year, Sharpe $-0.16$), because the cap halves exposure and the distress rule kept BNB and Solana, the two largest winners, out of the long leg. It also failed in the episode it was designed for: Terra's funding crossed $-50$\% only on May 10, 2022, in the middle of the week in which it collapsed and after the portfolio had been formed.
+
+\begin{table}[!htbp]
+\centering
+\caption{Strategy C With a Pre-Specified Risk Control}\label{tab:Crisk}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llccccc}
+\toprule
+ & Period & Mean (\%) & Vol (\%) & Sharpe & Max DD (\%) & Worst week (\%) \\
+\midrule
+Base & Full 2020--2026 & 4.13 & 29.87 & 0.14 & $-67.3$ & $-27.3$ \\
+Base & OOS 2024--2026 & 13.87 & 17.21 & 0.81 & $-13.3$ & $-9.2$ \\
+Risk-controlled & Full 2020--2026 & $-2.23$ & 14.11 & $-0.16$ & $-43.3$ & $-18.9$ \\
+Risk-controlled & OOS 2024--2026 & 6.36 & 8.57 & 0.74 & $-6.9$ & $-4.6$ \\
+\bottomrule
+\end{tabular}
+\tabnote{This table compares Strategy C with a version that caps each coin at one sixth of its leg (excess held in cash) and excludes coins with seven-day funding below $-50$\% a year from the long leg. OOS is out-of-sample. Both rules were fixed before the test. Returns are net of 5 basis point costs and annualised.}
+\end{table}
+
+%==========================================================
 \section{Discussion}\label{sec:disc}
 %==========================================================
 
@@ -471,7 +543,7 @@ Table~\ref{tab:verdict} summarises the evidence on each hypothesis.
 Hypothesis & Verdict & Evidence \\
 \midrule
 H-A1: G10 carry earns a premium & Supported & Net Sharpe 0.37; correlation 0.82 with the LRV factor \\
-H-A2: crowding predicts weaker carry & Leaning yes & 0.02\% vs 0.30\% next month; out-of-sample Sharpe 0.27 to 0.32; missed 2008 \\
+H-A2: crowding predicts weaker carry & Leaning yes & 0.02\% vs 0.30\% next month ($t=-0.57$); out-of-sample Sharpe 0.27 to 0.32; missed 2008 \\
 H-A3: carry loses in volatility spikes & Supported & Volatility beta $-1.55$ ($t=-3.7$); alpha not significant \\
 H-C1: funding carry earns a premium & Mixed & Funding $+8.5$\% a year, but net Sharpe 0.14; price moves dominate \\
 H-C2: no BTC exposure; coin-specific crashes & Supported & BTC beta $\approx 0$; Terra $-87$ points; worst week $-27$\% \\
@@ -497,7 +569,17 @@ Our results have several limitations. The crypto sample covers about six and a h
 
 We ask whether carry trades crash when they are crowded, using G10 currencies and crypto perpetual futures. Our answer is partly yes. Crowding makes carry weaker, but it does not predict the biggest crashes. In FX, carry crashes are compensation for exposure to volatility risk, and crowding measured from CFTC positions is a modest warning sign rather than a reliable crash predictor. In crypto, carry also earns a premium and also crashes, but the crashes come from single coins, mostly from being long a coin that traders are crowding to short, so crowding tells investors where the danger is rather than when it will hit. Because the two carry trades are nearly uncorrelated, combining them reduces volatility and drawdowns.
 
-Our results suggest two directions for future work: testing faster crowding measures in FX, such as options skew or flow data, and testing in a larger crypto universe whether extreme negative funding predicts collapses.
+\paragraph{Possible extensions.} Our results suggest several directions for future work.
+\begin{enumerate}
+\item \emph{Faster crowding measures in FX.} CFTC positions are weekly and slow. Options risk reversals, which price the cost of protection against a carry unwind, the CFTC disaggregated report that separates leveraged funds from asset managers, or dealer flow data could warn of crowding earlier.
+\item \emph{Combining crowding with volatility.} Section~\ref{sec:fx} shows that carry loses when volatility rises and that the 2008 crash began from an uncrowded position. A rule that reduces exposure when either crowding or implied volatility is high may protect against both kinds of crash.
+\item \emph{A broader FX universe.} Adding emerging-market currencies would raise the interest differentials and the number of crowded episodes, and test whether crowding matters more where liquidity is thinner.
+\item \emph{Better crowding signals in crypto.} Open interest, liquidation data, and funding rates from several exchanges could separate crowded leverage from exchange-specific noise. Extreme negative funding should be tested as a warning signal in a larger universe of coins, including those that later collapsed.
+\item \emph{Other forms of crypto carry.} A delta-neutral basis trade, which holds the coin and shorts its perpetual, earns funding without the coin-specific price risk that dominated our cross-sectional strategy.
+\item \emph{Risk management and portfolio design.} Volatility-scaled positions within each leg, coin-level risk limits, and realistic costs under stress (slippage, funding caps, and exchange failure) would bring the backtest closer to a tradable strategy. The combined portfolio could also add carry in other asset classes, as in \citet{Koijen2018}, and use estimated rather than equal weights.
+\end{enumerate}
+
+\paragraph{Data availability.} All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. The raw downloads, cleaned data, code, and the replication package are available at \url{https://github.com/rezazamani2329/currency-crypto-carry}; Appendix~\ref{app:rep} describes how to reproduce every table and figure.
 
 \clearpage
 \setstretch{1.0}
@@ -584,21 +666,26 @@ All code and data needed to reproduce the results are in the replication package
 Table or figure & Source file \\
 \midrule
 Table~\ref{tab:A}, Figures~\ref{fig:acum}, \ref{fig:crowd} & \texttt{output/strategyA/performance\_table.csv}, \texttt{monthly\_returns.csv} \\
+Table~\ref{tab:sum} & \texttt{data/clean/fx\_spot\_monthly\_usd\_per\_fcu.csv}, \texttt{rates\_3m\_monthly.csv} \\
 Table~\ref{tab:crowd} & \texttt{output/strategyA/crowded\_vs\_not.csv} \\
 Table~\ref{tab:Arob} & \texttt{output/strategyA/robustness\_grid.csv} \\
 Table~\ref{tab:Areg} & \texttt{output/risk/A\_factor\_regressions.csv} \\
 Figure~\ref{fig:lrv} & \texttt{output/risk/A\_vs\_LRV\_HML.csv} \\
+Figure~\ref{fig:acontrib} & \texttt{data/clean/fx\_spot\_monthly\_usd\_per\_fcu.csv}, \texttt{rates\_3m\_monthly.csv} \\
 Figure~\ref{fig:a2008} & \texttt{output/risk/A\_worst\_months.csv} \\
 Table~\ref{tab:C}, Figures~\ref{fig:ccum}, \ref{fig:cdd} & \texttt{output/strategyC/performance\_table.csv}, \texttt{daily\_returns.csv} \\
 Table~\ref{tab:Cdec}, Figure~\ref{fig:cdec} & \texttt{output/strategyC/return\_decomposition.csv} \\
 Table~\ref{tab:Crob} & \texttt{output/strategyC/robustness\_grid.csv} \\
 Figure~\ref{fig:contrib} & \texttt{output/risk/C\_contribution\_by\_coin.csv} \\
+Figure~\ref{fig:cperf} & \texttt{output/strategyC/strategyC\_performance.png} \\
+Figure~\ref{fig:rob} & \texttt{output/strategy\{A,C\}/robustness\_grid.csv} \\
+Table~\ref{tab:Crisk} & \texttt{output/risk/C\_risk\_control.csv} \\
 Table~\ref{tab:comb}, Figures~\ref{fig:comb}, \ref{fig:rollcorr} & \texttt{output/risk/combined\_portfolio.csv} \\
 Figure~\ref{fig:pos} & \texttt{output/strategyA/weights\_carry.csv} \\
 Figure~\ref{fig:fund} & \texttt{output/strategyC/coin\_summary.csv} \\
 \bottomrule
 \end{tabular}
-\tabnote{Figures~\ref{fig:fund}, \ref{fig:pos}, \ref{fig:crowd}, \ref{fig:cdd}, and \ref{fig:rollcorr} are drawn from these files by \texttt{paper/make\_paper\_figures.py}.}
+\tabnote{Figures~\ref{fig:fund}, \ref{fig:pos}, \ref{fig:acontrib}, \ref{fig:crowd}, \ref{fig:cdd}, \ref{fig:rollcorr}, and \ref{fig:rob} are drawn from these files by \texttt{paper/make\_paper\_figures.py}.}
 \end{table}
 
 \end{document}
