@@ -163,7 +163,7 @@ We split the main question into six research questions: (RQ1) whether G10 carry 
 \section{Data}\label{sec:data}
 %==========================================================
 
-All data are public and were downloaded on October 2, 2026. Table~\ref{tab:data} summarizes the sources.
+Table~\ref{tab:data} summarizes the data sources; all data are public.
 
 \begin{table}[!htbp]
 \centering
@@ -801,7 +801,7 @@ Stein, J.~C., 2009, Presidential address: Sophisticated investors and market eff
 \appendix
 \section{Data Availability and Replication}\label{app:rep}
 
-All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. The raw downloads, cleaned data, and code are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
+All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. All series were downloaded on October 2, 2026; because FRED, CFTC, and Binance data can be revised or extended, the replication package stores the raw downloads as of that date. The raw downloads, cleaned data, and code are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
 
 \begin{table}[!htbp]
 \centering
