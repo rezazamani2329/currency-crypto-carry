@@ -223,7 +223,9 @@ The crypto universe contains twelve large coins: Bitcoin (BTC), Ethereum (ETH), 
 \section{Methodology}\label{sec:method}
 %==========================================================
 
-\subsection{Strategy A: Crowded G10 Carry}
+This section describes how we build the two strategies and test the hypotheses of Section~\ref{sec:hyp}. Both strategies are pre-specified and dollar-neutral, with all parameters fixed before any backtest was run. Sections~\ref{sec:methA} and \ref{sec:methB} define Strategy~A, the G10 carry strategy with the CFTC crowding filter, and Strategy~B, the cross-sectional crypto funding carry strategy. Section~\ref{sec:methcost} sets out transaction costs and performance measures, Section~\ref{sec:methrisk} the risk regressions, and Section~\ref{sec:methcomb} the combined portfolio. Section~\ref{sec:methhonest} explains the steps we take to limit data mining.
+
+\subsection{Strategy A: Crowded G10 Carry}\label{sec:methA}
 
 Let $S_{k,t}$ be the spot rate of currency $k$ in US dollars per unit and $i_{k,t}$ its three-month interest rate in percent per year. The monthly excess return of a long position in currency $k$ is
 \begin{equation}
@@ -252,7 +254,7 @@ Figure~\ref{fig:pos} shows how stable the portfolio is. In practice it is long t
 \tabnote{The figure shows the share of the 327 holding months, May 1999 to August 2026, in which each currency is in the long leg (two highest interest rates) or the short leg (two lowest interest rates) of Strategy A.}
 \end{figure}
 
-\subsection{Strategy B: Crypto Funding Carry}
+\subsection{Strategy B: Crypto Funding Carry}\label{sec:methB}
 
 Let $f_{c,t}$ be the average daily funding rate of coin $c$ over the seven days up to day $t-1$. A coin is tradable on a day only if it has a price and positive volume, which removes LUNA after May 2022 and FTT after November 14, 2022. Every Sunday we assign weight $-0.5/k$ to the $k$ coins with the highest $f_{c,t}$ and $+0.5/k$ to the $k$ coins with the lowest, where $k$ is one third of the tradable coins. Each leg usually holds three coins (2,151 of 2,403 days); it holds two in early 2020 and briefly four in 2022. Positions are held for seven days, with daily profit and loss
 \begin{equation}
@@ -260,11 +262,11 @@ Let $f_{c,t}$ be the average daily funding rate of coin $c$ over the seven days 
 \end{equation}
 A short position ($w<0$) therefore receives funding when funding is positive. We decompose net returns into a funding component, a price component, and costs. There is no separate crowding filter in Strategy~B, because the funding rate is itself the crowding signal.
 
-\subsection{Transaction Costs and Performance Measures}
+\subsection{Transaction Costs and Performance Measures}\label{sec:methcost}
 
 Costs are proportional to turnover, $\text{cost}_t = c\sum_k |w_{k,t}-w_{k,t-1}|$, with $c=3$ basis points for G10 currencies and $c=5$ basis points for crypto perpetuals. We report annualized mean, volatility, and Sharpe ratio (scaled by 12 for monthly and 365 for daily data), maximum drawdown, skewness, worst month or week, hit rate, and annual turnover. Because the strategies are dollar-neutral and earn excess returns, the Sharpe ratio is the mean divided by volatility.
 
-\subsection{Risk Regressions}
+\subsection{Risk Regressions}\label{sec:methrisk}
 
 We estimate the following regressions with \citet{NeweyWest1987} standard errors (3 lags for monthly data, 7 lags for daily data):
 \begin{align}
@@ -273,11 +275,11 @@ r^{B}_{t} &= \alpha + \beta_{BTC}\, r^{BTC}_t + \varepsilon_t, \qquad \text{dail
 \end{align}
 where $RX_t$ is the dollar factor and $\Delta Vol_t$ the equity-volatility innovation from \citet{LRV2011}. The factor data end in May 2021, which limits the sample of the FX regression.
 
-\subsection{Combined Portfolio}
+\subsection{Combined Portfolio}\label{sec:methcomb}
 
 To compare the strategies on equal terms, we scale each to 10\% annual volatility using trailing volatility known at $t-1$ (36 months for A, 12 months for B) and combine them 50/50.
 
-\subsection{Keeping the Tests Honest}
+\subsection{Keeping the Tests Honest}\label{sec:methhonest}
 
 Several features of the design limit data mining. All parameters (number of currencies per leg, z-score window, crowding threshold, exposure cut, funding lookback, rebalancing frequency, and costs) were fixed before the backtests and were not changed afterwards. Results are split into an in-sample period (1999--2010 for A, 2020--2023 for B) and an out-of-sample period (2011--2026 for A, 2024--2026 for B). Weights set at the end of period $t$ earn the return of $t+1$; CFTC data are used only after their release; and crypto signals use funding up to the previous day. Robustness grids are reported in full but were not used to choose the headline parameters.
 
