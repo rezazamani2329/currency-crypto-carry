@@ -155,7 +155,7 @@ We split the main question into six research questions: (RQ1) whether G10 carry 
 \section{Data}\label{sec:data}
 %==========================================================
 
-Table~\ref{tab:data} summarizes the data sources; all data are public.
+Table~\ref{tab:data} summarizes the data sources; all data are public \citep{FRBH10,OECD2026,CFTC2026,Binance2026,LRVdata}.
 
 \begin{table}[!htbp]
 \centering
@@ -169,7 +169,7 @@ FX spot rates & FRED (Federal Reserve H.10), daily, sampled at month-end & JPY, 
 3-month interbank rates & OECD via FRED, monthly & US, JP, euro area, UK, CH, CA, AU, NZ, DE & Strategy A signal \\
 Speculator positions & CFTC Commitments of Traders, legacy futures-only, weekly & CME currency futures, 1986--2026 & Crowding signal \\
 Crypto prices, volume, funding & Binance public archive, USDT-margined perpetuals & Daily candles and 8-hourly funding, 2020-01 to 2026-08 & Strategy B \\
-Carry factor portfolios & \citet{LRV2011}, \textit{CurrencyPortfolios.xls} & Developed HML, dollar factor RX, volatility innovations, 1983--2021 & Validation and risk regressions \\
+Carry factor portfolios & \citet{LRVdata} & Developed HML, dollar factor RX, volatility innovations, 1983--2021 & Validation and risk regressions \\
 \bottomrule
 \end{tabular}
 \tabnote{This table lists the data used in the paper. FX spot rates are quoted in US dollars per unit of foreign currency. Interest rates are three-month interbank rates in percent per year. CFTC positions are non-commercial long and short futures positions and open interest. Crypto data cover twelve coins: BTC, ETH, BNB, XRP, ADA, DOGE, SOL, LTC, LINK, AVAX, LUNA, and FTT.}
@@ -692,6 +692,20 @@ Our results point to three directions for future work. First, the crowding that 
 \clearpage
 \setstretch{1.0}
 \begin{thebibliography}{99}
+\bibitem[Aquilina et~al.(2024)]{Aquilina2024}
+Aquilina, M., M.~J. Lombardi, A.~Schrimpf, and V.~Sushko, 2024, The market turbulence and carry trade unwind of August 2024, BIS Bulletin No.~90, Bank for International Settlements.
+
+\bibitem[Bank for International Settlements(2024)]{BIS2024}
+Bank for International Settlements, 2024, Hedge fund exposure to the carry trade, \textit{BIS Quarterly Review}, September 2024, \url{https://www.bis.org/publ/qtrpdf/r_qt2409x.htm}.
+
+\bibitem[Binance(2026)]{Binance2026}
+Binance, 2026, Binance public data: USDT-margined perpetual futures daily candles and funding rates, \url{https://data.binance.vision/} (accessed October 2, 2026).
+
+\bibitem[Board of Governors of the Federal Reserve System(2026)]{FRBH10}
+Board of Governors of the Federal Reserve System, 2026, Foreign exchange rates (H.10), retrieved from FRED, Federal Reserve Bank of St.~Louis, \url{https://fred.stlouisfed.org/} (accessed October 2, 2026).
+
+\bibitem[Borri et~al.(2026)]{Borri2025}
+Borri, N., Y.~Liu, A.~Tsyvinski, and X.~Wu, 2026, Cryptocurrency as an investable asset class: Coming of age, \textit{Annual Review of Financial Economics} 18, forthcoming, \url{https://doi.org/10.1146/annurev-financial-111524-010949}.
 
 \bibitem[Brunnermeier et~al.(2008)]{BrunnermeierNagelPedersen2008}
 Brunnermeier, M.~K., S.~Nagel, and L.~H. Pedersen, 2008, Carry trades and currency crashes, \textit{NBER Macroeconomics Annual} 23, 313--347.
@@ -699,23 +713,17 @@ Brunnermeier, M.~K., S.~Nagel, and L.~H. Pedersen, 2008, Carry trades and curren
 \bibitem[Brunnermeier and Pedersen(2009)]{BrunnermeierPedersen2009}
 Brunnermeier, M.~K., and L.~H. Pedersen, 2009, Market liquidity and funding liquidity, \textit{Review of Financial Studies} 22, 2201--2238.
 
-\bibitem[Aquilina et~al.(2024)]{Aquilina2024}
-Aquilina, M., M.~Lombardi, A.~Schrimpf, and V.~Sushko, 2024, The market turbulence and carry trade unwind of August 2024, BIS Bulletin No.~90, Bank for International Settlements.
-
-\bibitem[Bank for International Settlements(2024)]{BIS2024}
-Bank for International Settlements, 2024, Hedge fund exposure to the carry trade, \textit{BIS Quarterly Review}, September 2024.
-
-\bibitem[Borri et~al.(2025)]{Borri2025}
-Borri, N., Y.~Liu, A.~Tsyvinski, and X.~Wu, 2025, Cryptocurrency as an investable asset class: Coming of age, Working paper, arXiv:2510.14435.
-
 \bibitem[Burnside et~al.(2011)]{Burnside2011}
 Burnside, C., M.~Eichenbaum, I.~Kleshchelski, and S.~Rebelo, 2011, Do peso problems explain the returns to the carry trade?, \textit{Review of Financial Studies} 24, 853--891.
 
-\bibitem[Cheema-Fox et~al.(2025)]{CheemaFox2025}
-Cheema-Fox, A., E.~S. Cuipa, and R.~Greenwood, 2025, Flight to safety or flight from carry?, Working paper, Harvard University; \textit{Financial Analysts Journal}, 2026.
+\bibitem[Cheema-Fox et~al.(2026)]{CheemaFox2025}
+Cheema-Fox, A., E.~S. Cuipa III, and R.~Greenwood, 2026, Flight to safety or flight from carry?, \textit{Financial Analysts Journal}, forthcoming, \url{https://doi.org/10.1080/0015198X.2026.2728601}.
 
 \bibitem[Christin et~al.(2023)]{Christin2023}
-Christin, N., B.~R. Routledge, K.~Soska, and A.~Zetlin-Jones, 2023, The crypto carry trade, Working paper, Carnegie Mellon University.
+Christin, N., B.~R. Routledge, K.~Soska, and A.~Zetlin-Jones, 2023, The crypto carry trade, Working paper, Carnegie Mellon University, \url{https://gerbil.life/papers/CarryTrade.v1.2.pdf}.
+
+\bibitem[Commodity Futures Trading Commission(2026)]{CFTC2026}
+Commodity Futures Trading Commission, 2026, Commitments of Traders: Historical futures-only reports, 1986--2026, \url{https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalCompressed/index.htm} (accessed October 2, 2026).
 
 \bibitem[Daniel et~al.(2017)]{DanielHodrickLu2017}
 Daniel, K., R.~J. Hodrick, and Z.~Lu, 2017, The carry trade: Risks and drawdowns, \textit{Critical Finance Review} 6, 211--262.
@@ -733,7 +741,7 @@ Farhi, E., and X.~Gabaix, 2016, Rare disasters and exchange rates, \textit{Quart
 Frazzini, A., and L.~H. Pedersen, 2014, Betting against beta, \textit{Journal of Financial Economics} 111, 1--25.
 
 \bibitem[Gornall et~al.(2025)]{Gornall2025}
-Gornall, W., M.~Rinaldi, and Y.~Xiao, 2025, Perpetual futures and basis risk: Evidence from cryptocurrency, Working paper, University of British Columbia.
+Gornall, W., M.~Rinaldi, and Y.~Xiao, 2025, Perpetual futures and basis risk: Evidence from cryptocurrency, Working paper, University of British Columbia, \url{https://www.aeaweb.org/conference/2026/program/paper/ByyFEfr4}.
 
 \bibitem[Hansen and Hodrick(1980)]{HansenHodrick1980}
 Hansen, L.~P., and R.~J. Hodrick, 1980, Forward exchange rates as optimal predictors of future spot rates: An econometric analysis, \textit{Journal of Political Economy} 88, 829--853.
@@ -756,8 +764,11 @@ Liu, Y., and A.~Tsyvinski, 2021, Risks and returns of cryptocurrency, \textit{Re
 \bibitem[Liu et~al.(2022)]{LiuTsyvinskiWu2022}
 Liu, Y., A.~Tsyvinski, and X.~Wu, 2022, Common risk factors in cryptocurrency, \textit{Journal of Finance} 77, 1133--1177.
 
-\bibitem[Lustig et~al.(2011)]{LRV2011}
-Lustig, H., N.~Roussanov, and A.~Verdelhan, 2011, Common risk factors in currency markets, \textit{Review of Financial Studies} 24, 3731--3777.
+\bibitem[Lustig et~al.(2011a)]{LRV2011}
+Lustig, H., N.~Roussanov, and A.~Verdelhan, 2011a, Common risk factors in currency markets, \textit{Review of Financial Studies} 24, 3731--3777.
+
+\bibitem[Lustig et~al.(2011b)]{LRVdata}
+Lustig, H., N.~Roussanov, and A.~Verdelhan, 2011b, Currency portfolios data (\textit{CurrencyPortfolios.xls}), \url{https://web.mit.edu/adrienv/www/Data.html} (accessed October 2, 2026).
 
 \bibitem[Lustig et~al.(2014)]{LRV2014}
 Lustig, H., N.~Roussanov, and A.~Verdelhan, 2014, Countercyclical currency risk premia, \textit{Journal of Financial Economics} 111, 527--553.
@@ -774,6 +785,9 @@ Moskowitz, T.~J., Y.~H. Ooi, and L.~H. Pedersen, 2012, Time series momentum, \te
 \bibitem[Newey and West(1987)]{NeweyWest1987}
 Newey, W.~K., and K.~D. West, 1987, A simple, positive semi-definite, heteroskedasticity and autocorrelation consistent covariance matrix, \textit{Econometrica} 55, 703--708.
 
+\bibitem[OECD(2026)]{OECD2026}
+OECD, 2026, Main Economic Indicators: Three-month interbank rates, retrieved from FRED, Federal Reserve Bank of St.~Louis, \url{https://fred.stlouisfed.org/} (accessed October 2, 2026).
+
 \bibitem[Pedersen(2009)]{Pedersen2009}
 Pedersen, L.~H., 2009, When everyone runs for the exit, \textit{International Journal of Central Banking} 5, 177--199.
 
@@ -787,11 +801,10 @@ Schmeling, M., A.~Schrimpf, and K.~Todorov, 2023, Crypto carry, BIS Working Pape
 Schmeling, M., A.~Schrimpf, and K.~Todorov, 2025, Crypto carry, CEPR Discussion Paper No.~20719.
 
 \bibitem[Sokolovski(2016)]{Sokolovski2016}
-Sokolovski, V., 2016, Crowds, crashes, and the carry trade, Working paper, Stockholm School of Economics.
+Sokolovski, V., 2016, Crowds, crashes, and the carry trade, Job market paper, Stockholm School of Economics, \url{https://indem.uc3m.es/seminarios/filesem_1486993340.pdf}.
 
 \bibitem[Stein(2009)]{Stein2009}
 Stein, J.~C., 2009, Presidential address: Sophisticated investors and market efficiency, \textit{Journal of Finance} 64, 1517--1548.
-
 \end{thebibliography}
 
 \clearpage
@@ -799,7 +812,7 @@ Stein, J.~C., 2009, Presidential address: Sophisticated investors and market eff
 \appendix
 \section{Data Availability and Replication}\label{app:rep}
 
-All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRV2011}. All series were downloaded on October 2, 2026; because FRED, CFTC, and Binance data can be revised or extended, the replication package stores the raw downloads as of that date. The raw downloads, cleaned data, and code are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
+All data used in this paper are public: FRED (Federal Reserve H.10 spot rates and OECD interest rates), the CFTC Commitments of Traders reports, the Binance public data archive, and the carry factor portfolios of \citet{LRVdata}. All series were downloaded on October 2, 2026; because FRED, CFTC, and Binance data can be revised or extended, the replication package stores the raw downloads as of that date. The raw downloads, cleaned data, and code are in the replication package and at \url{https://github.com/rezazamani2329/currency-crypto-carry}. The scripts in \texttt{code/} run in order: \texttt{01} and \texttt{03} download and clean the FX, CFTC, and Binance data; \texttt{02} and \texttt{04} run the backtests for Strategies A and B; and \texttt{05} runs the factor regressions, coin-level analysis, and the combined portfolio. Running \texttt{SKIP\_DOWNLOAD=1 python run\_all.py} reproduces every table and figure from the cleaned data in \texttt{data/clean/}. Table~\ref{tab:files} maps each table and figure to its source file.
 
 \begin{table}[!htbp]
 \centering
