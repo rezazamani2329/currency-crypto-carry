@@ -156,7 +156,7 @@ We split the main question into six research questions: (RQ1) whether G10 carry 
 \item[H-A3.] Carry loses when volatility rises. The null is that carry returns are unrelated to volatility shocks.
 \item[H-B1.] Shorting high-funding coins and buying low-funding coins earns a positive return after costs, mainly from the funding it collects.
 \item[H-B2.] Because it is dollar-neutral, crypto carry has little exposure to Bitcoin, and its crashes are coin-specific rather than market-wide.
-\item[H-D.] FX carry and crypto carry have low correlation, so a combined portfolio diversifies.
+\item[H-C.] FX carry and crypto carry have low correlation, so a combined portfolio diversifies.
 \end{description}
 
 %==========================================================
@@ -587,7 +587,7 @@ This pattern is the mirror image of FX carry. In FX, carry crashes when a crowde
 \subsection{Diversification: Combining FX and Crypto Carry}\label{sec:comb}
 %==========================================================
 
-Table~\ref{tab:comb} reports the two strategies scaled to 10\% volatility and their 50/50 combination over February 2021 to August 2026, the period in which both scaled series are available. The correlation between the scaled strategies is 0.11 (0.12 for unscaled monthly net returns over 78 months). The combined portfolio has volatility of 7.0\%, below the 9.3--9.4\% of either part, and a maximum drawdown of $-10.6$\%, smaller than that of either strategy. Because crypto carry was weak over this period, the combination does not beat FX carry alone on Sharpe ratio (0.51 against 0.71). Figure~\ref{fig:comb} plots the three series. The low correlation is not an average of offsetting regimes: Figure~\ref{fig:rollcorr} shows that the 24-month rolling correlation stays between $-0.24$ and $+0.20$ throughout the sample. The evidence supports H-D.
+Table~\ref{tab:comb} reports the two strategies scaled to 10\% volatility and their 50/50 combination over February 2021 to August 2026, the period in which both scaled series are available. The correlation between the scaled strategies is 0.11 (0.12 for unscaled monthly net returns over 78 months). The combined portfolio has volatility of 7.0\%, below the 9.3--9.4\% of either part, and a maximum drawdown of $-10.6$\%, smaller than that of either strategy. Because crypto carry was weak over this period, the combination does not beat FX carry alone on Sharpe ratio (0.51 against 0.71). Figure~\ref{fig:comb} plots the three series. The low correlation is not an average of offsetting regimes: Figure~\ref{fig:rollcorr} shows that the 24-month rolling correlation stays between $-0.24$ and $+0.20$ throughout the sample. The evidence supports H-C.
 
 \begin{table}[!htbp]
 \centering
@@ -670,7 +670,7 @@ H-A2: crowding predicts weaker carry & Not supported & 0.02\% vs 0.30\% ($t=-0.5
 H-A3: carry loses in volatility spikes & Supported & Volatility beta $-1.55$ ($t=-3.7$); alpha not significant \\
 H-B1: funding carry earns a premium & Mixed & Funding $+8.5$\% a year, but net Sharpe 0.14; price moves dominate \\
 H-B2: no BTC exposure; coin-specific crashes & Supported & BTC beta $-0.02$, 95\% interval $[-0.06, 0.03]$; Terra $-87$ points \\
-H-D: FX and crypto carry diversify & Supported & Correlation 0.11; combined volatility 7.0\% vs about 9\% \\
+H-C: FX and crypto carry diversify & Supported & Correlation 0.11; combined volatility 7.0\% vs about 9\% \\
 \bottomrule
 \end{tabular}
 \end{table}
